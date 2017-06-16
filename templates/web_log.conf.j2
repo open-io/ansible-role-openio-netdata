@@ -1,0 +1,105 @@
+# -------------------------------------------
+# nginx log on various distros
+
+# debian, arch
+nginx_log:
+  name: 'nginx'
+  path: '/var/log/nginx/access.log'
+
+# gentoo
+nginx_log2:
+  name: 'nginx'
+  path: '/var/log/nginx/localhost.access_log'
+
+
+# -------------------------------------------
+# apache log on various distros
+
+# debian
+apache_log:
+  name: 'apache'
+  path: '/var/log/apache2/access.log'
+
+# gentoo
+apache_log2:
+  name: 'apache'
+  path: '/var/log/apache2/access_log'
+
+# arch
+apache_log3:
+  name: 'apache'
+  path: '/var/log/httpd/access_log'
+
+# debian
+apache_vhosts_log:
+  name: 'apache_vhosts'
+  path: '/var/log/apache2/other_vhosts_access.log'
+
+
+# -------------------------------------------
+# gunicorn log on various distros
+
+gunicorn_log:
+  name: 'gunicorn'
+  path: '/var/log/gunicorn/access.log'
+
+gunicorn_log2:
+  name: 'gunicorn'
+  path: '/var/log/gunicorn/gunicorn-access.log'
+
+# BEGIN ANSIBLE MANAGED BLOCK /var/log/oio/sds/VCFR1/rawx-1/rawx-1-httpd-access.log
+VCFR1-rawx-1:
+ name: '.openio.VCFR1.rawx.rawx-1.log.access'
+ path: '/var/log/oio/sds/VCFR1/rawx-1/rawx-1-httpd-access.log'
+ custom_log_format:
+   pattern: '\S+ \S+ \S+ \S+ \S+ \d+ \d+ \S+ \S+ (?P<address>\S+) \S+ (?P<method>\S+) (?P<code>\d+) (?P<resp_time>\d+) (?P<bytes_sent>\d+) \S+ \S+ (?P<url>.*)'
+# END ANSIBLE MANAGED BLOCK /var/log/oio/sds/VCFR1/rawx-1/rawx-1-httpd-access.log
+# BEGIN ANSIBLE MANAGED BLOCK /var/log/oio/sds/VCFR2R/rawx-1/rawx-1-httpd-access.log
+VCFR2R-rawx-1:
+ name: '.openio.VCFR2R.rawx.rawx-1.log.access'
+ path: '/var/log/oio/sds/VCFR2R/rawx-1/rawx-1-httpd-access.log'
+ custom_log_format:
+   pattern: '\S+ \S+ \S+ \S+ \S+ \d+ \d+ \S+ \S+ (?P<address>\S+) \S+ (?P<method>\S+) (?P<code>\d+) (?P<resp_time>\d+) (?P<bytes_sent>\d+) \S+ \S+ (?P<url>.*)'
+# END ANSIBLE MANAGED BLOCK /var/log/oio/sds/VCFR2R/rawx-1/rawx-1-httpd-access.log
+# BEGIN ANSIBLE MANAGED BLOCK /var/log/oio/sds/VCFR1/meta0-1/meta0-1.access
+VCFR1-meta0-1:
+  name: '.openio.VCFR1.meta0.meta0-1.log.access'
+  path: '/var/log/oio/sds/VCFR1/meta0-1/meta0-1.access'
+  custom_log_format:
+    pattern: '\S+ \S+ \S+ \S+  \S+ \S+ \S+ \S+ (?P<address>\S+) \S+ (?P<method>\S+) (?P<code>\d+) (?P<resp_time>\d+) (?P<bytes_sent>\d+) \S+ \S+ \S+ (?P<url>.*)'
+# END ANSIBLE MANAGED BLOCK /var/log/oio/sds/VCFR1/meta0-1/meta0-1.access
+# BEGIN ANSIBLE MANAGED BLOCK /var/log/oio/sds/VCFR1/meta1-1/meta1-1.access
+VCFR1-meta1-1:
+  name: '.openio.VCFR1.meta1.meta1-1.log.access'
+  path: '/var/log/oio/sds/VCFR1/meta1-1/meta1-1.access'
+  custom_log_format:
+    pattern: '\S+ \S+ \S+ \S+  \S+ \S+ \S+ \S+ (?P<address>\S+) \S+ (?P<method>\S+) (?P<code>\d+) (?P<resp_time>\d+) (?P<bytes_sent>\d+) \S+ \S+ \S+ (?P<url>.*)'
+# END ANSIBLE MANAGED BLOCK /var/log/oio/sds/VCFR1/meta1-1/meta1-1.access
+# BEGIN ANSIBLE MANAGED BLOCK /var/log/oio/sds/VCFR1/meta2-1/meta2-1.access
+VCFR1-meta2-1:
+  name: '.openio.VCFR1.meta2.meta2-1.log.access'
+  path: '/var/log/oio/sds/VCFR1/meta2-1/meta2-1.access'
+  custom_log_format:
+    pattern: '\S+ \S+ \S+ \S+  \S+ \S+ \S+ \S+ (?P<address>\S+) \S+ (?P<method>\S+) (?P<code>\d+) (?P<resp_time>\d+) (?P<bytes_sent>\d+) \S+ \S+ \S+ (?P<url>.*)'
+# END ANSIBLE MANAGED BLOCK /var/log/oio/sds/VCFR1/meta2-1/meta2-1.access
+# BEGIN ANSIBLE MANAGED BLOCK /var/log/oio/sds/VCFR2R/meta0-1/meta0-1.access
+VCFR2R-meta0-1:
+  name: '.openio.VCFR2R.meta0.meta0-1.log.access'
+  path: '/var/log/oio/sds/VCFR2R/meta0-1/meta0-1.access'
+  custom_log_format:
+    pattern: '\S+ \S+ \S+ \S+  \S+ \S+ \S+ \S+ (?P<address>\S+) \S+ (?P<method>\S+) (?P<code>\d+) (?P<resp_time>\d+) (?P<bytes_sent>\d+) \S+ \S+ \S+ (?P<url>.*)'
+# END ANSIBLE MANAGED BLOCK /var/log/oio/sds/VCFR2R/meta0-1/meta0-1.access
+# BEGIN ANSIBLE MANAGED BLOCK /var/log/oio/sds/VCFR2R/meta1-1/meta1-1.access
+VCFR2R-meta1-1:
+  name: '.openio.VCFR2R.meta1.meta1-1.log.access'
+  path: '/var/log/oio/sds/VCFR2R/meta1-1/meta1-1.access'
+  custom_log_format:
+    pattern: '\S+ \S+ \S+ \S+  \S+ \S+ \S+ \S+ (?P<address>\S+) \S+ (?P<method>\S+) (?P<code>\d+) (?P<resp_time>\d+) (?P<bytes_sent>\d+) \S+ \S+ \S+ (?P<url>.*)'
+# END ANSIBLE MANAGED BLOCK /var/log/oio/sds/VCFR2R/meta1-1/meta1-1.access
+# BEGIN ANSIBLE MANAGED BLOCK /var/log/oio/sds/VCFR2R/meta2-1/meta2-1.access
+VCFR2R-meta2-1:
+  name: '.openio.VCFR2R.meta2.meta2-1.log.access'
+  path: '/var/log/oio/sds/VCFR2R/meta2-1/meta2-1.access'
+  custom_log_format:
+    pattern: '\S+ \S+ \S+ \S+  \S+ \S+ \S+ \S+ (?P<address>\S+) \S+ (?P<method>\S+) (?P<code>\d+) (?P<resp_time>\d+) (?P<bytes_sent>\d+) \S+ \S+ \S+ (?P<url>.*)'
+# END ANSIBLE MANAGED BLOCK /var/log/oio/sds/VCFR2R/meta2-1/meta2-1.access

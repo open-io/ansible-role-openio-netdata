@@ -1,0 +1,27 @@
+---
+# defaults file for ansible-role-openio-netdata
+
+# netdata.conf
+netdata_run_as_user: 'netdata'
+netdata_web_files_owner: 'root'
+netdata_web_files_group: 'root'
+netdata_bind_socket_to_IP: '127\.0\.0\.1'
+netdata_backend: |
+  enabled = yes
+  type = graphite
+  destination = 10.0.0.1
+  data source = average
+  # prefix = netdata
+  hostname = {{ ansible_hostname }}
+  update every = 10
+  buffer on failures = 60
+  timeout ms = 20000
+
+# plugin.d.conf
+netdata_python_d_plugin_enabled: yes
+netdata_python_d_plugin_default_run: no
+netdata_python_d_plugin_logs_per_interval: 200
+netdata_python_d_plugin_log_interval: 3600
+netdata_python_d_plugin_web_log: yes
+netdata_python_d_plugin_nginx_log: no
+netdata_python_d_plugin_gunicorn_log: no
