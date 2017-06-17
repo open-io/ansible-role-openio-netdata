@@ -5,11 +5,19 @@
         web files group = {{ netdata_web_files_group }}
         # Netdata is not designed to be exposed to potentially hostile
         # networks.See https://github.com/firehol/netdata/issues/164
-        {% if netdata_bind_socket_to_IP %}
+        {% if netdata_bind_socket_to_IP -%}
         bind socket to IP = {{ netdata_bind_socket_to_IP }}
-        {% endif %}
-{% if netdata_backend %}
+        {%- endif -%}
+{% if netdata_backend_enabled %}
 
 [backend]
-{{ netdata_backend }}
-  {% endif %}
+  enabled = yes
+  type = {{ netdata_backend_type }}
+  destination = {{ netdata_backend_destination }}
+  data source = {{ netdata_backend_data_source }}
+  prefix = {{ netdata_backend_prefix }}
+  hostname = {{ netdata_backend_hostname }}
+  update every = {{ netdata_backend_update_every }}
+  buffer on failures = {{ netdata_backend_buffer_on_failures }}
+  timeout ms = {{ netdata_backend_timeout_ms }}
+{% endif %}

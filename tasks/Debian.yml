@@ -1,12 +1,12 @@
 ---
 - name: "Debian| add OpenIO repository"
   apt_repository:
-    repo: "deb {{ sds_openio_repo }}/{{ ansible_distribution }}/ {{ ansible_distribution_release }}/"
+    repo: "deb {{ openio_sds_repository }}/{{ ansible_distribution }}/ {{ ansible_distribution_release }}/"
     state: present
     filename: 'openio-sds'
 
 - name: "Debian| add OpenIO repo key"
   apt_key:
     url: "http://mirror.openio.io/pub/repo/openio/APT-GPG-KEY-OPENIO-0"
-    keyring: /etc/apt/trusted.gpg.d/openio.gpg  
+    keyring: /etc/apt/trusted.gpg.d/openio.gpg
 ...

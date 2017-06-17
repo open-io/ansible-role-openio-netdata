@@ -21,16 +21,16 @@ netdata_run_as_user: netdata
 netdata_web_files_owner: root
 netdata_web_files_group: root
 netdata_bind_socket_to_IP: '127.0.0.1'
-netdata_backend: |
-  enabled = yes
-  type = graphite
-  destination = 10.0.0.1
-  data source = average
-  # prefix = netdata
-  hostname = {{ ansible_hostname }}
-  update every = 10
-  buffer on failures = 60
-  timeout ms = 20000
+
+netdata_backend_enabled: no
+netdata_backend_type: graphite
+netdata_backend_destination: 10.0.0.1
+netdata_backend_data_source: average
+netdata_backend_prefix: netdata
+netdata_backend_hostname: "{{ ansible_hostname }}"
+netdata_backend_update_every: 10
+netdata_backend_buffer_on_failures: 60
+netdata_backend_timeout_ms: 20000
 
 # plugin.d.conf
 # Quote yes/no values
