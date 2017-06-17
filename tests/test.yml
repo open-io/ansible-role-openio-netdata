@@ -5,10 +5,18 @@
   gather_facts: true
 
   roles:
-#    - { role: haproxy, haproxy_sysctl_managed: false, haproxy_rsyslog_managed: false, haproxy_certbot_frontend: true, haproxy_swift_frontend: true, haproxy_keystone_frontend: true, haproxy_conscience_frontend: true }
     - { role: netdata }
 
   pre_tasks:
     - name: "Processing playbook on following servers"
       debug:
         msg: "{{ inventory_hostname }}: Using IP address {{ ansible_default_ipv4.address }}"
+    - name: "Creating directory to simulate OpenIO namespaces"
+      file:
+        path: "{{ item }}"
+        state: directory
+      with_items:
+        - /etc/oio/sds/OPENIO/rawx-1
+        - /etc/oio/sds/OPENIO2/rawx-99999
+        - /etc/oio/sds/OPENIO3/meta2-345
+        - /etc/oio/sds/OPENIO/meta1-678

@@ -49,25 +49,19 @@ gunicorn_log2:
 
 # -------------------------------------------
 # OpenIO SDS logs
-OPENIO-rawx-1:
- name: '.openio.OPENIO.rawx.rawx-1.log.access'
- path: '/var/log/oio/sds/OPENIO/rawx-1/rawx-1-httpd-access.log'
- custom_log_format:
-   pattern: '\S+ \S+ \S+ \S+ \S+ \d+ \d+ \S+ \S+ (?P<address>\S+) \S+ (?P<method>\S+) (?P<code>\d+) (?P<resp_time>\d+) (?P<bytes_sent>\d+) \S+ \S+ (?P<url>.*)'
-
-###
-{% for rawx in netdata_openio_rawxlogs.stdout_lines %}
-{{ rawx | regex_replace('/etc/oio/sds/(\w+)/.*', '\1') }}-{{ rawx | regex_replace('/etc/oio/sds/\w+/(\w+-\w+)', '\1') }}:
-  name: '.openio.{{ rawx | regex_replace('/etc/oio/sds/(\w+)/.*', '\1') }}.rawx.{{ rawx | regex_replace('/etc/oio/sds/\w+/(\w+-\w+)', '\1') }}.log.access'
-  path: '/var/log/oio/sds/{{ rawx | regex_replace('/etc/oio/sds/(\w+)/.*', '\1') }}/{{ rawx | regex_replace('/etc/oio/sds/\w+/(\w+-\w+)', '\1') }}/{{ rawx | regex_replace('/etc/oio/sds/\w+/(\w+-\w+)', '\1') }}-httpd-access.log'
+{% for rawx in netdata_openio_service_rawx -%}
+{{ rawx[0] }}-{{ rawx[1] }}-{{ rawx[2] }}:
+  name: '.openio.{{ rawx[0] }}.{{ rawx[1] }}.{{ rawx[1] }}-{{ rawx[2] }}.log.access'
+  path: '/var/log/oio/sds/{{ rawx[0] }}/{{ rawx[1] }}-{{ rawx[2] }}/{{ rawx[1] }}-{{ rawx[2] }}-httpd-access.log'
   custom_log_format:
     pattern: '\S+ \S+ \S+ \S+ \S+ \d+ \d+ \S+ \S+ (?P<address>\S+) \S+ (?P<method>\S+) (?P<code>\d+) (?P<resp_time>\d+) (?P<bytes_sent>\d+) \S+ \S+ (?P<url>.*)'
-{% endfor %}
-####
-{% for meta in netdata_openio_metalogs.stdout_lines %}
-{{ meta | regex_replace('/etc/oio/sds/(\w+)/.*', '\1') }}-{{ meta | regex_replace('/etc/oio/sds/\w+/(\w+-\w+)/.*', '\1') }}:
-  name: '.openio.{{ meta | regex_replace('/etc/oio/sds/(\w+)/.*', '\1') }}.{{ meta | regex_replace('/etc/oio/sds/\w+/(\w+)-\w+/.*', '\1') }}.{{ meta | regex_replace('/etc/oio/sds/\w+/(\w+-\w+)/.*', '\1') }}.log.access'
-  path: '/var/log/oio/sds/{{ meta | regex_replace('/etc/oio/sds/(\w+)/.*', '\1') }}/{{ meta | regex_replace('/etc/oio/sds/\w+/(\w+-\w+)/.*', '\1') }}/{{ meta | regex_replace('/etc/oio/sds/\w+/(\w+-\w+)/.*', '\1') }}.access'
+
+{% endfor -%}
+{% for meta in netdata_openio_service_meta -%}
+{{ meta[0] }}-{{ meta[1] }}-{{ meta[2] }}:
+  name: '.openio.{{ meta[0] }}.{{ meta[1] }}.{{ meta[1] }}-{{ meta[2] }}.log.access'
+  path: '/var/log/oio/sds/{{ meta[0] }}/{{ meta[1] }}-{{ meta[2] }}/{{ meta[1] }}-{{ meta[2] }}.access'
   custom_log_format:
     pattern: '\S+ \S+ \S+ \S+  \S+ \S+ \S+ \S+ (?P<address>\S+) \S+ (?P<method>\S+) (?P<code>\d+) (?P<resp_time>\d+) (?P<bytes_sent>\d+) \S+ \S+ \S+ (?P<url>.*)'
-{% endfor %}
+
+{% endfor -%}
