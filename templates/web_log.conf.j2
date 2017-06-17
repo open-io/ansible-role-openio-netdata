@@ -47,59 +47,27 @@ gunicorn_log2:
   name: 'gunicorn'
   path: '/var/log/gunicorn/gunicorn-access.log'
 
-# BEGIN ANSIBLE MANAGED BLOCK /var/log/oio/sds/VCFR1/rawx-1/rawx-1-httpd-access.log
-VCFR1-rawx-1:
- name: '.openio.VCFR1.rawx.rawx-1.log.access'
- path: '/var/log/oio/sds/VCFR1/rawx-1/rawx-1-httpd-access.log'
+# -------------------------------------------
+# OpenIO SDS logs
+OPENIO-rawx-1:
+ name: '.openio.OPENIO.rawx.rawx-1.log.access'
+ path: '/var/log/oio/sds/OPENIO/rawx-1/rawx-1-httpd-access.log'
  custom_log_format:
    pattern: '\S+ \S+ \S+ \S+ \S+ \d+ \d+ \S+ \S+ (?P<address>\S+) \S+ (?P<method>\S+) (?P<code>\d+) (?P<resp_time>\d+) (?P<bytes_sent>\d+) \S+ \S+ (?P<url>.*)'
-# END ANSIBLE MANAGED BLOCK /var/log/oio/sds/VCFR1/rawx-1/rawx-1-httpd-access.log
-# BEGIN ANSIBLE MANAGED BLOCK /var/log/oio/sds/VCFR2R/rawx-1/rawx-1-httpd-access.log
-VCFR2R-rawx-1:
- name: '.openio.VCFR2R.rawx.rawx-1.log.access'
- path: '/var/log/oio/sds/VCFR2R/rawx-1/rawx-1-httpd-access.log'
- custom_log_format:
-   pattern: '\S+ \S+ \S+ \S+ \S+ \d+ \d+ \S+ \S+ (?P<address>\S+) \S+ (?P<method>\S+) (?P<code>\d+) (?P<resp_time>\d+) (?P<bytes_sent>\d+) \S+ \S+ (?P<url>.*)'
-# END ANSIBLE MANAGED BLOCK /var/log/oio/sds/VCFR2R/rawx-1/rawx-1-httpd-access.log
-# BEGIN ANSIBLE MANAGED BLOCK /var/log/oio/sds/VCFR1/meta0-1/meta0-1.access
-VCFR1-meta0-1:
-  name: '.openio.VCFR1.meta0.meta0-1.log.access'
-  path: '/var/log/oio/sds/VCFR1/meta0-1/meta0-1.access'
+
+###
+{% for rawx in netdata_openio_rawxlogs.stdout_lines %}
+{{ rawx | regex_replace('/etc/oio/sds/(\w+)/.*', '\1') }}-{{ rawx | regex_replace('/etc/oio/sds/\w+/(\w+-\w+)', '\1') }}:
+  name: '.openio.{{ rawx | regex_replace('/etc/oio/sds/(\w+)/.*', '\1') }}.rawx.{{ rawx | regex_replace('/etc/oio/sds/\w+/(\w+-\w+)', '\1') }}.log.access'
+  path: '/var/log/oio/sds/{{ rawx | regex_replace('/etc/oio/sds/(\w+)/.*', '\1') }}/{{ rawx | regex_replace('/etc/oio/sds/\w+/(\w+-\w+)', '\1') }}/{{ rawx | regex_replace('/etc/oio/sds/\w+/(\w+-\w+)', '\1') }}-httpd-access.log'
+  custom_log_format:
+    pattern: '\S+ \S+ \S+ \S+ \S+ \d+ \d+ \S+ \S+ (?P<address>\S+) \S+ (?P<method>\S+) (?P<code>\d+) (?P<resp_time>\d+) (?P<bytes_sent>\d+) \S+ \S+ (?P<url>.*)'
+{% endfor %}
+####
+{% for meta in netdata_openio_metalogs.stdout_lines %}
+{{ meta | regex_replace('/etc/oio/sds/(\w+)/.*', '\1') }}-{{ meta | regex_replace('/etc/oio/sds/\w+/(\w+-\w+)/.*', '\1') }}:
+  name: '.openio.{{ meta | regex_replace('/etc/oio/sds/(\w+)/.*', '\1') }}.{{ meta | regex_replace('/etc/oio/sds/\w+/(\w+)-\w+/.*', '\1') }}.{{ meta | regex_replace('/etc/oio/sds/\w+/(\w+-\w+)/.*', '\1') }}.log.access'
+  path: '/var/log/oio/sds/{{ meta | regex_replace('/etc/oio/sds/(\w+)/.*', '\1') }}/{{ meta | regex_replace('/etc/oio/sds/\w+/(\w+-\w+)/.*', '\1') }}/{{ meta | regex_replace('/etc/oio/sds/\w+/(\w+-\w+)/.*', '\1') }}.access'
   custom_log_format:
     pattern: '\S+ \S+ \S+ \S+  \S+ \S+ \S+ \S+ (?P<address>\S+) \S+ (?P<method>\S+) (?P<code>\d+) (?P<resp_time>\d+) (?P<bytes_sent>\d+) \S+ \S+ \S+ (?P<url>.*)'
-# END ANSIBLE MANAGED BLOCK /var/log/oio/sds/VCFR1/meta0-1/meta0-1.access
-# BEGIN ANSIBLE MANAGED BLOCK /var/log/oio/sds/VCFR1/meta1-1/meta1-1.access
-VCFR1-meta1-1:
-  name: '.openio.VCFR1.meta1.meta1-1.log.access'
-  path: '/var/log/oio/sds/VCFR1/meta1-1/meta1-1.access'
-  custom_log_format:
-    pattern: '\S+ \S+ \S+ \S+  \S+ \S+ \S+ \S+ (?P<address>\S+) \S+ (?P<method>\S+) (?P<code>\d+) (?P<resp_time>\d+) (?P<bytes_sent>\d+) \S+ \S+ \S+ (?P<url>.*)'
-# END ANSIBLE MANAGED BLOCK /var/log/oio/sds/VCFR1/meta1-1/meta1-1.access
-# BEGIN ANSIBLE MANAGED BLOCK /var/log/oio/sds/VCFR1/meta2-1/meta2-1.access
-VCFR1-meta2-1:
-  name: '.openio.VCFR1.meta2.meta2-1.log.access'
-  path: '/var/log/oio/sds/VCFR1/meta2-1/meta2-1.access'
-  custom_log_format:
-    pattern: '\S+ \S+ \S+ \S+  \S+ \S+ \S+ \S+ (?P<address>\S+) \S+ (?P<method>\S+) (?P<code>\d+) (?P<resp_time>\d+) (?P<bytes_sent>\d+) \S+ \S+ \S+ (?P<url>.*)'
-# END ANSIBLE MANAGED BLOCK /var/log/oio/sds/VCFR1/meta2-1/meta2-1.access
-# BEGIN ANSIBLE MANAGED BLOCK /var/log/oio/sds/VCFR2R/meta0-1/meta0-1.access
-VCFR2R-meta0-1:
-  name: '.openio.VCFR2R.meta0.meta0-1.log.access'
-  path: '/var/log/oio/sds/VCFR2R/meta0-1/meta0-1.access'
-  custom_log_format:
-    pattern: '\S+ \S+ \S+ \S+  \S+ \S+ \S+ \S+ (?P<address>\S+) \S+ (?P<method>\S+) (?P<code>\d+) (?P<resp_time>\d+) (?P<bytes_sent>\d+) \S+ \S+ \S+ (?P<url>.*)'
-# END ANSIBLE MANAGED BLOCK /var/log/oio/sds/VCFR2R/meta0-1/meta0-1.access
-# BEGIN ANSIBLE MANAGED BLOCK /var/log/oio/sds/VCFR2R/meta1-1/meta1-1.access
-VCFR2R-meta1-1:
-  name: '.openio.VCFR2R.meta1.meta1-1.log.access'
-  path: '/var/log/oio/sds/VCFR2R/meta1-1/meta1-1.access'
-  custom_log_format:
-    pattern: '\S+ \S+ \S+ \S+  \S+ \S+ \S+ \S+ (?P<address>\S+) \S+ (?P<method>\S+) (?P<code>\d+) (?P<resp_time>\d+) (?P<bytes_sent>\d+) \S+ \S+ \S+ (?P<url>.*)'
-# END ANSIBLE MANAGED BLOCK /var/log/oio/sds/VCFR2R/meta1-1/meta1-1.access
-# BEGIN ANSIBLE MANAGED BLOCK /var/log/oio/sds/VCFR2R/meta2-1/meta2-1.access
-VCFR2R-meta2-1:
-  name: '.openio.VCFR2R.meta2.meta2-1.log.access'
-  path: '/var/log/oio/sds/VCFR2R/meta2-1/meta2-1.access'
-  custom_log_format:
-    pattern: '\S+ \S+ \S+ \S+  \S+ \S+ \S+ \S+ (?P<address>\S+) \S+ (?P<method>\S+) (?P<code>\d+) (?P<resp_time>\d+) (?P<bytes_sent>\d+) \S+ \S+ \S+ (?P<url>.*)'
-# END ANSIBLE MANAGED BLOCK /var/log/oio/sds/VCFR2R/meta2-1/meta2-1.access
+{% endfor %}

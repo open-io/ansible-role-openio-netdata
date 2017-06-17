@@ -1,5 +1,14 @@
 ---
-- hosts: localhost
-  remote_user: root
+- name: Install and configure Netdata for OpenIO services
+  hosts: all
+  become : true
+  gather_facts: true
+
   roles:
-    - ansible-role-openio-netdata
+#    - { role: haproxy, haproxy_sysctl_managed: false, haproxy_rsyslog_managed: false, haproxy_certbot_frontend: true, haproxy_swift_frontend: true, haproxy_keystone_frontend: true, haproxy_conscience_frontend: true }
+    - { role: netdata }
+
+  pre_tasks:
+    - name: "Processing playbook on following servers"
+      debug:
+        msg: "{{ inventory_hostname }}: Using IP address {{ ansible_default_ipv4.address }}"

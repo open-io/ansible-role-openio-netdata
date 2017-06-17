@@ -1,11 +1,22 @@
 ---
 # defaults file for ansible-role-openio-netdata
 
+# OpenIO
+openio_release: '16.10'
+openio_sds_repository: "http://mirror.openio.io/pub/repo/openio/sds/{{ openio_release }}"
+
+netdata_service_name: netdata
+netdata_packages: netdata
+netdata_global_conf_template: netdata.conf.j2
+netdata_global_conf_path: /etc/netdata/netdata.conf
+netdata_weblog_conf_template: web_log.conf.j2
+netdata_weblog_conf_path: /etc/netdata/python.d/web_log.conf
+
 # netdata.conf
-netdata_run_as_user: 'netdata'
-netdata_web_files_owner: 'root'
-netdata_web_files_group: 'root'
-netdata_bind_socket_to_IP: '127\.0\.0\.1'
+netdata_run_as_user: netdata
+netdata_web_files_owner: root
+netdata_web_files_group: root
+netdata_bind_socket_to_IP: '127.0.0.1'
 netdata_backend: |
   enabled = yes
   type = graphite

@@ -1,46 +1,80 @@
 ---
 # tasks file for ansible-role-openio-netdata
----
 
-    - package:
-        name: netdata
-        state: present
+- name: "Configure repositories for {{ ansible_os_family }} distribution"
+  tags:
+    - install
+  include : "{{ ansible_os_family }}.yml"
 
-    - name: Get all OpenIO RAW-X services configured
-      shell: ls -d /etc/oio/sds/VCFR*/rawx-*
-      register: rawxlogs
-      become: true
-    - name: Configure OpenIO RAW-X services log file monitoring
-      blockinfile:
-        dest: /etc/netdata/python.d/web_log.conf
-        block: |
-           {{ item | regex_replace('/etc/oio/sds/(\w+)/.*', '\1') }}-{{ item | regex_replace('/etc/oio/sds/\w+/(\w+-\w+)', '\1') }}:
-             name: '.openio.{{ item | regex_replace('/etc/oio/sds/(\w+)/.*', '\1') }}.rawx.{{ item | regex_replace('/etc/oio/sds/\w+/(\w+-\w+)', '\1') }}.log.access'
-             path: '/var/log/oio/sds/{{ item | regex_replace('/etc/oio/sds/(\w+)/.*', '\1') }}/{{ item | regex_replace('/etc/oio/sds/\w+/(\w+-\w+)', '\1') }}/{{ item | regex_replace('/etc/oio/sds/\w+/(\w+-\w+)', '\1') }}-httpd-access.log'
-             custom_log_format:
-               pattern: '\S+ \S+ \S+ \S+ \S+ \d+ \d+ \S+ \S+ (?P<address>\S+) \S+ (?P<method>\S+) (?P<code>\d+) (?P<resp_time>\d+) (?P<bytes_sent>\d+) \S+ \S+ (?P<url>.*)'
-        marker: "# {mark} ANSIBLE MANAGED BLOCK {{item}}"
-      with_items: "{{ rawxlogs.stdout_lines }}"
-      become: true
-    - name: Get all OpenIO directory services configured
-      shell: ls -d /etc/oio/sds/VCFR*/meta*
-      register: metalogs
-      become: true
-    - name: Configure OpenIO directory services log file monitoring
-      blockinfile:
-        dest: /etc/netdata/python.d/web_log.conf
-        block: |
-          {{ item | regex_replace('/etc/oio/sds/(\w+)/.*', '\1') }}-{{ item | regex_replace('/etc/oio/sds/\w+/(\w+-\w+)/.*', '\1') }}:
-            name: '.openio.{{ item | regex_replace('/etc/oio/sds/(\w+)/.*', '\1') }}.{{ item | regex_replace('/etc/oio/sds/\w+/(\w+)-\w+/.*', '\1') }}.{{ item | regex_replace('/etc/oio/sds/\w+/(\w+-\w+)/.*', '\1') }}.log.access'
-            path: '/var/log/oio/sds/{{ item | regex_replace('/etc/oio/sds/(\w+)/.*', '\1') }}/{{ item | regex_replace('/etc/oio/sds/\w+/(\w+-\w+)/.*', '\1') }}/{{ item | regex_replace('/etc/oio/sds/\w+/(\w+-\w+)/.*', '\1') }}.access'
-            custom_log_format:
-              pattern: '\S+ \S+ \S+ \S+  \S+ \S+ \S+ \S+ (?P<address>\S+) \S+ (?P<method>\S+) (?P<code>\d+) (?P<resp_time>\d+) (?P<bytes_sent>\d+) \S+ \S+ \S+ (?P<url>.*)'
-        marker: "# {mark} ANSIBLE MANAGED BLOCK {{item}}"
-      with_items: "{{ metalogs.stdout_lines }}"
-      become: true
+- name: 'Netdata: Install packages'
+  package:
+    name: "{{ item }}"
+    state: installed
+  with_items: "{{ netdata_packages }}"
 
-    - name: Restart netdata
-      service:
-        name: netdata
-        state: restarted
-      become: true
+- name: Creates directories for TESTING PURPOSES
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - /etc/oio/sds/OPENIO/rawx-123
+    - /etc/oio/sds/OPENIO/rawx-124
+    - /etc/oio/sds/OPENIO/meta2-987
+
+- name: Register OpenIO RAW-X services configured
+  shell: ls -d /etc/oio/sds/*/rawx-*
+  register: netdata_openio_rawxlogs
+- name: Register OpenIO directory services configured
+  shell: ls -d /etc/oio/sds/*/meta*
+  register: netdata_openio_metalogs
+
+- name: 'Netdata: Set configuration'
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode:  0644
+  with_items:
+    - { src: "{{ netdata_global_conf_template }}", dest: "{{ netdata_global_conf_path }}" }
+    - { src: "{{ netdata_weblog_conf_template }}", dest: "{{ netdata_weblog_conf_path }}" }
+#  notify:
+#    - restart netdata
+
+- name: 'Netdata: Start service'
+  service:
+    name: "{{ netdata_service_name }}"
+    state: started
+    enabled: true
+
+
+
+    #   become: true
+    # - name: Configure OpenIO RAW-X services log file monitoring
+    #   blockinfile:
+    #   dest: /etc/netdata/python.d/web_log.conf
+    #   block: |
+    #   {{ item | regex_replace('/etc/oio/sds/(\w+)/.*', '\1') }}-{{ item | regex_replace('/etc/oio/sds/\w+/(\w+-\w+)', '\1') }}:
+    #     name: '.openio.{{ item | regex_replace('/etc/oio/sds/(\w+)/.*', '\1') }}.rawx.{{ item | regex_replace('/etc/oio/sds/\w+/(\w+-\w+)', '\1') }}.log.access'
+    #     path: '/var/log/oio/sds/{{ item | regex_replace('/etc/oio/sds/(\w+)/.*', '\1') }}/{{ item | regex_replace('/etc/oio/sds/\w+/(\w+-\w+)', '\1') }}/{{ item | regex_replace('/etc/oio/sds/\w+/(\w+-\w+)', '\1') }}-httpd-access.log'
+    #       custom_log_format:
+    #         pattern: '\S+ \S+ \S+ \S+ \S+ \d+ \d+ \S+ \S+ (?P<address>\S+) \S+ (?P<method>\S+) (?P<code>\d+) (?P<resp_time>\d+) (?P<bytes_sent>\d+) \S+ \S+ (?P<url>.*)'
+    #         marker: "# {mark} ANSIBLE MANAGED BLOCK {{item}}"
+    #       with_items: "{{ rawxlogs.stdout_lines }}"
+    #       become: true
+    #     - name: Get all OpenIO directory services configured
+    #       shell: ls -d /etc/oio/sds/VCFR*/meta*
+    #       register: metalogs
+    #       become: true
+    #     - name: Configure OpenIO directory services log file monitoring
+    #       blockinfile:
+    #         dest: /etc/netdata/python.d/web_log.conf
+    #         block: |
+    #           {{ item | regex_replace('/etc/oio/sds/(\w+)/.*', '\1') }}-{{ item | regex_replace('/etc/oio/sds/\w+/(\w+-\w+)/.*', '\1') }}:
+    #             name: '.openio.{{ item | regex_replace('/etc/oio/sds/(\w+)/.*', '\1') }}.{{ item | regex_replace('/etc/oio/sds/\w+/(\w+)-\w+/.*', '\1') }}.{{ item | regex_replace('/etc/oio/sds/\w+/(\w+-\w+)/.*', '\1') }}.log.access'
+    #             path: '/var/log/oio/sds/{{ item | regex_replace('/etc/oio/sds/(\w+)/.*', '\1') }}/{{ item | regex_replace('/etc/oio/sds/\w+/(\w+-\w+)/.*', '\1') }}/{{ item | regex_replace('/etc/oio/sds/\w+/(\w+-\w+)/.*', '\1') }}.access'
+    #             custom_log_format:
+    #               pattern: '\S+ \S+ \S+ \S+  \S+ \S+ \S+ \S+ (?P<address>\S+) \S+ (?P<method>\S+) (?P<code>\d+) (?P<resp_time>\d+) (?P<bytes_sent>\d+) \S+ \S+ \S+ (?P<url>.*)'
+    #         marker: "# {mark} ANSIBLE MANAGED BLOCK {{item}}"
+    #       with_items: "{{ metalogs.stdout_lines }}"
+    #       become: true
