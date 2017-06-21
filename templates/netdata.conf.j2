@@ -1,13 +1,13 @@
 # NetData Configuration
 [global]
-        run as user = {{ netdata_run_as_user }}
-        web files owner = {{ netdata_web_files_owner }}
-        web files group = {{ netdata_web_files_group }}
-        # Netdata is not designed to be exposed to potentially hostile
-        # networks.See https://github.com/firehol/netdata/issues/164
-        {% if netdata_bind_socket_to_IP -%}
-        bind socket to IP = {{ netdata_bind_socket_to_IP }}
-        {%- endif -%}
+  run as user = {{ netdata_run_as_user }}
+  web files owner = {{ netdata_web_files_owner }}
+  web files group = {{ netdata_web_files_group }}
+  # Netdata is not designed to be exposed to potentially hostile
+  # networks.See https://github.com/firehol/netdata/issues/164
+  {% if netdata_bind_socket_to_IP -%}
+  bind socket to IP = {{ netdata_bind_socket_to_IP }}
+  {%- endif -%}
 {% if netdata_backend_enabled %}
 
 [backend]
