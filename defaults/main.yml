@@ -19,7 +19,7 @@ netdata_apps_groups_conf_path: /etc/netdata/apps_groups.conf
 # netdata.conf
 netdata_run_as_user: netdata
 netdata_web_files_owner: root
-netdata_web_files_group: root
+netdata_web_files_group: netdata
 netdata_bind_socket_to_IP: '127.0.0.1'
 
 netdata_backend_enabled: no
