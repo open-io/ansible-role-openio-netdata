@@ -3,7 +3,6 @@
   apt_repository:
     repo: "deb {{ openio_sds_repository }}/{{ ansible_distribution }}/ {{ ansible_distribution_release }}/"
     state: present
-    filename: 'openio-sds'
 
 - name: "Debian| add OpenIO repo key"
   apt_key:
