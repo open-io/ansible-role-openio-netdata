@@ -7,7 +7,7 @@
   # networks.See https://github.com/firehol/netdata/issues/164
   {% if netdata_bind_socket_to_IP -%}
   bind socket to IP = {{ netdata_bind_socket_to_IP }}
-  {%- endif -%}
+  {% endif %}
 
 {% if netdata_backend_enabled %}
 [backend]
@@ -24,17 +24,21 @@
 {% endif %}
 
 [plugins]
-{% for plugin, state in netdata_active_plugins.iteritems() -%}
-  {{plugin}} = {{active}}
-{% endfor -%}
+{% for plugin, state in netdata_active_plugins.iteritems() %}
+  {{plugin}} = {{ 'yes' if state else 'no' }}
+{% endfor %}
 
 [netdata.backend_metrics]
   enabled=no
+
 [netdata.backend_bytes]
   enabled=no
+
 [netdata.backend_ops]
   enabled=no
+
 [netdata.backend_thread_cpu]
   enabled=no
+
 [netdata.private_charts]
   enabled=no
