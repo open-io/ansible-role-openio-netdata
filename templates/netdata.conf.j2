@@ -8,8 +8,8 @@
   {% if netdata_bind_socket_to_IP -%}
   bind socket to IP = {{ netdata_bind_socket_to_IP }}
   {%- endif -%}
-{% if netdata_backend_enabled %}
 
+{% if netdata_backend_enabled %}
 [backend]
   enabled = yes
   type = {{ netdata_backend_type }}
@@ -20,4 +20,21 @@
   update every = {{ netdata_backend_update_every }}
   buffer on failures = {{ netdata_backend_buffer_on_failures }}
   timeout ms = {{ netdata_backend_timeout_ms }}
+  send charts matching = {{ netdata_backend_charts | join(' ')}}
 {% endif %}
+
+[plugins]
+{% for plugin, state in netdata_active_plugins.iteritems() -%}
+  {{plugin}} = {{active}}
+{% endfor -%}
+
+[netdata.backend_metrics]
+  enabled=no
+[netdata.backend_bytes]
+  enabled=no
+[netdata.backend_ops]
+  enabled=no
+[netdata.backend_thread_cpu]
+  enabled=no
+[netdata.private_charts]
+  enabled=no

@@ -15,6 +15,7 @@ netdata_python_d_conf_template: python.d.conf.j2
 netdata_python_d_conf_path: /etc/netdata/python.d.conf
 netdata_apps_groups_conf_template: apps_groups.conf.j2
 netdata_apps_groups_conf_path: /etc/netdata/apps_groups.conf
+netdata_apps_groups_monitor_all: false
 
 # netdata.conf
 netdata_run_as_user: netdata
@@ -31,6 +32,49 @@ netdata_backend_hostname: "{{ ansible_hostname }}"
 netdata_backend_update_every: 10
 netdata_backend_buffer_on_failures: 60
 netdata_backend_timeout_ms: 20000
+netdata_backend_charts:
+    - "*apps*"
+    - "*disk_backlog*"
+    - "*disk_util*"
+    - "*disk_inodes*"
+    - "*disk_ops*"
+    - "*disk_space*"
+    - "*ipv4.errors*"
+    - "*ipv4.tcpsock*"
+    - "*ipv4.tcppackets*"
+    - "*ipv4.tcperrors*"
+    - "*ipv4.packets*"
+    - "*ipv4.tcphandshake*"
+    - "*ipv4.udppackets*"
+    - "*mem.committed*"
+    - "*net_drops*"
+    - "*net_packets*"
+    - "*net.*"
+    - "*system.ctxt*"
+    - "*system.cpu*"
+    - "*system.ram*"
+    - "*system.io*"
+    - "*system.processes*"
+    - "*system.load*"
+    - "*system.uptime*"
+    - "*system.forks*"
+    - "*response_time*"
+    - "*requests*"
+    - "*plugin_pythond_web_log*"
+    - "*web_log_.openio*"
+
+netdata_active_plugins:
+    apps: yes
+    cgroups: no
+    charts.d: no
+    checks: no
+    diskspace: yes
+    fping: no
+    idlejitter: no
+    node.d: no
+    proc: yes
+    python.d: yes
+    tc: no
 
 # plugin.d.conf
 # Quote yes/no values

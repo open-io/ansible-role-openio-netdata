@@ -18,6 +18,7 @@ openio.redis: *redis-*
 openio.redissentinel: *redissentinel-*
 openio.zookeeper: *zookeeper-*
 
+{% if netdata_apps_groups_monitor_all %}
 # -----------------------------------------------------------------------------
 # NETDATA processes accounting
 
@@ -198,3 +199,5 @@ crsproxy: crsproxy
 sidekiq: *sidekiq*
 java: java
 ipfs: ipfs
+
+{% endif %}
