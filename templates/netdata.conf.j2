@@ -28,6 +28,15 @@
   {{plugin}} = {{ 'yes' if state else 'no' }}
 {% endfor %}
 
+{% for plugin in netdata_openio_plugins %}
+{% if plugin['enabled'] %}
+[plugin:{{plugin}}]
+    update every = {{ plugin['every'] if 'every' in plugin else netdata_backend_update_every }}
+    command options = --ns {{netdata_openio_namespaces}} {{ plugin['opts'] }}
+{% endif %}
+{% endfor %}
+
+
 [netdata.backend_metrics]
   enabled=no
 
@@ -42,3 +51,15 @@
 
 [netdata.private_charts]
   enabled=no
+
+{% for t in ('ect','errors','icmp','icmpmldv2','icmpneighbor','icmprouter','icmptypes') %}
+[ipv6.{{t}}]
+  enabled=no
+{% endfor %}
+
+{% for t in ('vmem','threads','processes','preads','pipes','minor_faults','mem','major_faults','lwrites','lreads','files','cpu_user','cpu_system','cpu') %}
+[groups.{{t}}]
+  enabled=no
+[users.{{t}}]
+  enabled=no
+{% endfor %}

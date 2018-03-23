@@ -15,13 +15,15 @@ netdata_python_d_conf_template: python.d.conf.j2
 netdata_python_d_conf_path: /etc/netdata/python.d.conf
 netdata_apps_groups_conf_template: apps_groups.conf.j2
 netdata_apps_groups_conf_path: /etc/netdata/apps_groups.conf
+netdata_beanstalk_conf_template: beanstalk.conf.j2
+netdata_beanstalk_conf_path: /etc/netdata/python.d/beanstalk.conf
 netdata_apps_groups_monitor_all: false
 
 # netdata.conf
 netdata_run_as_user: netdata
 netdata_web_files_owner: root
 netdata_web_files_group: netdata
-netdata_bind_socket_to_IP: '127.0.0.1'
+netdata_bind_socket_to_IP: '0.0.0.0'
 
 netdata_backend_enabled: no
 netdata_backend_type: graphite
@@ -33,7 +35,9 @@ netdata_backend_update_every: 10
 netdata_backend_buffer_on_failures: 60
 netdata_backend_timeout_ms: 20000
 netdata_backend_charts:
+    - "*openio*"
     - "*apps*"
+    - "*beanstalk*"
     - "*disk_backlog*"
     - "*disk_util*"
     - "*disk_inodes*"
@@ -75,6 +79,20 @@ netdata_active_plugins:
     proc: yes
     python.d: yes
     tc: no
+
+netdata_openio_namespaces: "OPENIO"
+netdata_openio_plugins_version: "0.2.7"
+netdata_openio_plugins:
+    - openio:
+        enabled: true
+        opts: "--ns OPENIO"
+    - zookeeper:
+        enabled: true
+        opts: "--ns OPENIO"
+    - container:
+        enabled: false
+        every: 3600
+        opts: "--threshold 300000 --limit 1000"
 
 # plugin.d.conf
 # Quote yes/no values
