@@ -82,17 +82,18 @@ netdata_active_plugins:
 
 netdata_openio_namespaces: "OPENIO"
 netdata_openio_plugins_version: "0.2.7"
+netdata_container_plugin_host: null
 netdata_openio_plugins:
-    - openio:
-        enabled: true
-        opts: "--ns OPENIO"
-    - zookeeper:
-        enabled: true
-        opts: "--ns OPENIO"
-    - container:
-        enabled: false
-        every: 3600
-        opts: "--threshold 300000 --limit 1000"
+    - name: openio
+      enabled: true
+      opts: "--ns OPENIO"
+    - name: zookeeper
+      enabled: true
+      opts: "--ns OPENIO"
+    - name: container
+      enabled: false
+      every: 3600
+      opts: "--threshold 300000 --limit 1000"
 
 # plugin.d.conf
 # Quote yes/no values

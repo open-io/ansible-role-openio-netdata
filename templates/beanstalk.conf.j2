@@ -1,4 +1,5 @@
-{{ for b in netdata_openio_service_beanstalk }}
+{% for b in netdata_openio_service_beanstalk %}
 {{b[0]}}:
   host: '{{b[1]}}'
   port: {{b[2]}}
+{% endfor %}

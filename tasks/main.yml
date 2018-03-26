@@ -17,13 +17,11 @@
     state: installed
   with_items: "{{ netdata_packages }}"
 
-- name: Install OpenIO collectors for netdata
-
 - name: Install OpenIO plugins for netdata
   unarchive:
     # TODO: make compatible with facter_architecture
     src: https://github.com/vdombrovski/openio-netdata/releases/download/v{{netdata_openio_plugins_version}}/openio-netdata-{{netdata_openio_plugins_version}}.amd64.tar.gz
-    dest: {{ netdata_openio_plugins_endpoint }}
+    dest: "{{ netdata_openio_plugins_endpoint }}"
     remote_src: yes
 
 # A filter would be much better here @cdelgehier ;-)
