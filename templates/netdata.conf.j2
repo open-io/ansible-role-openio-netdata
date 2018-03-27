@@ -30,7 +30,7 @@
 
 {% for plugin in netdata_openio_plugins %}
 {% if plugin['enabled'] %}
-{% if plugin['name'] != 'container' or (netdata_container_plugin_host and (netdata_container_plugin_host == inventory_hostname)) %}
+{% if plugin['name'] != 'container' or (netdata_container_plugin_host and (netdata_container_plugin_host == ansible_hostname)) %}
 [plugin:{{ plugin['name'] }}]
     update every = {{ plugin['every'] if 'every' in plugin else netdata_backend_update_every }}
     command options = --ns {{netdata_openio_namespaces}} {{ plugin['opts'] }}
