@@ -9,19 +9,19 @@
   bind socket to IP = {{ netdata_bind_socket_to_IP }}
   {% endif %}
 
-{% if netdata_backend_enabled %}
 [backend]
-  enabled = yes
-  type = {{ netdata_backend_type }}
-  destination = {{ netdata_backend_destination }}
-  data source = {{ netdata_backend_data_source }}
-  prefix = {{ netdata_backend_prefix }}
+  enabled = no
+  ; type = {{ netdata_backend_type }}
+  ; destination = {{ netdata_backend_destination }}
+  ; data source = {{ netdata_backend_data_source }}
+  ; prefix = {{ netdata_backend_prefix }}
+  ;
+  ; buffer on failures = {{ netdata_backend_buffer_on_failures }}
+  ;
   hostname = {{ netdata_backend_hostname }}
   update every = {{ netdata_backend_update_every }}
-  buffer on failures = {{ netdata_backend_buffer_on_failures }}
   timeout ms = {{ netdata_backend_timeout_ms }}
   send charts matching = {{ netdata_backend_charts | join(' ')}}
-{% endif %}
 
 [plugins]
 {% for plugin, state in netdata_active_plugins.iteritems() %}
