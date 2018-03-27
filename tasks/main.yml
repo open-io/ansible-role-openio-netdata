@@ -55,6 +55,10 @@
           ["{{ item | regex_replace('^(.*?) .*', '\1')}}", "{{ item | regex_replace('.* -l (.*?) .*', '\1')}}", "{{ item | regex_replace('.* -p (.*?) .*', '\1')}}"]
         {%- endfor %}]
 
+- name: "Get redis instance data"
+  shell: "ps aux | grep redis | grep -v \"grep\\|sentinel\" | awk '{print $NF}'"
+  register: netdata_openio_service_redis
+
 - name: 'Netdata: Set configurations'
   template:
     src: "{{ item.src }}"
@@ -68,6 +72,7 @@
     - { src: "{{ netdata_python_d_conf_template }}", dest: "{{ netdata_python_d_conf_path }}" }
     - { src: "{{ netdata_apps_groups_conf_template }}", dest: "{{ netdata_apps_groups_conf_path }}" }
     - { src: "{{ netdata_beanstalk_conf_template }}", dest: "{{ netdata_beanstalk_conf_path }}" }
+    - { src: "{{ netdata_redis_conf_template }}", dest: "{{ netdata_redis_conf_path }}" }
   notify:
     - restart netdata
 

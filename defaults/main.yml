@@ -17,6 +17,8 @@ netdata_apps_groups_conf_template: apps_groups.conf.j2
 netdata_apps_groups_conf_path: /etc/netdata/apps_groups.conf
 netdata_beanstalk_conf_template: beanstalk.conf.j2
 netdata_beanstalk_conf_path: /etc/netdata/python.d/beanstalk.conf
+netdata_redis_conf_template: redis.conf.j2
+netdata_redis_conf_path: /etc/netdata/python.d/redis.conf
 netdata_apps_groups_monitor_all: false
 
 # netdata.conf

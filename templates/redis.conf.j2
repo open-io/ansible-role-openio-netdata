@@ -1,0 +1,8 @@
+{% for svc in netdata_openio_service_redis.stdout_lines %}
+{% if svc.split(':')[0] | ipaddr %}
+'{{svc}}':
+  name: '{{svc | replace(".", "_") | replace (":", "__")}}'
+  host: '{{ svc.split(":")[0] | ipaddr }}'
+  port:  {{ svc.split(":")[1] }}
+{% endif %}
+{% endfor %}
