@@ -63,5 +63,13 @@ gunicorn_log2:
   path: '/var/log/oio/sds/{{ meta[0] }}/{{ meta[1] }}-{{ meta[2] }}/{{ meta[1] }}-{{ meta[2] }}.access'
   custom_log_format:
     pattern: '\S+ \S+ \S+ \S+  \S+ \S+ \S+ \S+ (?P<address>\S+) \S+ (?P<method>\S+) (?P<code>\d+) (?P<resp_time>\d+) (?P<bytes_sent>\d+) \S+ \S+ \S+ (?P<url>.*)'
+{% endfor -%}
 
+{% for swift in netdata_openio_service_oioswift -%}
+{{ swift[0] }}-{{ swift[1] }}-{{ swift[2] }}:
+  name: '.openio.{{ swift[0] }}.{{ swift[1] }}.{{ swift[1] }}-{{ swift[2] }}.log.access'
+  path: '/var/log/oio/sds/{{ swift[0] }}/{{ swift[1] }}-{{ swift[2] }}/{{ swift[1] }}-{{ swift[2] }}.log.access'
+  custom_log_format:
+    pattern: '\S+ \S+ \S+ \S+  \S+ (?P<address>\S+) \S+ (?P<method>\S+) (?P<url>\S+) \S+ (?P<code>\d+) \S+ \S+ \S+ (?P<resp_length>\d+|-) (?P<bytes_sent>\d+|-) \S+ \S+ \S+ (?P<resp_time>\d+\.\d+) .*'
+    time_multiplier: 1000000
 {% endfor -%}
