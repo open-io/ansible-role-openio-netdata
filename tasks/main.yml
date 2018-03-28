@@ -91,3 +91,8 @@
     name: "{{ netdata_service_name }}"
     state: started
     enabled: true
+  when: ansible_virtualization_type != "docker"
+
+- name: 'Netdata: Start service (docker)'
+  shell: "(pkill netdata || true) && netdata"
+  when: ansible_virtualization_type == "docker"

@@ -84,7 +84,7 @@ netdata_active_plugins:
     tc: no
 
 netdata_openio_namespaces: "OPENIO"
-netdata_openio_plugins_version: "0.2.7"
+netdata_openio_plugins_version: "0.2.8"
 netdata_container_plugin_host: null
 netdata_openio_plugins:
     - name: openio
