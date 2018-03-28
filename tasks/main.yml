@@ -83,16 +83,14 @@
     - { src: "{{ netdata_apps_groups_conf_template }}", dest: "{{ netdata_apps_groups_conf_path }}" }
     - { src: "{{ netdata_beanstalk_conf_template }}", dest: "{{ netdata_beanstalk_conf_path }}" }
     - { src: "{{ netdata_redis_conf_template }}", dest: "{{ netdata_redis_conf_path }}" }
-  notify:
-    - restart netdata
 
-- name: 'Netdata: Start service'
+- name: 'Netdata: (Re)Start service'
   service:
     name: "{{ netdata_service_name }}"
-    state: started
+    state: restarted
     enabled: true
   when: ansible_virtualization_type != "docker"
 
-- name: 'Netdata: Start service (docker)'
+- name: 'Netdata: (Re)Start service (docker)'
   shell: "(pkill netdata || true) && netdata"
   when: ansible_virtualization_type == "docker"
