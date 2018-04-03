@@ -1,3 +1,4 @@
+autodetection_retry: {{ netdata_python_d_retry }}
 {% for svc in netdata_openio_service_redis.stdout_lines %}
 {% if svc.split(':')[0] | ipaddr %}
 '{{svc}}':

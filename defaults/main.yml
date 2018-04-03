@@ -107,3 +107,4 @@ netdata_python_d_plugin_log_interval: 3600
 netdata_python_d_plugin_web_log: 'yes'
 netdata_python_d_plugin_nginx_log: 'no'
 netdata_python_d_plugin_gunicorn_log: 'no'
+netdata_python_d_retry: 300

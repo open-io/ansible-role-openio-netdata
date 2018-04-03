@@ -1,3 +1,4 @@
+autodetection_retry: {{ netdata_python_d_retry }}
 {% for b in netdata_openio_service_beanstalk %}
 {{b[0]}}:
   host: '{{b[1]}}'
