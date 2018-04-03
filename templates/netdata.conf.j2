@@ -11,13 +11,6 @@
 
 [backend]
   enabled = no
-  ; type = {{ netdata_backend_type }}
-  ; destination = {{ netdata_backend_destination }}
-  ; data source = {{ netdata_backend_data_source }}
-  ; prefix = {{ netdata_backend_prefix }}
-  ;
-  ; buffer on failures = {{ netdata_backend_buffer_on_failures }}
-  ;
   hostname = {{ netdata_backend_hostname }}
   update every = {{ netdata_backend_update_every }}
   timeout ms = {{ netdata_backend_timeout_ms }}
