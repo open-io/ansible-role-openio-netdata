@@ -1,7 +1,8 @@
 ---
 - name: "Debian| add OpenIO repository"
   apt_repository:
-    repo: "deb {{ openio_sds_repository }}/{{ ansible_distribution }}/ {{ ansible_distribution_release }}/"
+    repo: "deb {{ openio_sds_repository }}/{{ ansible_distribution }}/ \
+           {{ ansible_distribution_release }}/"
     state: present
 
 - name: "Debian| add OpenIO repo key"

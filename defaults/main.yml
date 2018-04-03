@@ -27,7 +27,7 @@ netdata_web_files_owner: root
 netdata_web_files_group: netdata
 netdata_bind_socket_to_IP: '0.0.0.0'
 
-netdata_backend_enabled: no
+netdata_backend_enabled: "no"
 netdata_backend_type: graphite
 netdata_backend_destination: 10.0.0.1
 netdata_backend_data_source: average
@@ -37,66 +37,66 @@ netdata_backend_update_every: 10
 netdata_backend_buffer_on_failures: 60
 netdata_backend_timeout_ms: 20000
 netdata_backend_charts:
-    - "*openio*"
-    - "*apps*"
-    - "*beanstalk*"
-    - "*redis*"
-    - "*disk_backlog*"
-    - "*disk_util*"
-    - "*disk_inodes*"
-    - "*disk_ops*"
-    - "*disk_space*"
-    - "*ipv4.errors*"
-    - "*ipv4.tcpsock*"
-    - "*ipv4.tcppackets*"
-    - "*ipv4.tcperrors*"
-    - "*ipv4.packets*"
-    - "*ipv4.tcphandshake*"
-    - "*ipv4.udppackets*"
-    - "*mem.committed*"
-    - "*net_drops*"
-    - "*net_packets*"
-    - "*net.*"
-    - "*system.ctxt*"
-    - "*system.cpu*"
-    - "*system.ram*"
-    - "*system.io*"
-    - "*system.processes*"
-    - "*system.load*"
-    - "*system.uptime*"
-    - "*system.forks*"
-    - "*response_time*"
-    - "*requests*"
-    - "*plugin_pythond_web_log*"
-    - "*web_log_.openio*"
+  - "*openio*"
+  - "*apps*"
+  - "*beanstalk*"
+  - "*redis*"
+  - "*disk_backlog*"
+  - "*disk_util*"
+  - "*disk_inodes*"
+  - "*disk_ops*"
+  - "*disk_space*"
+  - "*ipv4.errors*"
+  - "*ipv4.tcpsock*"
+  - "*ipv4.tcppackets*"
+  - "*ipv4.tcperrors*"
+  - "*ipv4.packets*"
+  - "*ipv4.tcphandshake*"
+  - "*ipv4.udppackets*"
+  - "*mem.committed*"
+  - "*net_drops*"
+  - "*net_packets*"
+  - "*net.*"
+  - "*system.ctxt*"
+  - "*system.cpu*"
+  - "*system.ram*"
+  - "*system.io*"
+  - "*system.processes*"
+  - "*system.load*"
+  - "*system.uptime*"
+  - "*system.forks*"
+  - "*response_time*"
+  - "*requests*"
+  - "*plugin_pythond_web_log*"
+  - "*web_log_.openio*"
 
 netdata_active_plugins:
-    apps: yes
-    cgroups: no
-    charts.d: no
-    checks: no
-    diskspace: yes
-    fping: no
-    idlejitter: no
-    node.d: no
-    proc: yes
-    python.d: yes
-    tc: no
+  apps: "yes"
+  cgroups: "no"
+  charts.d: "no"
+  checks: "no"
+  diskspace: "yes"
+  fping: "no"
+  idlejitter: "no"
+  node.d: "no"
+  proc: "yes"
+  python.d: "yes"
+  tc: "no"
 
 netdata_openio_namespaces: "OPENIO"
 netdata_openio_plugins_version: "0.2.13"
 netdata_container_plugin_host: null
 netdata_openio_plugins:
-    - name: openio
-      enabled: true
-      opts: ""
-    - name: zookeeper
-      enabled: true
-      opts: ""
-    - name: container
-      enabled: false
-      every: 3600
-      opts: "--threshold 300000 --limit 1000"
+  - name: openio
+    enabled: true
+    opts: ""
+  - name: zookeeper
+    enabled: true
+    opts: ""
+  - name: container
+    enabled: false
+    every: 3600
+    opts: "--threshold 300000 --limit 1000"
 
 # plugin.d.conf
 # Quote yes/no values
@@ -108,3 +108,4 @@ netdata_python_d_plugin_web_log: 'yes'
 netdata_python_d_plugin_nginx_log: 'no'
 netdata_python_d_plugin_gunicorn_log: 'no'
 netdata_python_d_retry: 300
+...

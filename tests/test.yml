@@ -1,7 +1,7 @@
 ---
 - name: Install and configure Netdata for OpenIO services
   hosts: all
-  become : true
+  become: true
   gather_facts: true
 
   roles:
@@ -20,3 +20,4 @@
         - /etc/oio/sds/OPENIO2/rawx-99999
         - /etc/oio/sds/OPENIO3/meta2-345
         - /etc/oio/sds/OPENIO/meta1-678
+...
