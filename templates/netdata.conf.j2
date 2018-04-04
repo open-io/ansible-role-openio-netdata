@@ -8,6 +8,7 @@
   {% if netdata_bind_socket_to_IP -%}
   bind socket to IP = {{ netdata_bind_socket_to_IP }}
   {% endif %}
+  default port = {{ netdata_default_port }}
 
 [backend]
   enabled = no

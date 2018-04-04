@@ -26,6 +26,7 @@ netdata_run_as_user: netdata
 netdata_web_files_owner: root
 netdata_web_files_group: netdata
 netdata_bind_socket_to_IP: '0.0.0.0'
+netdata_default_port: 19999
 
 netdata_backend_enabled: "no"
 netdata_backend_type: graphite
