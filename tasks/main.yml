@@ -27,6 +27,11 @@
     dest: "{{ netdata_openio_plugins_endpoint }}"
     remote_src: "yes"
 
+- name: Deactivate container plugin
+  command: "mv {{ netdata_openio_plugins_endpoint }}/container.plugin \
+           {{ netdata_openio_plugins_endpoint }}/container.disabled"
+  when: "('container' not in netdata_openio_plugins) or not netdata_openio_plugins['container']['enabled']"
+
 # A filter would be much better here @cdelgehier ;-)
 - name: Register configured OpenIO RAW-X services
   shell: ls -d /etc/oio/sds/*/rawx-*||true
