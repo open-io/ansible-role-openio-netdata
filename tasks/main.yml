@@ -30,7 +30,7 @@
 - name: Deactivate container plugin
   command: "mv {{ netdata_openio_plugins_endpoint }}/container.plugin \
            {{ netdata_openio_plugins_endpoint }}/container.disabled"
-  when: "('container' not in netdata_openio_plugins) or not netdata_openio_plugins['container']['enabled']"
+  when: "(not netdata_container_plugin_host) or (netdata_container_plugin_host != ansible_hostname)"
 
 # A filter would be much better here @cdelgehier ;-)
 - name: Register configured OpenIO RAW-X services
