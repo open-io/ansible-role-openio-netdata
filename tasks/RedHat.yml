@@ -1,7 +1,7 @@
 ---
 - name: RedHat | add OpenIO SDS repository
   include_role:
-    name: ansible-role-openio-sds
+    name: ansible-role-repo-openio-sds
 
 - name: RedHat | install beanstalkc
   yum:
