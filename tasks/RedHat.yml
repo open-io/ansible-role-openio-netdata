@@ -1,7 +1,10 @@
 ---
-# Maybe just require the ansible-role-openio-sds ?
-- name: RedHat| add OpenIO SDS repository
+- name: RedHat | add OpenIO SDS repository
+  include_role:
+    name: ansible-role-openio-sds
+
+- name: RedHat | install beanstalkc
   yum:
-    name: "{{ openio_sds_repository }}/el/openio-sds-release-{{ openio_release }}-1.el.noarch.rpm"
+    name: beanstalkc
     state: present
 ...

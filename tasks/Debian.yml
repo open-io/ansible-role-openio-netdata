@@ -1,12 +1,17 @@
 ---
-- name: "Debian| add OpenIO repository"
+- name: "Debian | add OpenIO repository"
   apt_repository:
     repo: "deb {{ openio_sds_repository }}/{{ ansible_distribution }}/ \
            {{ ansible_distribution_release }}/"
     state: present
 
-- name: "Debian| add OpenIO repo key"
+- name: "Debian | add OpenIO repo key"
   apt_key:
     url: "http://mirror.openio.io/pub/repo/openio/APT-GPG-KEY-OPENIO-0"
     keyring: /etc/apt/trusted.gpg.d/openio.gpg
+
+- name: Debian | install beanstalkc
+  apt:
+    name: python-beanstalkc
+    state: present
 ...
