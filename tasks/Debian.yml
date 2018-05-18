@@ -10,8 +10,11 @@
     url: "http://mirror.openio.io/pub/repo/openio/APT-GPG-KEY-OPENIO-0"
     keyring: /etc/apt/trusted.gpg.d/openio.gpg
 
-- name: Debian | install beanstalkc
-  apt:
-    name: python-beanstalkc
+- name: Debian | Install packages
+  package:
+    name: "{{ pkg }}"
     state: present
+  with_items: "{{ netdata_packages }}"
+  loop_control:
+    loop_var: pkg
 ...

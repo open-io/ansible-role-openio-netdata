@@ -3,8 +3,11 @@
   include_role:
     name: ansible-role-repo-openio-sds
 
-- name: RedHat | install beanstalkc
-  yum:
-    name: beanstalkc
+- name: RedHat |Install packages
+  package:
+    name: "{{ pkg }}"
     state: present
+  with_items: "{{ netdata_packages }}"
+  loop_control:
+    loop_var: pkg
 ...

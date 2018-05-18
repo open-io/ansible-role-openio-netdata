@@ -1,3 +1,6 @@
 ---
 netdata_openio_plugins_endpoint: "/usr/lib/x86_64-linux-gnu/netdata/plugins.d/"
+netdata_packages:
+  - python-beanstalkc
+  - python-netaddr
 ...
