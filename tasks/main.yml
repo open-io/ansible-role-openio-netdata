@@ -66,11 +66,13 @@
          "{{ item|regex_replace('/etc/oio/sds/\w+/(\w+)-\w+', '\1') }}",
          "{{ item|regex_replace('/etc/oio/sds/\w+/\w+-(\w+)', '\1') }}"],
       {%- endfor %}]
+  when: netdata_python_d_plugin_enabled
 
 - name: "Get beanstalk instance data"
   shell: "gridinit_cmd status2 | grep beanstalk"
   register: netdata_openio_tmp_beanstalk
   changed_when: true
+  when: netdata_python_d_plugin_enabled
 
 - name: "Register beanstalk services"
   changed_when: true
@@ -81,13 +83,15 @@
             "{{ item | regex_replace('.* -l (.*?) .*', '\1')}}",
             "{{ item | regex_replace('.* -p (.*?) .*', '\1')}}"]
         {%- endfor %}]
+  when: netdata_python_d_plugin_enabled
 
 - name: "Get redis instance data"
   shell: "ps aux | grep redis | grep -v \"grep\\|sentinel\" | awk '{print $NF}'"
   register: netdata_openio_service_redis
   changed_when: true
+  when: netdata_python_d_plugin_enabled
 
-- name: 'Netdata: Set configurations'
+- name: 'Netdata: Set global configuration'
   template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
@@ -97,6 +101,17 @@
   with_items:
     - src: "{{ netdata_global_conf_template }}"
       dest: "{{ netdata_global_conf_path }}"
+
+
+- name: 'Netdata: Set plugin configuration'
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: 0644
+  when: netdata_python_d_plugin_enabled
+  with_items:
     - src: "{{ netdata_weblog_conf_template }}"
       dest: "{{ netdata_weblog_conf_path }}"
     - src: "{{ netdata_python_d_conf_template }}"
