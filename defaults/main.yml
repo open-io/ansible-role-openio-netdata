@@ -97,7 +97,7 @@ netdata_openio_plugins:
 
 # plugin.d.conf
 # Quote yes/no values
-netdata_python_d_plugin_enabled: 'yes'
+netdata_python_d_plugin_enabled: true
 netdata_python_d_plugin_default_run: 'no'
 netdata_python_d_plugin_logs_per_interval: 200
 netdata_python_d_plugin_log_interval: 3600
