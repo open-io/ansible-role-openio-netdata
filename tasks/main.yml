@@ -119,6 +119,13 @@
     - src: "{{ netdata_redis_conf_template }}"
       dest: "{{ netdata_redis_conf_path }}"
 
+- name: Add user netdata to openio group
+  user:
+    name: netdata
+    groups: openio
+    append: true
+  ignore_errors: true
+
 - name: 'Netdata: (Re)Start service'
   service:
     name: "{{ netdata_service_name }}"
