@@ -13,7 +13,7 @@
 - name: 'Netdata: Install packages'
   package:
     name: "{{ item }}"
-    state: installed
+    state: present
   with_items: "{{ netdata_packages }}"
 
 - name: Install OpenIO plugins for netdata
