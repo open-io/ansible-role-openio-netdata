@@ -22,7 +22,8 @@ netdata_redis_conf_path: /etc/netdata/python.d/redis.conf
 netdata_apps_groups_monitor_all: false
 
 # netdata.conf
-netdata_run_as_user: netdata
+netdata_user: netdata
+netdata_group: netdata
 netdata_web_files_owner: root
 netdata_web_files_group: netdata
 netdata_bind_socket_to_IP: '0.0.0.0'
@@ -81,7 +82,7 @@ netdata_active_plugins:
   tc: "no"
 
 netdata_openio_namespaces: "OPENIO"
-netdata_openio_plugins_version: "0.2.13"
+netdata_openio_plugins_version: "0.2.14"
 netdata_container_plugin_host: null
 netdata_openio_plugins:
   - name: openio

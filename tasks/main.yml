@@ -1,6 +1,4 @@
 ---
-# tasks file for ansible-role-openio-netdata
-
 - name: "Include per-distro variables"
   include_vars: "{{ item }}"
   with_first_found:
@@ -20,7 +18,6 @@
 
 - name: Install OpenIO plugins for netdata
   unarchive:
-    # TODO: make compatible with facter_architecture
     src: "https://github.com/vdombrovski/openio-netdata/releases/download/\
           v{{netdata_openio_plugins_version}}\
           /openio-netdata-{{netdata_openio_plugins_version}}.amd64.tar.gz"
@@ -95,9 +92,9 @@
   template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
-    owner: root
-    group: root
-    mode: 0644
+    owner: "{{ netdata_user }}"
+    group: "{{ netdata_group }}"
+    mode: 0640
   with_items:
     - src: "{{ netdata_global_conf_template }}"
       dest: "{{ netdata_global_conf_path }}"
@@ -107,9 +104,9 @@
   template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
-    owner: root
-    group: root
-    mode: 0644
+    owner: "{{ netdata_user }}"
+    group: "{{ netdata_group }}"
+    mode: 0640
   when: netdata_python_d_plugin_enabled
   with_items:
     - src: "{{ netdata_weblog_conf_template }}"
