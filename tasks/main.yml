@@ -99,7 +99,6 @@
     - src: "{{ netdata_global_conf_template }}"
       dest: "{{ netdata_global_conf_path }}"
 
-
 - name: 'Netdata: Set plugin configuration'
   template:
     src: "{{ item.src }}"
