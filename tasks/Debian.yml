@@ -4,11 +4,13 @@
     repo: "deb {{ openio_sds_repository }}/{{ ansible_distribution }}/ \
            {{ ansible_distribution_release }}/"
     state: present
+  when: netdata_manage_repository
 
 - name: "Debian | add OpenIO repo key"
   apt_key:
     url: "http://mirror.openio.io/pub/repo/openio/APT-GPG-KEY-OPENIO-0"
     keyring: /etc/apt/trusted.gpg.d/openio.gpg
+  when: netdata_manage_repository
 
 - name: Debian | Install packages
   package:

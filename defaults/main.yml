@@ -4,6 +4,7 @@
 # OpenIO
 openio_release: '16.10'
 openio_sds_repository: "http://mirror.openio.io/pub/repo/openio/sds/{{ openio_release }}"
+netdata_manage_repository: false
 
 netdata_service_name: netdata
 netdata_global_conf_template: netdata.conf.j2
