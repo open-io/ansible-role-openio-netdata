@@ -1,105 +1,45 @@
 ---
-- name: "Include per-distro variables"
+- name: "Include {{ ansible_distribution }} variables"
   include_vars: "{{ item }}"
   with_first_found:
     - "{{ ansible_distribution }}.yml"
     - "{{ ansible_os_family }}.yml"
+  tags: install
 
-- name: "Configure repositories for {{ ansible_os_family }} distribution"
-  tags:
-    - install
-  include: "{{ ansible_os_family }}.yml"
+- name: "Include {{ ansible_distribution }} tasks"
+  include_tasks: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_distribution }}.yml"
+    - "{{ ansible_os_family }}.yml"
+  tags: install
 
-- name: 'Netdata: Install packages'
-  package:
-    name: "{{ item }}"
-    state: present
-  with_items: "{{ netdata_packages }}"
+- name: Ensure service is started
+  service:
+    name: "{{ openio_netdata_service_name }}"
+    state: started
+    enabled: true
 
-- name: Install OpenIO plugins for netdata
-  unarchive:
-    src: "https://github.com/vdombrovski/openio-netdata/releases/download/\
-          v{{netdata_openio_plugins_version}}\
-          /openio-netdata-{{netdata_openio_plugins_version}}.amd64.tar.gz"
-    dest: "{{ netdata_openio_plugins_endpoint }}"
-    remote_src: "yes"
+- name: Add user netdata to openio group
+  user:
+    name: "{{ netdata_user }}"
+    groups: openio
+    append: true
+  when: openio_netdata_openio_host
 
-- name: Deactivate container plugin
-  command: "mv {{ netdata_openio_plugins_endpoint }}/container.plugin \
-           {{ netdata_openio_plugins_endpoint }}/container.disabled"
-  when: "(not netdata_container_plugin_host) or (netdata_container_plugin_host != ansible_hostname)"
+- name: Register openio services
+  include_tasks: openio.yml
+  when: openio_netdata_openio_host
 
-# A filter would be much better here @cdelgehier ;-)
-- name: Register configured OpenIO RAW-X services
-  shell: ls -d /etc/oio/sds/*/rawx-*||true
-  register: netdata_openio_rawxlogs
-  changed_when: false
-- name: Register configured OpenIO directory services
-  shell: ls -d /etc/oio/sds/*/meta*||true
-  register: netdata_openio_metalogs
-  changed_when: false
-- name: Register configured OpenIO swift gateway services
-  shell: ls -d /etc/oio/sds/*/oioswift*||true
-  register: netdata_openio_swiftlogs
-  changed_when: false
-
-- name: Creating service list to monitor
-  set_fact:
-    netdata_openio_service_rawx: |
-      [{% for item in netdata_openio_rawxlogs.stdout_lines -%}
-        ["{{ item | regex_replace('/etc/oio/sds/(\w+)/.*', '\1') }}",
-         "{{ item | regex_replace('/etc/oio/sds/\w+/(\w+)-\w+', '\1') }}",
-         "{{ item | regex_replace('/etc/oio/sds/\w+/\w+-(\w+)', '\1') }}"],
-      {%- endfor %}]
-    netdata_openio_service_meta: |
-      [{% for item in netdata_openio_metalogs.stdout_lines -%}
-        ["{{ item| regex_replace('/etc/oio/sds/(\w+)/.*', '\1') }}",
-         "{{ item| regex_replace('/etc/oio/sds/\w+/(\w+)-\w+', '\1') }}",
-         "{{ item| regex_replace('/etc/oio/sds/\w+/\w+-(\w+)', '\1') }}"],
-      {%- endfor %}]
-    netdata_openio_service_oioswift: |
-      [{% for item in netdata_openio_swiftlogs.stdout_lines -%}
-        ["{{ item| regex_replace('/etc/oio/sds/(\w+)/.*', '\1') }}",
-         "{{ item|regex_replace('/etc/oio/sds/\w+/(\w+)-\w+', '\1') }}",
-         "{{ item|regex_replace('/etc/oio/sds/\w+/\w+-(\w+)', '\1') }}"],
-      {%- endfor %}]
-  when: netdata_python_d_plugin_enabled
-
-- name: "Get beanstalk instance data"
-  shell: "gridinit_cmd status2 | grep beanstalk"
-  register: netdata_openio_tmp_beanstalk
-  changed_when: true
-  when: netdata_python_d_plugin_enabled
-
-- name: "Register beanstalk services"
-  changed_when: true
-  set_fact:
-    netdata_openio_service_beanstalk: |
-        [{% for item in netdata_openio_tmp_beanstalk.stdout_lines -%}
-            ["{{ item | regex_replace('^(.*?) .*', '\1')}}",
-            "{{ item | regex_replace('.* -l (.*?) .*', '\1')}}",
-            "{{ item | regex_replace('.* -p (.*?) .*', '\1')}}"]
-        {%- endfor %}]
-  when: netdata_python_d_plugin_enabled
-
-- name: "Get redis instance data"
-  shell: "ps aux | grep redis | grep -v \"grep\\|sentinel\" | awk '{print $NF}'"
-  register: netdata_openio_service_redis
-  changed_when: true
-  when: netdata_python_d_plugin_enabled
-
-- name: 'Netdata: Set global configuration'
+- name: 'Set global configuration'
   template:
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
+    src: netdata.conf.j2 
+    dest: /etc/netdata/netdata.conf
     owner: "{{ netdata_user }}"
     group: "{{ netdata_group }}"
     mode: 0640
-  with_items:
-    - src: "{{ netdata_global_conf_template }}"
-      dest: "{{ netdata_global_conf_path }}"
+  notify: restart netdata
 
-- name: 'Netdata: Set plugin configuration'
+- name: 'Set plugin configuration'
   template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
@@ -118,22 +58,5 @@
       dest: "{{ netdata_beanstalk_conf_path }}"
     - src: "{{ netdata_redis_conf_template }}"
       dest: "{{ netdata_redis_conf_path }}"
-
-- name: Add user netdata to openio group
-  user:
-    name: netdata
-    groups: openio
-    append: true
-  ignore_errors: true
-
-- name: 'Netdata: (Re)Start service'
-  service:
-    name: "{{ netdata_service_name }}"
-    state: restarted
-    enabled: true
-  when: ansible_virtualization_type != "docker"
-
-- name: 'Netdata: (Re)Start service (docker)'
-  shell: "(pkill netdata || true) && netdata"
-  when: ansible_virtualization_type == "docker"
+  notify: restart netdata
 ...

@@ -1,109 +1,114 @@
 ---
 # defaults file for ansible-role-openio-netdata
+openio_netdata_namespace: "OPENIO"
+openio_netdata_openio_host: true
 
-# OpenIO
-openio_release: '16.10'
-openio_sds_repository: "http://mirror.openio.io/pub/repo/openio/sds/{{ openio_release }}"
-netdata_manage_repository: false
+openio_netdata_service_name: netdata
 
-netdata_service_name: netdata
-netdata_global_conf_template: netdata.conf.j2
-netdata_global_conf_path: /etc/netdata/netdata.conf
-netdata_weblog_conf_template: web_log.conf.j2
-netdata_weblog_conf_path: /etc/netdata/python.d/web_log.conf
-netdata_python_d_conf_template: python.d.conf.j2
-netdata_python_d_conf_path: /etc/netdata/python.d.conf
-netdata_apps_groups_conf_template: apps_groups.conf.j2
-netdata_apps_groups_conf_path: /etc/netdata/apps_groups.conf
-netdata_beanstalk_conf_template: beanstalk.conf.j2
-netdata_beanstalk_conf_path: /etc/netdata/python.d/beanstalk.conf
-netdata_redis_conf_template: redis.conf.j2
-netdata_redis_conf_path: /etc/netdata/python.d/redis.conf
-netdata_apps_groups_monitor_all: false
 
-# netdata.conf
-netdata_user: netdata
-netdata_group: netdata
-netdata_web_files_owner: root
-netdata_web_files_group: netdata
-netdata_bind_socket_to_IP: '0.0.0.0'
-netdata_default_port: 19999
 
-netdata_backend_enabled: "no"
-netdata_backend_type: graphite
-netdata_backend_destination: 10.0.0.1
-netdata_backend_data_source: average
-netdata_backend_prefix: netdata
-netdata_backend_hostname: "{{ ansible_hostname }}"
-netdata_backend_update_every: 10
-netdata_backend_buffer_on_failures: 60
-netdata_backend_timeout_ms: 20000
-netdata_backend_charts:
-  - "*openio*"
-  - "*apps*"
-  - "*beanstalk*"
-  - "*redis*"
-  - "*disk*"
-  - "*ipv4.errors*"
-  - "*ipv4.tcpsock*"
-  - "*ipv4.tcppackets*"
-  - "*ipv4.tcperrors*"
-  - "*ipv4.packets*"
-  - "*ipv4.tcphandshake*"
-  - "*ipv4.udppackets*"
-  - "*mem.committed*"
-  - "*net_drops*"
-  - "*net_packets*"
-  - "*net.*"
-  - "*system.ctxt*"
-  - "*system.cpu*"
-  - "*system.ram*"
-  - "*system.io*"
-  - "*system.processes*"
-  - "*system.load*"
-  - "*system.uptime*"
-  - "*system.forks*"
-  - "*response_time*"
-  - "*requests*"
-  - "*plugin_pythond_web_log*"
-  - "*web_log_.openio*"
 
-netdata_active_plugins:
-  apps: "yes"
-  cgroups: "no"
-  charts.d: "no"
-  checks: "no"
-  diskspace: "yes"
-  fping: "no"
-  idlejitter: "no"
-  node.d: "no"
-  proc: "yes"
-  python.d: "yes"
-  tc: "no"
 
-netdata_openio_namespaces: "OPENIO"
-netdata_openio_plugins_version: "0.2.14"
-netdata_container_plugin_host: null
-netdata_openio_plugins:
-  - name: openio
-    enabled: true
-    opts: ""
-  - name: zookeeper
-    enabled: true
-    opts: ""
-  - name: container
-    enabled: false
-    every: 3600
-    opts: "--threshold 300000 --limit 1000"
 
-# plugin.d.conf
-# Quote yes/no values
-netdata_python_d_plugin_enabled: true
-netdata_python_d_plugin_default_run: 'no'
-netdata_python_d_plugin_logs_per_interval: 200
-netdata_python_d_plugin_log_interval: 3600
-netdata_python_d_plugin_web_log: 'yes'
-netdata_python_d_plugin_nginx_log: 'no'
-netdata_python_d_plugin_gunicorn_log: 'no'
-netdata_python_d_retry: 300
+##########
+## OpenIO
+#openio_release: '16.10'
+#openio_sds_repository: "http://mirror.openio.io/pub/repo/openio/sds/{{ openio_release }}"
+#netdata_manage_repository: false
+#
+#netdata_weblog_conf_template: web_log.conf.j2
+#netdata_weblog_conf_path: /etc/netdata/python.d/web_log.conf
+#netdata_python_d_conf_template: python.d.conf.j2
+#netdata_python_d_conf_path: /etc/netdata/python.d.conf
+#netdata_apps_groups_conf_template: apps_groups.conf.j2
+#netdata_apps_groups_conf_path: /etc/netdata/apps_groups.conf
+#netdata_beanstalk_conf_template: beanstalk.conf.j2
+#netdata_beanstalk_conf_path: /etc/netdata/python.d/beanstalk.conf
+#netdata_redis_conf_template: redis.conf.j2
+#netdata_redis_conf_path: /etc/netdata/python.d/redis.conf
+#netdata_apps_groups_monitor_all: false
+#
+## netdata.conf
+#netdata_web_files_owner: root
+#netdata_web_files_group: netdata
+#netdata_bind_socket_to_IP: '0.0.0.0'
+#netdata_default_port: 19999
+#
+#netdata_backend_enabled: "no"
+#netdata_backend_type: graphite
+#netdata_backend_destination: 10.0.0.1
+#netdata_backend_data_source: average
+#netdata_backend_prefix: netdata
+#netdata_backend_hostname: "{{ ansible_hostname }}"
+#netdata_backend_update_every: 10
+#netdata_backend_buffer_on_failures: 60
+#netdata_backend_timeout_ms: 20000
+#netdata_backend_charts:
+#  - "*openio*"
+#  - "*apps*"
+#  - "*beanstalk*"
+#  - "*redis*"
+#  - "*disk*"
+#  - "*ipv4.errors*"
+#  - "*ipv4.tcpsock*"
+#  - "*ipv4.tcppackets*"
+#  - "*ipv4.tcperrors*"
+#  - "*ipv4.packets*"
+#  - "*ipv4.tcphandshake*"
+#  - "*ipv4.udppackets*"
+#  - "*mem.committed*"
+#  - "*net_drops*"
+#  - "*net_packets*"
+#  - "*net.*"
+#  - "*system.ctxt*"
+#  - "*system.cpu*"
+#  - "*system.ram*"
+#  - "*system.io*"
+#  - "*system.processes*"
+#  - "*system.load*"
+#  - "*system.uptime*"
+#  - "*system.forks*"
+#  - "*response_time*"
+#  - "*requests*"
+#  - "*plugin_pythond_web_log*"
+#  - "*web_log_.openio*"
+#
+#netdata_active_plugins:
+#  apps: "yes"
+#  cgroups: "no"
+#  charts.d: "no"
+#  checks: "no"
+#  diskspace: "yes"
+#  fping: "no"
+#  idlejitter: "no"
+#  node.d: "no"
+#  proc: "yes"
+#  python.d: "yes"
+#  tc: "no"
+#
+#netdata_openio_namespaces: "OPENIO"
+#netdata_openio_plugins_version: "0.2.14"
+#netdata_container_plugin_host: null
+#netdata_openio_plugins:
+#  - name: openio
+#    enabled: true
+#    opts: ""
+#  - name: zookeeper
+#    enabled: true
+#    opts: ""
+#  - name: container
+#    enabled: false
+#    every: 3600
+#    opts: "--threshold 300000 --limit 1000"
+#
+## plugin.d.conf
+## Quote yes/no values
+#netdata_python_d_plugin_enabled: true
+#netdata_python_d_plugin_default_run: 'no'
+#netdata_python_d_plugin_logs_per_interval: 200
+#netdata_python_d_plugin_log_interval: 3600
+#netdata_python_d_plugin_web_log: 'yes'
+#netdata_python_d_plugin_nginx_log: 'no'
+#netdata_python_d_plugin_gunicorn_log: 'no'
+#netdata_python_d_retry: 300
 ...

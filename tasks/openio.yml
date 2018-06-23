@@ -1,0 +1,52 @@
+---
+#  ?
+#- name: Deactivate container plugin
+#  command: "mv {{ netdata_openio_plugins_endpoint }}/container.plugin \
+#           {{ netdata_openio_plugins_endpoint }}/container.disabled"
+#  when: "(not netdata_container_plugin_host) or (netdata_container_plugin_host != ansible_hostname)"
+
+# A filter would be much better here @cdelgehier ;-)
+#- name: Register configured OpenIO RAW-X services
+#  shell: ls -d /etc/oio/sds/*/rawx-*||true
+#  register: netdata_openio_rawxlogs
+#  changed_when: false
+#- name: Register configured OpenIO directory services
+#  shell: ls -d /etc/oio/sds/*/meta*||true
+#  register: netdata_openio_metalogs
+#  changed_when: false
+#- name: Register configured OpenIO swift gateway services
+#  shell: ls -d /etc/oio/sds/*/oioswift*||true
+#  register: netdata_openio_swiftlogs
+#  changed_when: false
+
+#- name: Creating service list to monitor
+#  set_fact:
+#    netdata_openio_service_rawx: |
+#      [{% for item in netdata_openio_rawxlogs.stdout_lines -%}
+#        ["{{ item | regex_replace('/etc/oio/sds/(\w+)/.*', '\1') }}",
+#         "{{ item | regex_replace('/etc/oio/sds/\w+/(\w+)-\w+', '\1') }}",
+#         "{{ item | regex_replace('/etc/oio/sds/\w+/\w+-(\w+)', '\1') }}"],
+#      {%- endfor %}]
+#    netdata_openio_service_meta: |
+#      [{% for item in netdata_openio_metalogs.stdout_lines -%}
+#        ["{{ item| regex_replace('/etc/oio/sds/(\w+)/.*', '\1') }}",
+#         "{{ item| regex_replace('/etc/oio/sds/\w+/(\w+)-\w+', '\1') }}",
+#         "{{ item| regex_replace('/etc/oio/sds/\w+/\w+-(\w+)', '\1') }}"],
+#      {%- endfor %}]
+#    netdata_openio_service_oioswift: |
+#      [{% for item in netdata_openio_swiftlogs.stdout_lines -%}
+#        ["{{ item| regex_replace('/etc/oio/sds/(\w+)/.*', '\1') }}",
+#         "{{ item|regex_replace('/etc/oio/sds/\w+/(\w+)-\w+', '\1') }}",
+#         "{{ item|regex_replace('/etc/oio/sds/\w+/\w+-(\w+)', '\1') }}"],
+#      {%- endfor %}]
+#  when: netdata_python_d_plugin_enabled
+
+#- name: "Get beanstalk instance data"
+#  shell: "gridinit_cmd status2 | grep beanstalk"
+#  register: netdata_openio_tmp_beanstalk
+#  changed_when: true
+#  when: netdata_python_d_plugin_enabled
+
+#- name: "Register beanstalk services"
+#  changed_when: true
+...

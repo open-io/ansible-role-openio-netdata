@@ -1,7 +1,8 @@
 ---
-netdata_openio_plugins_endpoint: "/usr/libexec/netdata/plugins.d/"
+openio_netdata_plugins_directory: "/usr/libexec/netdata/plugins.d/"
 
-netdata_packages:
+openio_netdata_packages:
   - netdata
   - beanstalkc
+  #- "{% if openio_netdata_openio_host %}netdata-plugin-openio{% endif %}"
 ...

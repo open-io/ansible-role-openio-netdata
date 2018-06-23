@@ -1,10 +1,5 @@
 ---
-- name: RedHat | add OpenIO SDS repository
-  include_role:
-    name: ansible-role-repo-openio-sds
-  when: netdata_manage_repository
-
-- name: RedHat |Install packages
+- name: Install packages
   package:
     name: "{{ pkg }}"
     state: present
