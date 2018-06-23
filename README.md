@@ -1,38 +1,56 @@
-Role Name
-=========
+[![Build Status](https://travis-ci.org/open-io/ansible-role-openio-netdata.svg?branch=master)](https://travis-ci.org/open-io/ansible-role-openio-netdata)
+# Ansible role `netdata`
 
-A brief description of the role goes here.
+An Ansible role for install netdata. Specifically, the responsibilities of this role are to:
 
-Requirements
-------------
+- install netdata packages
+- Install openio plugin
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+## Requirements
 
-Role Variables
---------------
+- Ansible 2.4+
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+## Role Variables
 
-Dependencies
-------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+| Variable   | Default | Comments (type)  |
+| :---       | :---    | :---             |
+| `openio_netdata_namespace` | `"OPENIO"` | ... |
+| `openio_netdata_openio_host` | `true` | ... |
+| `openio_netdata_service_name` | `netdata` | ... |
 
-Example Playbook
-----------------
+## Dependencies
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+No dependencies.
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+## Example Playbook
 
-License
--------
+```yaml
+- hosts: all
+  gather_facts: true
+  become: true
+  roles:
+    - role: netdata
+```
 
-BSD
 
-Author Information
-------------------
+```ini
+[all]
+node1 ansible_host=192.168.1.173
+```
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+## Contributing
+
+Issues, feature requests, ideas are appreciated and can be posted in the Issues section.
+
+Pull requests are also very welcome.
+The best way to submit a PR is by first creating a fork of this Github project, then creating a topic branch for the suggested change and pushing that branch to your own fork.
+Github can then easily create a PR based on that branch.
+
+## License
+
+Apache License, Version 2.0
+
+## Contributors
+- [Vladimir DOMBROVSKI](https://github.com/vdombrovski) (maintainer)
+- [Cedric DELGEHIER](https://github.com/cdelgehier)

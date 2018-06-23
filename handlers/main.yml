@@ -1,3 +1,7 @@
 ---
 # handlers file for ansible-role-openio-netdata
+- name: restart netdata
+  service:
+    name: "{{ openio_netdata_service_name }}"
+    state: restarted
 ...
