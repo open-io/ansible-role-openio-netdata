@@ -1,37 +1,38 @@
 # NetData Configuration
 [global]
-  run as user = {{ netdata_user }}
-  web files owner = {{ netdata_web_files_owner }}
-  web files group = {{ netdata_web_files_group }}
+  run as user = netdata
+  web files owner = root
+  web files group = netdata
   # Netdata is not designed to be exposed to potentially hostile
   # networks.See https://github.com/firehol/netdata/issues/164
-  {% if netdata_bind_socket_to_IP -%}
-  bind socket to IP = {{ netdata_bind_socket_to_IP }}
-  {% endif %}
-  default port = {{ netdata_default_port }}
+  bind socket to IP = {{ openio_netdata_bind_address }}
+  default port = {{ openio_netdata_bind_port }}
 
 [backend]
   enabled = no
-  hostname = {{ netdata_backend_hostname }}
-  update every = {{ netdata_backend_update_every }}
-  timeout ms = {{ netdata_backend_timeout_ms }}
-  send charts matching = {{ netdata_backend_charts | join(' ')}}
+  hostname = {{ openio_netdata_backend_hostname }}
+  update every = {{ openio_netdata_backend_update_every }}
+  timeout ms = {{ openio_netdata_backend_timeout_ms }}
+  send charts matching = {{ openio_netdata_backend_charts | join(' ')}}
 
 [plugins]
-{% for plugin, state in netdata_active_plugins.iteritems() %}
-  {{plugin}} = {{ 'yes' if state else 'no' }}
+{% for plugin, state in openio_netdata_active_plugins.iteritems() %}
+  {{ plugin }} = {{ 'yes' if state else 'no' }}
 {% endfor %}
 
-{% for plugin in netdata_openio_plugins %}
-{% if plugin['enabled'] %}
-{% if plugin['name'] != 'container' or (netdata_container_plugin_host and (netdata_container_plugin_host == ansible_hostname)) %}
-[plugin:{{ plugin['name'] }}]
-    update every = {{ plugin['every'] if 'every' in plugin else netdata_backend_update_every }}
-    command options = --ns {{netdata_openio_namespaces}} {{ plugin['opts'] }}
+{% if openio_netdata_oio_host %}
+{% for plugin in openio_netdata_oio_plugins %}
+{% if plugin.enabled %}
+{% if plugin.name != 'container' 
+   or openio_netdata_oio_container_hostname == ansible_hostname %}
+[plugin:{{ plugin.name }}]
+    update every = {{ plugin.every | default(openio_netdata_backend_update_every) }}
+    command options = --ns {{ openio_netdata_namespace }} {{ plugin.opts }}
+
 {% endif %}
 {% endif %}
 {% endfor %}
-
+{% endif %}
 
 [netdata.backend_metrics]
   enabled=no
@@ -48,14 +49,17 @@
 [netdata.private_charts]
   enabled=no
 
-{% for t in ('ect','errors','icmp','icmpmldv2','icmpneighbor','icmprouter','icmptypes') %}
-[ipv6.{{t}}]
+{% for t in openio_netdata_ipv6_ignore %}
+[ipv6.{{ t }}]
   enabled=no
+
 {% endfor %}
 
-{% for t in ('vmem','threads','processes','preads','pipes','minor_faults','mem','major_faults','lwrites','lreads','files','cpu_user','cpu_system','cpu') %}
-[groups.{{t}}]
+{% for t in openio_netdata_users_groups_ignore %}
+[groups.{{ t }}]
   enabled=no
-[users.{{t}}]
+
+[users.{{ t }}]
   enabled=no
+
 {% endfor %}

@@ -32,7 +32,7 @@
 
 - name: 'Set global configuration'
   template:
-    src: netdata.conf.j2 
+    src: netdata.conf.j2
     dest: /etc/netdata/netdata.conf
     owner: "{{ netdata_user }}"
     group: "{{ netdata_group }}"
@@ -46,17 +46,19 @@
     owner: "{{ netdata_user }}"
     group: "{{ netdata_group }}"
     mode: 0640
-  when: netdata_python_d_plugin_enabled
+  when:
+    - openio_netdata_oio_host
+    - openio_netdata_python_d_plugin_enabled
   with_items:
-    - src: "{{ netdata_weblog_conf_template }}"
-      dest: "{{ netdata_weblog_conf_path }}"
-    - src: "{{ netdata_python_d_conf_template }}"
-      dest: "{{ netdata_python_d_conf_path }}"
-    - src: "{{ netdata_apps_groups_conf_template }}"
-      dest: "{{ netdata_apps_groups_conf_path }}"
-    - src: "{{ netdata_beanstalk_conf_template }}"
-      dest: "{{ netdata_beanstalk_conf_path }}"
-    - src: "{{ netdata_redis_conf_template }}"
-      dest: "{{ netdata_redis_conf_path }}"
+    - src: web_log.conf.j2
+      dest: /etc/netdata/python.d/web_log.conf
+    - src: python.d.conf.j2
+      dest: /etc/netdata/python.d.conf
+    - src: apps_groups.conf.j2
+      dest: /etc/netdata/apps_groups.conf
+    - src: beanstalk.conf.j2
+      dest: /etc/netdata/python.d/beanstalk.conf
+    - src: redis.conf.j2
+      dest: /etc/netdata/python.d/redis.conf
   notify: restart netdata
 ...
