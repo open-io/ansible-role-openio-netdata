@@ -16,22 +16,33 @@ An Ansible role for install netdata. Specifically, the responsibilities of this 
 | Variable   | Default | Comments (type)  |
 | :---       | :---    | :---             |
 | `openio_netdata_active_plugins` | `` | ... |
+| `openio_netdata_apps_groups_monitor_all` | `false` | ... |
 | `openio_netdata_backend_charts` | `` | ... |
-| `openio_netdata_backend_hostname` | `"{{ ansible_hostname }}"` | ... |
-| `openio_netdata_backend_oio_charts` | ` "{{ openio_netdata_backend_standard_charts + openio_netdata_backend_oio_charts if openio_netdata_openio_host \` | ... |
-| `openio_netdata_backend_standard_charts` | ` "{{ openio_netdata_backend_standard_charts + openio_netdata_backend_oio_charts if openio_netdata_openio_host \ else openio_netdata_backend_standard_charts }}"` | ... |
+| `openio_netdata_backend_hostname` | `ansible_hostname` | ... |
+| `openio_netdata_backend_oio_charts` | `list` | ... |
+| `openio_netdata_backend_standard_charts` | `list` | ... |
 | `openio_netdata_backend_timeout_ms` | `20000` | ... |
 | `openio_netdata_backend_update_every` | `10` | ... |
 | `openio_netdata_bind_address` | `` | ... |
-| `openio_netdata_bind_interface` | `"{{ ansible_default_ipv4.alias }}" "{{ hostvars[inventory_hostname]['ansible_' + openio_netdata_bind_interface]['ipv4']['address'] }}"` | ... |
+| `openio_netdata_bind_interface` | `ansible_default_ipv4.alias` | ... |
 | `openio_netdata_bind_port` | `19999` | ... |
-| `openio_netdata_inventory_groupname` | `all "{{ hostvars[ groups[openio_netdata_inventory_groupname][0] ]['ansible_hostname' ] }}"` | ... |
+| `openio_netdata_inventory_groupname` | `all` | ... |
 | `openio_netdata_namespace` | `"OPENIO"` | ... |
 | `openio_netdata_oio_container_hostname` | `` | ... |
 | `openio_netdata_oio_host` | `false` | ... |
 | `openio_netdata_oio_plugins` | `` | ... |
+| `openio_netdata_oio_plugin_version` | `'latest'` | ... |
+| `openio_netdata_openio_plugins` | `` | ... |
 | `openio_netdata_plugin_container_host` | `""` | ... |
+| `openio_netdata_python_d_plugin_default_run` | `'no'` | ... |
 | `openio_netdata_python_d_plugin_enabled` | `true` | ... |
+| `openio_netdata_python_d_plugin_gunicorn_log` | `'no'` | ... |
+| `openio_netdata_python_d_plugin_log_interval` | `3600` | ... |
+| `openio_netdata_python_d_plugin_logs_per_interval` | `200` | ... |
+| `openio_netdata_python_d_plugin_nginx_log` | `'no'` | ... |
+| `openio_netdata_python_d_plugin_web_log` | `'yes'` | ... |
+| `openio_netdata_python_d_retry` | `300` | ... |
+
 ## Dependencies
 
 No dependencies.
