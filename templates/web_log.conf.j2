@@ -1,4 +1,5 @@
-autodetection_retry: {{ netdata_python_d_retry }}
+# {{ ansible_managed }}
+autodetection_retry: {{ openio_netdata_python_d_retry }}
 # -------------------------------------------
 # nginx log on various distros
 
@@ -50,26 +51,26 @@ gunicorn_log2:
 
 # -------------------------------------------
 # OpenIO SDS logs
-{% for rawx in netdata_openio_service_rawx -%}
-{{ rawx[0] }}-{{ rawx[1] }}-{{ rawx[2] }}:
-  name: '.openio.{{ rawx[0] }}.{{ rawx[1] }}.{{ rawx[1] }}-{{ rawx[2] }}.log.access'
-  path: '/var/log/oio/sds/{{ rawx[0] }}/{{ rawx[1] }}-{{ rawx[2] }}/{{ rawx[1] }}-{{ rawx[2] }}-httpd-access.log'
+{% for rawx in services_rawx -%}
+{{ rawx.ns }}-{{ rawx.service_type }}-{{ rawx.id }}:
+  name: '.openio.{{ rawx.ns }}.{{ rawx.service_type }}.{{ rawx.service_type }}-{{ rawx.id }}.log.access'
+  path: '/var/log/oio/sds/{{ rawx.ns }}/{{ rawx.service_type }}-{{ rawx.id }}/{{ rawx.service_type }}-{{ rawx.id }}-httpd-access.log'
   custom_log_format:
     pattern: '\S+ \S+ \S+ \S+ \S+ \d+ \d+ \S+ \S+ (?P<address>\S+) \S+ (?P<method>\S+) (?P<code>\d+) (?P<resp_time>\d+) (?P<bytes_sent>\d+) \S+ \S+ (?P<url>.*)'
 
 {% endfor -%}
-{% for meta in netdata_openio_service_meta -%}
-{{ meta[0] }}-{{ meta[1] }}-{{ meta[2] }}:
-  name: '.openio.{{ meta[0] }}.{{ meta[1] }}.{{ meta[1] }}-{{ meta[2] }}.log.access'
-  path: '/var/log/oio/sds/{{ meta[0] }}/{{ meta[1] }}-{{ meta[2] }}/{{ meta[1] }}-{{ meta[2] }}.access'
+{% for meta in services_meta -%}
+{{ meta.ns }}-{{ meta.service_type }}-{{ meta.id }}:
+  name: '.openio.{{ meta.ns }}.{{ meta.service_type }}.{{ meta.service_type }}-{{ meta.id }}.log.access'
+  path: '/var/log/oio/sds/{{ meta.ns }}/{{ meta.service_type }}-{{ meta.id }}/{{ meta.service_type }}-{{ meta.id }}.access'
   custom_log_format:
     pattern: '\S+ \S+ \S+ \S+  \S+ \S+ \S+ \S+ (?P<address>\S+) \S+ (?P<method>\S+) (?P<code>\d+) (?P<resp_time>\d+) (?P<bytes_sent>\d+) \S+ \S+ \S+ (?P<url>.*)'
 {% endfor -%}
 
-{% for swift in netdata_openio_service_oioswift -%}
-{{ swift[0] }}-{{ swift[1] }}-{{ swift[2] }}:
-  name: '.openio.{{ swift[0] }}.{{ swift[1] }}.{{ swift[1] }}-{{ swift[2] }}.log'
-  path: '/var/log/oio/sds/{{ swift[0] }}/{{ swift[1] }}-{{ swift[2] }}/{{ swift[1] }}-{{ swift[2] }}.log'
+{% for swift in services_oioswift -%}
+{{ swift.ns }}-{{ swift.service_type }}-{{ swift.id }}:
+  name: '.openio.{{ swift.ns }}.{{ swift.service_type }}.{{ swift.service_type }}-{{ swift.id }}.log'
+  path: '/var/log/oio/sds/{{ swift.ns }}/{{ swift.service_type }}-{{ swift.id }}/{{ swift.service_type }}-{{ swift.id }}.log'
   custom_log_format:
     pattern: '\S+ \S+ \S+ \S+  \S+ (?P<address>\S+) \S+ (?P<method>\S+) (?P<url>\S+) \S+ (?P<code>\d+) \S+ \S+ \S+ (?P<resp_length>\d+|-) (?P<bytes_sent>\d+|-) \S+ \S+ \S+ (?P<resp_time>\d+\.\d+) .*'
     time_multiplier: 1000000

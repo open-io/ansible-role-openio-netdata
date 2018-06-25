@@ -1,9 +1,10 @@
-autodetection_retry: {{ netdata_python_d_retry }}
-{% for svc in netdata_openio_service_redis.stdout_lines %}
-{% if svc.split(':')[0] | ipaddr %}
-'{{svc}}':
-  name: '{{svc}}'
-  host: '{{ svc.split(":")[0] | ipaddr }}'
-  port:  {{ svc.split(":")[1] }}
+# {{ ansible_managed }}
+autodetection_retry: {{ openio_netdata_python_d_retry }}
+{% for redis in services_redis %}
+{% if redis.ip | ipaddr %}
+'{{ redis.ip }}:{{ redis.port }}':
+  name: '{{ redis.ip }}:{{ redis.port }}'
+  host: '{{ redis.ip }}'
+  port:  {{ redis.port }}
 {% endif %}
 {% endfor %}

@@ -4,13 +4,14 @@ openio_netdata_namespace: "OPENIO"
 openio_netdata_oio_host: false
 openio_netdata_inventory_groupname: all
 openio_netdata_oio_container_hostname:
-  "{{  hostvars[ groups[openio_netdata_inventory_groupname][0] ]['ansible_hostname' ] }}"
+  "{{  hostvars[ groups[openio_netdata_inventory_groupname][0] ]['ansible_hostname'] }}"
 
 openio_netdata_bind_interface: "{{ ansible_default_ipv4.alias }}"
 openio_netdata_bind_address:
   "{{ hostvars[inventory_hostname]['ansible_' + openio_netdata_bind_interface]['ipv4']['address'] }}"
 
 openio_netdata_bind_port: 19999
+openio_netdata_oio_plugin_version: 'latest'
 
 ## netdata.conf
 openio_netdata_backend_hostname: "{{ ansible_hostname }}"
@@ -18,7 +19,7 @@ openio_netdata_backend_update_every: 10
 openio_netdata_backend_timeout_ms: 20000
 
 openio_netdata_backend_charts:
-  "{{ openio_netdata_backend_standard_charts + openio_netdata_backend_oio_charts  if openio_netdata_openio_host \
+  "{{ openio_netdata_backend_standard_charts + openio_netdata_backend_oio_charts  if openio_netdata_oio_host \
   else openio_netdata_backend_standard_charts }}"
 
 openio_netdata_backend_standard_charts:
@@ -79,73 +80,29 @@ openio_netdata_oio_plugins:
     every: 3600
     opts: "--threshold 300000 --limit 1000"
 
-##########
-## OpenIO
-#openio_release: '16.10'
-#openio_sds_repository: "http://mirror.openio.io/pub/repo/openio/sds/{{ openio_release }}"
-#netdata_manage_repository: false
-#
-#netdata_weblog_conf_template: web_log.conf.j2
-#netdata_weblog_conf_path: /etc/netdata/python.d/web_log.conf
-#netdata_python_d_conf_template: python.d.conf.j2
-#netdata_python_d_conf_path: /etc/netdata/python.d.conf
-#netdata_apps_groups_conf_template: apps_groups.conf.j2
-#netdata_apps_groups_conf_path: /etc/netdata/apps_groups.conf
-#netdata_beanstalk_conf_template: beanstalk.conf.j2
-#netdata_beanstalk_conf_path: /etc/netdata/python.d/beanstalk.conf
-#netdata_redis_conf_template: redis.conf.j2
-#netdata_redis_conf_path: /etc/netdata/python.d/redis.conf
+openio_netdata_apps_groups_monitor_all: false
 #netdata_apps_groups_monitor_all: false
-#
-## netdata.conf
-#netdata_bind_socket_to_IP: '0.0.0.0'
-#netdata_default_port: 19999
-#
-#netdata_backend_enabled: "no"
-#netdata_backend_type: graphite
-#netdata_backend_destination: 10.0.0.1
-#netdata_backend_data_source: average
-#netdata_backend_prefix: netdata
-#netdata_backend_hostname: "{{ ansible_hostname }}"
-#netdata_backend_update_every: 10
-#netdata_backend_buffer_on_failures: 60
-#netdata_backend_timeout_ms: 20000
-#netdata_active_plugins:
-#  apps: "yes"
-#  cgroups: "no"
-#  charts.d: "no"
-#  checks: "no"
-#  diskspace: "yes"
-#  fping: "no"
-#  idlejitter: "no"
-#  node.d: "no"
-#  proc: "yes"
-#  python.d: "yes"
-#  tc: "no"
-#
-#netdata_openio_namespaces: "OPENIO"
-#netdata_openio_plugins_version: "0.2.14"
-#netdata_container_plugin_host: null
-#netdata_openio_plugins:
-#  - name: openio
-#    enabled: true
-#    opts: ""
-#  - name: zookeeper
-#    enabled: true
-#    opts: ""
-#  - name: container
-#    enabled: false
-#    every: 3600
-#    opts: "--threshold 300000 --limit 1000"
-#
+
+openio_netdata_openio_plugins:
+  - name: openio
+    enabled: true
+    opts: ""
+  - name: zookeeper
+    enabled: true
+    opts: ""
+  - name: container
+    enabled: false
+    every: 3600
+    opts: "--threshold 300000 --limit 1000"
+
 ## plugin.d.conf
 ## Quote yes/no values
 openio_netdata_python_d_plugin_enabled: true
-#netdata_python_d_plugin_default_run: 'no'
-#netdata_python_d_plugin_logs_per_interval: 200
-#netdata_python_d_plugin_log_interval: 3600
-#netdata_python_d_plugin_web_log: 'yes'
-#netdata_python_d_plugin_nginx_log: 'no'
-#netdata_python_d_plugin_gunicorn_log: 'no'
-#netdata_python_d_retry: 300
+openio_netdata_python_d_plugin_default_run: 'no'
+openio_netdata_python_d_plugin_logs_per_interval: 200
+openio_netdata_python_d_plugin_log_interval: 3600
+openio_netdata_python_d_plugin_web_log: 'yes'
+openio_netdata_python_d_plugin_nginx_log: 'no'
+openio_netdata_python_d_plugin_gunicorn_log: 'no'
+openio_netdata_python_d_retry: 300
 ...

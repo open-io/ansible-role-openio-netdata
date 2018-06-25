@@ -1,18 +1,19 @@
+# {{ ansible_managed }}
 # netdata python.d.plugin configuration
 
 # Enable / disable the whole python.d.plugin (all its modules)
-enabled: {{ 'yes' if netdata_python_d_plugin_enabled else 'no' }}
+enabled: {{ 'yes' if openio_netdata_python_d_plugin_enabled else 'no' }}
 
 # Prevent log flood
 # Define how many log messages can be written to log file in one log_interval
-logs_per_interval: {{ netdata_python_d_plugin_logs_per_interval }}
+logs_per_interval: {{ openio_netdata_python_d_plugin_logs_per_interval }}
 
 # Define how long is one logging interval (in seconds)
-log_interval: {{ netdata_python_d_plugin_log_interval }}
+log_interval: {{ openio_netdata_python_d_plugin_log_interval }}
 
 # ----------------------------------------------------------------------
 # Enable / Disable python.d.plugin modules
-default_run: {{ netdata_python_d_plugin_default_run }}
+default_run: {{ openio_netdata_python_d_plugin_default_run }}
 #
 # If "default_run" = "yes" the default for all modules is enabled (yes).
 # Setting any of these to "no" will disable it.
@@ -34,7 +35,7 @@ beanstalk: yes
 # freeradius: yes
 
 # gunicorn_log has been replaced by web_log
-gunicorn_log: {{ netdata_python_d_plugin_gunicorn_log }}
+gunicorn_log: {{ openio_netdata_python_d_plugin_gunicorn_log }}
 
 # haproxy: yes
 # hddtemp: yes
@@ -46,7 +47,7 @@ gunicorn_log: {{ netdata_python_d_plugin_gunicorn_log }}
 # nginx: yes
 
 # nginx_log has been replaced by web_log
-nginx_log: {{ netdata_python_d_plugin_nginx_log }}
+nginx_log: {{ openio_netdata_python_d_plugin_nginx_log }}
 
 # ovpn_status_log: yes
 # phpfpm: yes
@@ -60,4 +61,4 @@ redis: yes
 # squid: yes
 # tomcat: yes
 # varnish: yes
-web_log: {{ netdata_python_d_plugin_web_log }}
+web_log: {{ openio_netdata_python_d_plugin_web_log }}
