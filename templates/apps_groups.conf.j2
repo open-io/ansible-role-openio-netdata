@@ -1,3 +1,4 @@
+# {{ ansible_managed }}
 # -----------------------------------------------------------------------------
 # OpenIO processes
 
@@ -18,7 +19,7 @@ openio.redis: *redis-*
 openio.redissentinel: *redissentinel-*
 openio.zookeeper: *zookeeper-*
 
-{% if netdata_apps_groups_monitor_all %}
+{% if openio_netdata_apps_groups_monitor_all %}
 # -----------------------------------------------------------------------------
 # NETDATA processes accounting
 

@@ -1,52 +1,51 @@
 ---
-#  ?
-#- name: Deactivate container plugin
-#  command: "mv {{ netdata_openio_plugins_endpoint }}/container.plugin \
-#           {{ netdata_openio_plugins_endpoint }}/container.disabled"
-#  when: "(not netdata_container_plugin_host) or (netdata_container_plugin_host != ansible_hostname)"
+- name: Remove container plugin
+  file:
+    path: "{{ openio_netdata_plugins_directory }}/container.plugin"
+    state: absent
+  when: openio_netdata_oio_container_hostname != ansible_hostname
 
-# A filter would be much better here @cdelgehier ;-)
-#- name: Register configured OpenIO RAW-X services
-#  shell: ls -d /etc/oio/sds/*/rawx-*||true
-#  register: netdata_openio_rawxlogs
-#  changed_when: false
-#- name: Register configured OpenIO directory services
-#  shell: ls -d /etc/oio/sds/*/meta*||true
-#  register: netdata_openio_metalogs
-#  changed_when: false
-#- name: Register configured OpenIO swift gateway services
-#  shell: ls -d /etc/oio/sds/*/oioswift*||true
-#  register: netdata_openio_swiftlogs
-#  changed_when: false
+- name: Register configured OpenIO RAW-X services
+  shell: "ls -d /etc/oio/sds/*/rawx-*"
+  register: _rawxlogs
+  changed_when: false
+  failed_when: false
+  when: openio_netdata_python_d_plugin_enabled
 
-#- name: Creating service list to monitor
-#  set_fact:
-#    netdata_openio_service_rawx: |
-#      [{% for item in netdata_openio_rawxlogs.stdout_lines -%}
-#        ["{{ item | regex_replace('/etc/oio/sds/(\w+)/.*', '\1') }}",
-#         "{{ item | regex_replace('/etc/oio/sds/\w+/(\w+)-\w+', '\1') }}",
-#         "{{ item | regex_replace('/etc/oio/sds/\w+/\w+-(\w+)', '\1') }}"],
-#      {%- endfor %}]
-#    netdata_openio_service_meta: |
-#      [{% for item in netdata_openio_metalogs.stdout_lines -%}
-#        ["{{ item| regex_replace('/etc/oio/sds/(\w+)/.*', '\1') }}",
-#         "{{ item| regex_replace('/etc/oio/sds/\w+/(\w+)-\w+', '\1') }}",
-#         "{{ item| regex_replace('/etc/oio/sds/\w+/\w+-(\w+)', '\1') }}"],
-#      {%- endfor %}]
-#    netdata_openio_service_oioswift: |
-#      [{% for item in netdata_openio_swiftlogs.stdout_lines -%}
-#        ["{{ item| regex_replace('/etc/oio/sds/(\w+)/.*', '\1') }}",
-#         "{{ item|regex_replace('/etc/oio/sds/\w+/(\w+)-\w+', '\1') }}",
-#         "{{ item|regex_replace('/etc/oio/sds/\w+/\w+-(\w+)', '\1') }}"],
-#      {%- endfor %}]
-#  when: netdata_python_d_plugin_enabled
+- name: Register configured OpenIO directory services
+  shell: "ls -d /etc/oio/sds/*/meta*"
+  register: _metalogs
+  changed_when: false
+  failed_when: false
+  when: openio_netdata_python_d_plugin_enabled
 
-#- name: "Get beanstalk instance data"
-#  shell: "gridinit_cmd status2 | grep beanstalk"
-#  register: netdata_openio_tmp_beanstalk
-#  changed_when: true
-#  when: netdata_python_d_plugin_enabled
+- name: Register configured OpenIO swift gateway services
+  shell: "ls -d /etc/oio/sds/*/oioswift*"
+  register: _swiftlogs
+  changed_when: false
+  failed_when: false
+  when: openio_netdata_python_d_plugin_enabled
 
-#- name: "Register beanstalk services"
-#  changed_when: true
+- name: Register configured OpenIO beanstalk services
+  shell: "gridinit_cmd status2 | grep beanstalk"
+  register: _beanstalk
+  changed_when: false
+  failed_when: false
+  when: openio_netdata_python_d_plugin_enabled
+
+- name: Register configured OpenIO redis services
+  shell: "ps aux | grep redis | grep -v \"grep\\|sentinel\" | awk '{print $NF}'"
+  register: _redis
+  changed_when: false
+  failed_when: false
+  when: openio_netdata_python_d_plugin_enabled
+
+- name: Creating service list to monitor
+  set_fact:
+    services_rawx: "{{ _rawxlogs.stdout_lines | services_by_path }}"
+    services_meta: "{{ _metalogs.stdout_lines | services_by_path }}"
+    services_oioswift: "{{ _swiftlogs.stdout_lines | services_by_path }}"
+    services_beanstalk: "{{ _beanstalk.stdout_lines | beanstalks_by_status2 }}"
+    services_redis: "{{ _redis.stdout_lines | ip_port }}"
+  when: openio_netdata_python_d_plugin_enabled
 ...

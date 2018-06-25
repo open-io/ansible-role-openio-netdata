@@ -24,11 +24,11 @@
     name: "{{ netdata_user }}"
     groups: openio
     append: true
-  when: openio_netdata_openio_host
+  when: openio_netdata_oio_host
 
 - name: Register openio services
   include_tasks: openio.yml
-  when: openio_netdata_openio_host
+  when: openio_netdata_oio_host
 
 - name: 'Set global configuration'
   template:
