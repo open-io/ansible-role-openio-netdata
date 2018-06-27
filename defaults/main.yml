@@ -1,73 +1,21 @@
 ---
 # defaults file for ansible-role-openio-netdata
 openio_netdata_namespace: "OPENIO"
+openio_netdata_confdir: "/etc/netdata"
 openio_netdata_oio_host: false
 openio_netdata_inventory_groupname: all
-openio_netdata_oio_container_hostname:
-  "{{  hostvars[ groups[openio_netdata_inventory_groupname][0] ]['ansible_hostname'] }}"
 
 openio_netdata_bind_interface: "{{ ansible_default_ipv4.alias }}"
 openio_netdata_bind_address:
   "{{ hostvars[inventory_hostname]['ansible_' + openio_netdata_bind_interface]['ipv4']['address'] }}"
-
 openio_netdata_bind_port: 19999
-openio_netdata_oio_plugin_version: 'latest'
 
-## netdata.conf
 openio_netdata_backend_hostname: "{{ ansible_hostname }}"
 openio_netdata_backend_update_every: 10
 openio_netdata_backend_timeout_ms: 20000
 
-openio_netdata_backend_charts:
-  "{{ openio_netdata_backend_standard_charts + openio_netdata_backend_oio_charts  if openio_netdata_oio_host \
-  else openio_netdata_backend_standard_charts }}"
-
-openio_netdata_backend_standard_charts:
-  - "*apps*"
-  - "*disk*"
-  - "*ipv4.errors*"
-  - "*ipv4.tcpsock*"
-  - "*ipv4.tcppackets*"
-  - "*ipv4.tcperrors*"
-  - "*ipv4.packets*"
-  - "*ipv4.tcphandshake*"
-  - "*ipv4.udppackets*"
-  - "*mem.committed*"
-  - "*net_drops*"
-  - "*net_packets*"
-  - "*net.*"
-  - "*system.ctxt*"
-  - "*system.cpu*"
-  - "*system.ram*"
-  - "*system.io*"
-  - "*system.processes*"
-  - "*system.load*"
-  - "*system.uptime*"
-  - "*system.forks*"
-  - "*response_time*"
-  - "*requests*"
-  - "*plugin_pythond_web_log*"
-
-openio_netdata_backend_oio_charts:
-  - "*openio*"
-  - "*beanstalk*"
-  - "*redis*"
-  - "*web_log_.openio*"
-
-openio_netdata_active_plugins:
-  apps: true
-  cgroups: false
-  charts.d: false
-  checks: false
-  diskspace: true
-  fping: false
-  idlejitter: false
-  node.d: false
-  proc: true
-  python.d: true
-  tc: false
-
-openio_netdata_plugin_container_host: ""
+openio_netdata_oio_container_hostname:
+  "{{  hostvars[ groups[openio_netdata_inventory_groupname][0] ]['ansible_hostname'] }}"
 openio_netdata_oio_plugins:
   - name: openio
     enabled: true
@@ -80,29 +28,5 @@ openio_netdata_oio_plugins:
     every: 3600
     opts: "--threshold 300000 --limit 1000"
 
-openio_netdata_apps_groups_monitor_all: false
-#netdata_apps_groups_monitor_all: false
-
-openio_netdata_openio_plugins:
-  - name: openio
-    enabled: true
-    opts: ""
-  - name: zookeeper
-    enabled: true
-    opts: ""
-  - name: container
-    enabled: false
-    every: 3600
-    opts: "--threshold 300000 --limit 1000"
-
-## plugin.d.conf
-## Quote yes/no values
-openio_netdata_python_d_plugin_enabled: true
-openio_netdata_python_d_plugin_default_run: 'no'
-openio_netdata_python_d_plugin_logs_per_interval: 200
-openio_netdata_python_d_plugin_log_interval: 3600
-openio_netdata_python_d_plugin_web_log: 'yes'
-openio_netdata_python_d_plugin_nginx_log: 'no'
-openio_netdata_python_d_plugin_gunicorn_log: 'no'
 openio_netdata_python_d_retry: 300
 ...

@@ -24,8 +24,8 @@
 {% if openio_netdata_oio_host %}
 {% for plugin in openio_netdata_oio_plugins %}
 {% if plugin.enabled %}
-{% if plugin.name != 'container' 
-   or openio_netdata_oio_container_hostname == ansible_hostname %}
+{% if plugin.name != 'container'
+   or openio_netdata_container_plugin_target == ansible_hostname %}
 [plugin:{{ plugin.name }}]
     update every = {{ plugin.every | default(openio_netdata_backend_update_every) }}
     command options = --ns {{ openio_netdata_namespace }} {{ plugin.opts }}
