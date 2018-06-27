@@ -5,47 +5,43 @@
     state: absent
   when: openio_netdata_oio_container_hostname != ansible_hostname
 
-- name: Register configured OpenIO RAW-X services
-  shell: "ls -d /etc/oio/sds/*/rawx-*"
-  register: _rawxlogs
-  changed_when: false
-  failed_when: false
-  when: openio_netdata_python_d_plugin_enabled
+- block:
+    - name: Register configured OpenIO RAW-X services
+      shell: "ls -d /etc/oio/sds/*/rawx-*"
+      register: _rawxlogs
+      changed_when: false
+      failed_when: false
 
-- name: Register configured OpenIO directory services
-  shell: "ls -d /etc/oio/sds/*/meta*"
-  register: _metalogs
-  changed_when: false
-  failed_when: false
-  when: openio_netdata_python_d_plugin_enabled
+    - name: Register configured OpenIO directory services
+      shell: "ls -d /etc/oio/sds/*/meta*"
+      register: _metalogs
+      changed_when: false
+      failed_when: false
 
-- name: Register configured OpenIO swift gateway services
-  shell: "ls -d /etc/oio/sds/*/oioswift*"
-  register: _swiftlogs
-  changed_when: false
-  failed_when: false
-  when: openio_netdata_python_d_plugin_enabled
+    - name: Register configured OpenIO swift gateway services
+      shell: "ls -d /etc/oio/sds/*/oioswift*"
+      register: _swiftlogs
+      changed_when: false
+      failed_when: false
 
-- name: Register configured OpenIO beanstalk services
-  shell: "gridinit_cmd status2 | grep beanstalk"
-  register: _beanstalk
-  changed_when: false
-  failed_when: false
-  when: openio_netdata_python_d_plugin_enabled
+    - name: Register configured OpenIO beanstalk services
+      shell: "gridinit_cmd status2 | grep beanstalk"
+      register: _beanstalk
+      changed_when: false
+      failed_when: false
 
-- name: Register configured OpenIO redis services
-  shell: "ps aux | grep redis | grep -v \"grep\\|sentinel\" | awk '{print $NF}'"
-  register: _redis
-  changed_when: false
-  failed_when: false
-  when: openio_netdata_python_d_plugin_enabled
+    - name: Register configured OpenIO redis services
+      shell: "ps aux | grep redis | grep -v \"grep\\|sentinel\" | awk '{print $NF}'"
+      register: _redis
+      changed_when: false
+      failed_when: false
 
-- name: Creating service list to monitor
-  set_fact:
-    services_rawx: "{{ _rawxlogs.stdout_lines | services_by_path }}"
-    services_meta: "{{ _metalogs.stdout_lines | services_by_path }}"
-    services_oioswift: "{{ _swiftlogs.stdout_lines | services_by_path }}"
-    services_beanstalk: "{{ _beanstalk.stdout_lines | beanstalks_by_status2 }}"
-    services_redis: "{{ _redis.stdout_lines | ip_port }}"
+    - name: Create service list to monitor
+      set_fact:
+        services_rawx: "{{ _rawxlogs.stdout_lines | services_by_path }}"
+        services_meta: "{{ _metalogs.stdout_lines | services_by_path }}"
+        services_oioswift: "{{ _swiftlogs.stdout_lines | services_by_path }}"
+        services_beanstalk: "{{ _beanstalk.stdout_lines | beanstalks_by_status2 }}"
+        services_redis: "{{ _redis.stdout_lines | ip_port }}"
   when: openio_netdata_python_d_plugin_enabled
 ...

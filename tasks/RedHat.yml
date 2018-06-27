@@ -1,9 +1,0 @@
----
-- name: Install packages
-  package:
-    name: "{{ pkg }}"
-    state: present
-  with_items: "{{ openio_netdata_packages }}"
-  loop_control:
-    loop_var: pkg
-...

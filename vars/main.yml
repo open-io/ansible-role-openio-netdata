@@ -29,4 +29,57 @@ openio_netdata_users_groups_ignore:
   - cpu_user
   - cpu_system
   - cpu
+
+openio_netdata_backend_charts:
+  - "*apps*"
+  - "*disk*"
+  - "*ipv4.errors*"
+  - "*ipv4.tcpsock*"
+  - "*ipv4.tcppackets*"
+  - "*ipv4.tcperrors*"
+  - "*ipv4.packets*"
+  - "*ipv4.tcphandshake*"
+  - "*ipv4.udppackets*"
+  - "*mem.committed*"
+  - "*net_drops*"
+  - "*net_packets*"
+  - "*net.*"
+  - "*system.ctxt*"
+  - "*system.cpu*"
+  - "*system.ram*"
+  - "*system.io*"
+  - "*system.processes*"
+  - "*system.load*"
+  - "*system.uptime*"
+  - "*system.forks*"
+  - "*response_time*"
+  - "*requests*"
+  - "*plugin_pythond_web_log*"
+  - "*openio*"
+  - "*beanstalk*"
+  - "*redis*"
+  - "*web_log_.openio*"
+
+openio_netdata_active_plugins:
+  apps: true
+  cgroups: false
+  charts.d: false
+  checks: false
+  diskspace: true
+  fping: false
+  idlejitter: false
+  node.d: false
+  proc: true
+  python.d: true
+  tc: false
+
+openio_netdata_apps_groups_monitor_all: false
+
+openio_netdata_python_d_plugin_enabled: true
+openio_netdata_python_d_plugin_default_run: 'no'
+openio_netdata_python_d_plugin_logs_per_interval: 200
+openio_netdata_python_d_plugin_log_interval: 3600
+openio_netdata_python_d_plugin_web_log: 'yes'
+openio_netdata_python_d_plugin_nginx_log: 'no'
+openio_netdata_python_d_plugin_gunicorn_log: 'no'
 ...

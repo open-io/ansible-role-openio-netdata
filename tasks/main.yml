@@ -6,18 +6,21 @@
     - "{{ ansible_os_family }}.yml"
   tags: install
 
+- name: Install packages
+  package:
+    name: "{{ pkg }}"
+    state: present
+  with_items: "{{ openio_netdata_packages }}"
+  tags: install
+  loop_control:
+    loop_var: pkg
+
 - name: "Include {{ ansible_distribution }} tasks"
   include_tasks: "{{ item }}"
   with_first_found:
     - "{{ ansible_distribution }}.yml"
     - "{{ ansible_os_family }}.yml"
   tags: install
-
-- name: Ensure service is started
-  service:
-    name: "{{ openio_netdata_service_name }}"
-    state: started
-    enabled: true
 
 - name: Add user netdata to openio group
   user:
@@ -51,14 +54,14 @@
     - openio_netdata_python_d_plugin_enabled
   with_items:
     - src: web_log.conf.j2
-      dest: /etc/netdata/python.d/web_log.conf
+      dest: "{{openio_netdata_confdir}}/python.d/web_log.conf"
     - src: python.d.conf.j2
-      dest: /etc/netdata/python.d.conf
+      dest: "{{openio_netdata_confdir}}/python.d.conf"
     - src: apps_groups.conf.j2
-      dest: /etc/netdata/apps_groups.conf
+      dest: "{{openio_netdata_confdir}}/apps_groups.conf"
     - src: beanstalk.conf.j2
-      dest: /etc/netdata/python.d/beanstalk.conf
+      dest: "{{openio_netdata_confdir}}/python.d/beanstalk.conf"
     - src: redis.conf.j2
-      dest: /etc/netdata/python.d/redis.conf
+      dest: "{{openio_netdata_confdir}}/python.d/redis.conf"
   notify: restart netdata
 ...
