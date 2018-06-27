@@ -29,7 +29,7 @@ class FilterModule(object):
             ip = line_splitted[10]
             port = line_splitted[12]
             services.append({'ns': ns, 'service_type': service_type, 'id': id,
-              'ip': ip, 'port': port})
+                             'ip': ip, 'port': port})
         return services
 
     def ip_port(self, ip_port):
