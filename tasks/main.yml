@@ -3,7 +3,6 @@
   include_vars: "{{ item }}"
   with_first_found:
     - "{{ ansible_distribution }}.yml"
-    - "{{ ansible_os_family }}.yml"
   tags: install
 
 - name: Install packages
@@ -14,13 +13,6 @@
   tags: install
   loop_control:
     loop_var: pkg
-
-- name: "Include {{ ansible_distribution }} tasks"
-  include_tasks: "{{ item }}"
-  with_first_found:
-    - "{{ ansible_distribution }}.yml"
-    - "{{ ansible_os_family }}.yml"
-  tags: install
 
 - name: Add user netdata to openio group
   user:
