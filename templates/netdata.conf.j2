@@ -21,7 +21,7 @@
   {{ plugin }} = {{ 'yes' if state else 'no' }}
 {% endfor %}
 
-{% if openio_netdata_oio_host %}
+{% if openio_netdata_inventory_oio_group in group_names %}
 {% for plugin in openio_netdata_oio_plugins %}
 {% if plugin.enabled %}
 {% if plugin.name != 'container'

@@ -15,18 +15,7 @@
   loop_control:
     loop_var: pkg
 
-- name: Add user netdata to openio group
-  user:
-    name: "{{ netdata_user }}"
-    groups: openio
-    append: true
-  when: openio_netdata_oio_host
-
-- name: Register openio services
-  include_tasks: openio.yml
-  when: openio_netdata_oio_host
-
-- name: 'Set global configuration'
+- name: Set global configuration
   template:
     src: netdata.conf.j2
     dest: /etc/netdata/netdata.conf
@@ -35,26 +24,36 @@
     mode: 0640
   notify: restart netdata
 
-- name: 'Set plugin configuration'
-  template:
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
-    owner: "{{ netdata_user }}"
-    group: "{{ netdata_group }}"
-    mode: 0640
-  when:
-    - openio_netdata_oio_host
-    - openio_netdata_python_d_plugin_enabled
-  with_items:
-    - src: web_log.conf.j2
-      dest: "{{openio_netdata_confdir}}/python.d/web_log.conf"
-    - src: python.d.conf.j2
-      dest: "{{openio_netdata_confdir}}/python.d.conf"
-    - src: apps_groups.conf.j2
-      dest: "{{openio_netdata_confdir}}/apps_groups.conf"
-    - src: beanstalk.conf.j2
-      dest: "{{openio_netdata_confdir}}/python.d/beanstalk.conf"
-    - src: redis.conf.j2
-      dest: "{{openio_netdata_confdir}}/python.d/redis.conf"
-  notify: restart netdata
+- block:
+    - name: Add user netdata to openio group
+      user:
+        name: "{{ netdata_user }}"
+        groups: openio
+        append: true
+
+    - name: Register openio services
+      include_tasks: openio.yml
+
+    - name: 'Set plugin configuration'
+      template:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+        owner: "{{ netdata_user }}"
+        group: "{{ netdata_group }}"
+        mode: 0640
+      when:
+        - openio_netdata_python_d_plugin_enabled
+      with_items:
+        - src: web_log.conf.j2
+          dest: "{{openio_netdata_confdir}}/python.d/web_log.conf"
+        - src: python.d.conf.j2
+          dest: "{{openio_netdata_confdir}}/python.d.conf"
+        - src: apps_groups.conf.j2
+          dest: "{{openio_netdata_confdir}}/apps_groups.conf"
+        - src: beanstalk.conf.j2
+          dest: "{{openio_netdata_confdir}}/python.d/beanstalk.conf"
+        - src: redis.conf.j2
+          dest: "{{openio_netdata_confdir}}/python.d/redis.conf"
+      notify: restart netdata
+  when: openio_netdata_inventory_oio_group in group_names
 ...
