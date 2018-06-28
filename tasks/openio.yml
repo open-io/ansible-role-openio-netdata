@@ -3,7 +3,7 @@
   file:
     path: "{{ openio_netdata_plugins_directory }}/container.plugin"
     state: absent
-  when: openio_netdata_oio_container_hostname != ansible_hostname
+  when: openio_netdata_oio_container_plugin_target != ansible_hostname
 
 - block:
     - name: Register configured OpenIO RAW-X services
