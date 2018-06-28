@@ -12,21 +12,21 @@ An Ansible role for install netdata. Specifically, the responsibilities of this 
 
 ## Role Variables
 
-| Variable                               | Description                                                       | Type    |
-| -------------------------------------- | ----------------------------------------------------------------- | ------- |
-| openio_netdata_namespace               | Namespace to monitor                                              | string  |
-| openio_netdata_confdir                 | Path to netdata configuration directory                           | string  |
-| openio_netdata_oio_host                | Whether a host is an OpenIO node                                  | boolean |
-| openio_netdata_inventory_groupname     | Group name of targets where to install netdata                    | string  |
-| openio_netdata_container_plugin_target | Hostname of the node where the container plugin will be installed | string  |
-| openio_netdata_bind_interface          | Network interface on which netdata listens                        | string  |
-| openio_netdata_bind_address            | IP Address on which netdata listens                               | string  |
-| openio_netdata_bind_port               | Port on which netdata listens                                     | string  |
-| openio_netdata_backend_hostname        | Hostname to report in netdata metrics                             | string  |
-| openio_netdata_backend_update_every    | Interval on which to update collected metrics                     | integer |
-| openio_netdata_backend_timeout_ms      | Metric collection timeout                                         | integer |
-| openio_netdata_oio_plugins             | OpenIO plugins configuration                                      | list    |
-| openio_netdata_python_d_retry          | PythonD plugin autodiscovery retry timer                          | integer |
+| Variable                                   | Description                                                       | Type    |
+| ------------------------------------------ | ----------------------------------------------------------------- | ------- |
+| openio_netdata_namespace                   | Namespace to monitor                                              | string  |
+| openio_netdata_confdir                     | Path to netdata configuration directory                           | string  |
+| openio_netdata_oio_host                    | Whether a host is an OpenIO node                                  | boolean |
+| openio_netdata_inventory_groupname         | Group name of targets where to install netdata                    | string  |
+| openio_netdata_oio_container_plugin_target | Hostname of the node where the container plugin will be installed | string  |
+| openio_netdata_bind_interface              | Network interface on which netdata listens                        | string  |
+| openio_netdata_bind_address                | IP Address on which netdata listens                               | string  |
+| openio_netdata_bind_port                   | Port on which netdata listens                                     | string  |
+| openio_netdata_backend_hostname            | Hostname to report in netdata metrics                             | string  |
+| openio_netdata_backend_update_every        | Interval on which to update collected metrics                     | integer |
+| openio_netdata_backend_timeout_ms          | Metric collection timeout                                         | integer |
+| openio_netdata_oio_plugins                 | OpenIO plugins configuration                                      | list    |
+| openio_netdata_python_d_retry              | PythonD plugin autodiscovery retry timer                          | integer |
 
 
 

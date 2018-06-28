@@ -14,7 +14,7 @@ openio_netdata_backend_hostname: "{{ ansible_hostname }}"
 openio_netdata_backend_update_every: 10
 openio_netdata_backend_timeout_ms: 20000
 
-openio_netdata_oio_container_hostname:
+openio_netdata_oio_container_plugin_target:
   "{{  hostvars[ groups[openio_netdata_inventory_groupname][0] ]['ansible_hostname'] }}"
 openio_netdata_oio_plugins:
   - name: openio
