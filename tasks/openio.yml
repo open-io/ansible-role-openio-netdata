@@ -1,9 +1,17 @@
 ---
-- name: Remove container plugin
+- name: Disable container plugin
   file:
     path: "{{ openio_netdata_plugins_directory }}/container.plugin"
-    state: absent
+    state: touch
+    mode: "0644"
   when: openio_netdata_oio_container_plugin_target != ansible_hostname
+
+- name: Enable container plugin
+  file:
+    path: "{{ openio_netdata_plugins_directory }}/container.plugin"
+    state: touch
+    mode: "0755"
+  when: openio_netdata_oio_container_plugin_target == ansible_hostname
 
 - block:
     - name: Register configured OpenIO RAW-X services
