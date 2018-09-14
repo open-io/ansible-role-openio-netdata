@@ -16,7 +16,7 @@ An Ansible role for install netdata. Specifically, the responsibilities of this 
 | ------------------------------------------ | ----------------------------------------------------------------- | ------- |
 | openio_netdata_namespace                   | Namespace to monitor                                              | string  |
 | openio_netdata_confdir                     | Path to netdata configuration directory                           | string  |
-| openio_netdata_inventory_oio_group         | Group name of all the nodes running OpenIO                        | boolean |
+| openio_netdata_inventory_oio_group         | Group name of all the nodes running OpenIO                        | string  |
 | openio_netdata_inventory_groupname         | Group name of targets where to install netdata                    | string  |
 | openio_netdata_oio_container_plugin_target | Hostname of the node where the container plugin will be installed | string  |
 | openio_netdata_bind_interface              | Network interface on which netdata listens                        | string  |
