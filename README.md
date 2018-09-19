@@ -22,7 +22,9 @@ An Ansible role for install netdata. Specifically, the responsibilities of this 
 | openio_netdata_bind_interface              | Network interface on which netdata listens                        | string  |
 | openio_netdata_bind_address                | IP Address on which netdata listens                               | string  |
 | openio_netdata_bind_port                   | Port on which netdata listens                                     | string  |
+| openio_netdata_backend_enabled             | Enabled Netdata backend                                           | string  |
 | openio_netdata_backend_hostname            | Hostname to report in netdata metrics                             | string  |
+| openio_netdata_backend_destination         | IP:ADDR to send netdata metrics                                   | string  |
 | openio_netdata_backend_update_every        | Interval on which to update collected metrics                     | integer |
 | openio_netdata_backend_timeout_ms          | Metric collection timeout                                         | integer |
 | openio_netdata_oio_plugins                 | OpenIO plugins configuration                                      | list    |

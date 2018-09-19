@@ -10,11 +10,14 @@
   default port = {{ openio_netdata_bind_port }}
 
 [backend]
-  enabled = no
+  enabled = {{ openio_netdata_backend_enabled }}
   hostname = {{ openio_netdata_backend_hostname }}
   update every = {{ openio_netdata_backend_update_every }}
   timeout ms = {{ openio_netdata_backend_timeout_ms }}
   send charts matching = {{ openio_netdata_backend_charts | join(' ')}}
+{% if openio_netdata_backend_destination %}
+  destination = {{ openio_netdata_backend_destination }}
+{% endif %}
 
 [plugins]
 {% for plugin, state in openio_netdata_active_plugins.iteritems() %}
