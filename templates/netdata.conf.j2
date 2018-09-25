@@ -8,11 +8,12 @@
   # networks.See https://github.com/firehol/netdata/issues/164
   bind socket to IP = {{ openio_netdata_bind_address }}
   default port = {{ openio_netdata_bind_port }}
+  update every = {{ openio_netdata_global_update_every }}
 
 [backend]
   enabled = {{ openio_netdata_backend_enabled }}
   hostname = {{ openio_netdata_backend_hostname }}
-  update every = {{ openio_netdata_backend_update_every }}
+  update every = {{ openio_netdata_backend_update_every | default(openio_netdata_global_update_every) }}
   timeout ms = {{ openio_netdata_backend_timeout_ms }}
   send charts matching = {{ openio_netdata_backend_charts | join(' ')}}
 {% if openio_netdata_backend_destination %}
@@ -30,7 +31,7 @@
 {% if plugin.name != 'container'
    or openio_netdata_oio_container_plugin_target == ansible_hostname %}
 [plugin:{{ plugin.name }}]
-    update every = {{ plugin.every | default(openio_netdata_backend_update_every) }}
+    update every = {{ plugin.every | default(openio_netdata_global_update_every) }}
     command options = --ns {{ openio_netdata_namespace }} {{ plugin.opts }}
 
 {% endif %}
