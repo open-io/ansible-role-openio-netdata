@@ -21,44 +21,6 @@ default_run: {{ openio_netdata_python_d_plugin_default_run }}
 # If "default_run" = "no" the default for all modules is disabled (no).
 # Setting any of these to "yes" will enable it.
 
-# apache_cache: yes
-# apache: yes
 beanstalk: yes
-# bind_rndc: yes
-# cpufreq: yes
-# cpuidle: yes
-# dovecot: yes
-# elasticsearch: yes
-
-# exim: yes
-# fail2ban: yes
-# freeradius: yes
-
-# gunicorn_log has been replaced by web_log
-gunicorn_log: {{ openio_netdata_python_d_plugin_gunicorn_log }}
-
-# haproxy: yes
-# hddtemp: yes
-# ipfs: yes
-# isc_dhcpd: yes
-# mdstat: yes
-# memcached: yes
-# mysql: yes
-# nginx: yes
-
-# nginx_log has been replaced by web_log
-nginx_log: {{ openio_netdata_python_d_plugin_nginx_log }}
-
-# ovpn_status_log: yes
-# phpfpm: yes
-# postfix: yes
-# postgres: yes
-# redis: yes
 redis: yes
-# retroshare: yes
-# sensors: yes
-# smartd_log: yes
-# squid: yes
-# tomcat: yes
-# varnish: yes
 web_log: {{ openio_netdata_python_d_plugin_web_log }}

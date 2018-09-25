@@ -73,13 +73,9 @@ openio_netdata_active_plugins:
   python.d: true
   tc: false
 
-openio_netdata_apps_groups_monitor_all: false
-
 openio_netdata_python_d_plugin_enabled: true
 openio_netdata_python_d_plugin_default_run: 'no'
 openio_netdata_python_d_plugin_logs_per_interval: 200
 openio_netdata_python_d_plugin_log_interval: 3600
 openio_netdata_python_d_plugin_web_log: 'yes'
-openio_netdata_python_d_plugin_nginx_log: 'no'
-openio_netdata_python_d_plugin_gunicorn_log: 'no'
 ...
