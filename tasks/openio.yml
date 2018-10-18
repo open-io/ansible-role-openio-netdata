@@ -33,7 +33,7 @@
       failed_when: false
 
     - name: Register configured OpenIO beanstalk services
-      shell: "gridinit_cmd status2 @beanstalkd"
+      shell: "gridinit_cmd status2 | grep bin/beanstalk"
       register: _beanstalk
       changed_when: false
       failed_when: false
