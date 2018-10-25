@@ -66,7 +66,7 @@ Github can then easily create a PR based on that branch.
 
 ## License
 
-Apache License, Version 2.0
+GNU AFFERO GENERAL PUBLIC LICENSE, Version 3
 
 ## Contributors
 - [Vladimir DOMBROVSKI](https://github.com/vdombrovski) (maintainer)
