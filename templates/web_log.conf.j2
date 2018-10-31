@@ -1,29 +1,38 @@
+#jinja2: lstrip_blocks: True
 # {{ ansible_managed }}
 autodetection_retry: {{ openio_netdata_python_d_retry }}
 
 # -------------------------------------------
 # OpenIO SDS logs
-{% for rawx in services_rawx -%}
-{{ rawx.ns }}-{{ rawx.service_type }}-{{ rawx.id }}:
-  name: '.openio.{{ rawx.ns }}.{{ rawx.service_type }}.{{ rawx.service_type }}-{{ rawx.id }}.log.access'
-  path: '/var/log/oio/sds/{{ rawx.ns }}/{{ rawx.service_type }}-{{ rawx.id }}/{{ rawx.service_type }}-{{ rawx.id }}-httpd-access.log'
-  custom_log_format:
-    pattern: '\S+ \S+ \S+ \S+ \S+ \d+ \d+ \S+ \S+ (?P<address>\S+) \S+ (?P<method>\S+) (?P<code>\d+) (?P<resp_time>\d+) (?P<bytes_sent>\d+) \S+ \S+ (?P<url>.*)'
 
-{% endfor -%}
-{% for meta in services_meta -%}
-{{ meta.ns }}-{{ meta.service_type }}-{{ meta.id }}:
-  name: '.openio.{{ meta.ns }}.{{ meta.service_type }}.{{ meta.service_type }}-{{ meta.id }}.log.access'
-  path: '/var/log/oio/sds/{{ meta.ns }}/{{ meta.service_type }}-{{ meta.id }}/{{ meta.service_type }}-{{ meta.id }}.access'
-  custom_log_format:
+{% if 'rawx' in inventory %}
+    {% for instance in inventory.rawx %}
+{{ instance.id }}:
+    name: '.openio.{{ openio_netdata_namespace }}.rawx.rawx-{{ loop.index }}.log.access'
+    path: '/var/log/oio/sds/{{ openio_netdata_namespace }}/rawx-{{ loop.index }}/rawx-{{ loop.index }}-httpd-access.log'
+    custom_log_format:
+        pattern: '\S+ \S+ \S+ \S+ \S+ \d+ \d+ \S+ \S+ (?P<address>\S+) \S+ (?P<method>\S+) (?P<code>\d+) (?P<resp_time>\d+) (?P<bytes_sent>\d+) \S+ \S+ (?P<url>.*)'
+    {% endfor %}
+{% endif %}
+
+{% for service in ['meta0', 'meta1', 'meta2'] %}
+    {% if service in inventory %}
+        {% for instance in inventory[service] %}
+{{ instance.id }}:
+    name: '.openio.{{ openio_netdata_namespace }}.{{service}}.{{service}}-{{ loop.index }}.log.access'
+    path: '/var/log/oio/sds/{{ openio_netdata_namespace }}/{{service}}-{{ loop.index }}/{{service}}-{{ loop.index }}.access'
+    custom_log_format:
+        pattern: '\S+ \S+ \S+ \S+  \S+ \S+ \S+ \S+ (?P<address>\S+) \S+ (?P<method>\S+) (?P<code>\d+) (?P<resp_time>\d+) (?P<bytes_sent>\d+) \S+ \S+ \S+ (?P<url>.*)'
+        {% endfor %}
+    {% endif %}
+{% endfor %}
+
+{% if 'oioswift' in inventory %}
+    {% for instance in inventory.oioswift %}
+{{ instance.id }}:
+name: '.openio.{{ openio_netdata_namespace }}.{{service}}.{{service}}-{{ loop.index }}.log.access'
+path: '/var/log/oio/sds/{{ openio_netdata_namespace }}/{{service}}-{{ loop.index }}/{{service}}-{{ loop.index }}.access'
+custom_log_format:
     pattern: '\S+ \S+ \S+ \S+  \S+ \S+ \S+ \S+ (?P<address>\S+) \S+ (?P<method>\S+) (?P<code>\d+) (?P<resp_time>\d+) (?P<bytes_sent>\d+) \S+ \S+ \S+ (?P<url>.*)'
-{% endfor -%}
-
-{% for swift in services_oioswift -%}
-{{ swift.ns }}-{{ swift.service_type }}-{{ swift.id }}:
-  name: '.openio.{{ swift.ns }}.{{ swift.service_type }}.{{ swift.service_type }}-{{ swift.id }}.log'
-  path: '/var/log/oio/sds/{{ swift.ns }}/{{ swift.service_type }}-{{ swift.id }}/{{ swift.service_type }}-{{ swift.id }}.log'
-  custom_log_format:
-    pattern: '\S+ \S+ \S+ \S+  \S+ (?P<address>\S+) \S+ (?P<method>\S+) (?P<url>\S+) \S+ (?P<code>\d+) \S+ \S+ \S+ (?P<resp_length>\d+|-) (?P<bytes_sent>\d+|-) \S+ \S+ \S+ (?P<resp_time>\d+\.\d+) .*'
-    time_multiplier: 1000000
-{% endfor -%}
+    {% endfor %}
+{% endif %}

@@ -36,8 +36,34 @@
         groups: openio
         append: true
 
-    - name: Register openio services
-      include_tasks: openio.yml
+    - name: Disable container plugin
+      file:
+        path: "{{ openio_netdata_plugins_directory }}/container.plugin"
+        state: touch
+        mode: "0644"
+      when: openio_netdata_oio_container_plugin_target != ansible_hostname
+
+    - name: Enable container plugin
+      file:
+        path: "{{ openio_netdata_plugins_directory }}/container.plugin"
+        state: touch
+        mode: "0755"
+      when: openio_netdata_oio_container_plugin_target == ansible_hostname
+
+    - name: "Fetch inventory file"
+      fetch:
+        src: /etc/oio/sds/{{openio_netdata_namespace}}/inventory.yml
+        dest: ../inventories/{{ansible_hostname}}.yml
+        flat: true
+
+    - name: "Load inventory as fact"
+      include_vars:
+        file: "inventories/{{ansible_hostname}}.yml"
+        name: "inventory"
+
+    - name: "Select current namespace in inventory fact"
+      set_fact:
+        inventory: "{{ inventory.namespaces[openio_netdata_namespace].services }}"
 
     - name: 'Set plugin configuration'
       template:
