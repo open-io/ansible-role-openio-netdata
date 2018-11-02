@@ -1,7 +1,10 @@
+#jinja2: lstrip_blocks: True
 # {{ ansible_managed }}
 autodetection_retry: {{ openio_netdata_python_d_retry }}
-{% for b in services_beanstalk %}
-{{ b.ns }}-{{ b.service_type }}-{{ b.id }}:
-  host: '{{ b.ip}}'
-  port: {{ b.port }}
-{% endfor %}
+{% if 'beanstalkd' in inventory %}
+    {% for beanstalk in inventory.beanstalkd %}
+{{ beanstalk.id }}:
+    host: '{{ beanstalk.ip}}'
+    port: {{ beanstalk.port }}
+    {% endfor %}
+{% endif %}
