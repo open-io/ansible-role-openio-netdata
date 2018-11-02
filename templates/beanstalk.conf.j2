@@ -3,7 +3,7 @@
 autodetection_retry: {{ openio_netdata_python_d_retry }}
 {% if 'beanstalkd' in inventory %}
     {% for beanstalk in inventory.beanstalkd %}
-{{ beanstalk.id }}:
+'{{ beanstalk.ip }}:{{ beanstalk.port }}':
     host: '{{ beanstalk.ip}}'
     port: {{ beanstalk.port }}
     {% endfor %}
