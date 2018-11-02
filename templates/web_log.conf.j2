@@ -30,8 +30,8 @@ autodetection_retry: {{ openio_netdata_python_d_retry }}
 {% if 'oioswift' in inventory %}
     {% for instance in inventory.oioswift %}
 {{ instance.id }}:
-name: '.openio.{{ openio_netdata_namespace }}.{{service}}.{{service}}-{{ loop.index }}.log.access'
-path: '/var/log/oio/sds/{{ openio_netdata_namespace }}/{{service}}-{{ loop.index }}/{{service}}-{{ loop.index }}.access'
+name: '.openio.{{ openio_netdata_namespace }}.oioswift.oioswift-{{ loop.index }}.log.access'
+path: '/var/log/oio/sds/{{ openio_netdata_namespace }}/oioswift-{{ loop.index }}/oioswift-{{ loop.index }}.access'
 custom_log_format:
     pattern: '\S+ \S+ \S+ \S+  \S+ \S+ \S+ \S+ (?P<address>\S+) \S+ (?P<method>\S+) (?P<code>\d+) (?P<resp_time>\d+) (?P<bytes_sent>\d+) \S+ \S+ \S+ (?P<url>.*)'
     {% endfor %}
