@@ -86,5 +86,4 @@
         - src: redis.conf.j2
           dest: "{{openio_netdata_confdir}}/python.d/redis.conf"
       notify: restart netdata
-  when: openio_netdata_inventory_oio_group in group_names
 ...

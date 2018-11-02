@@ -2,8 +2,6 @@
 # defaults file for ansible-role-openio-netdata
 openio_netdata_namespace: "OPENIO"
 openio_netdata_confdir: "/etc/netdata"
-openio_netdata_inventory_groupname: all
-openio_netdata_inventory_oio_group: openio
 
 openio_netdata_bind_interface: "{{ ansible_default_ipv4.alias }}"
 openio_netdata_bind_address:
@@ -16,8 +14,7 @@ openio_netdata_backend_timeout_ms: 20000
 openio_netdata_backend_enabled: 'no'
 openio_netdata_backend_destination: false
 
-openio_netdata_oio_container_plugin_target:
-  "{{  hostvars[ groups[openio_netdata_inventory_groupname][0] ]['ansible_hostname'] }}"
+openio_netdata_oio_container_plugin_target: ""
 openio_netdata_oio_plugins:
   - name: openio
     enabled: true
@@ -28,7 +25,7 @@ openio_netdata_oio_plugins:
   - name: container
     enabled: false
     every: 3600
-    opts: "--threshold 300000 --limit 1000"
+    opts: "--fast"
 
 openio_netdata_python_d_retry: 300
 ...
