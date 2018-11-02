@@ -22,9 +22,12 @@ openio_netdata_oio_plugins:
   - name: zookeeper
     enabled: true
     opts: ""
+  - name: command
+    enabled: false
+    opts: ""
   - name: container
     enabled: false
-    every: 3600
+    every: 60
     opts: "--fast"
 
 openio_netdata_python_d_retry: 300

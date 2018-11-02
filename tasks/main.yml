@@ -65,7 +65,15 @@
       set_fact:
         inventory: "{{ inventory.namespaces[openio_netdata_namespace].services }}"
 
-    - name: 'Set plugin configuration'
+    - name: "Set commands plugin configuration"
+      copy:
+        src: "commands/{{ ansible_os_family }}.conf"
+        dest: "{{openio_netdata_confdir}}/commands.conf"
+        owner: "{{ netdata_user }}"
+        group: "{{ netdata_group }}"
+      notify: restart netdata
+
+    - name: "Set python.d plugin configuration"
       template:
         src: "{{ item.src }}"
         dest: "{{ item.dest }}"
