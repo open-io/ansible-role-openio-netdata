@@ -1,3 +1,4 @@
+#jinja2: lstrip_blocks: True
 # {{ ansible_managed }}
 # NetData Configuration
 [global]
@@ -32,7 +33,9 @@
    or openio_netdata_oio_container_plugin_target == ansible_hostname %}
 [plugin:{{ plugin.name }}]
     update every = {{ plugin.every | default(openio_netdata_global_update_every) }}
+    {% if 'opts' in plugin %}
     command options = --ns {{ openio_netdata_namespace }} {{ plugin.opts }}
+    {% endif %}
 
 {% endif %}
 {% endif %}

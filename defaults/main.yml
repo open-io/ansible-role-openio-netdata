@@ -25,7 +25,6 @@ openio_netdata_oio_plugins:
     opts: ""
   - name: command
     enabled: false
-    opts: ""
   - name: container
     enabled: false
     every: 60
