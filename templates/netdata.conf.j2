@@ -20,6 +20,7 @@
   destination = {{ openio_netdata_backend_destination }}
 {% endif %}
 
+{% if openio_netdata_inventory_oio_group in groups %}
 [plugins]
 {% for plugin, state in openio_netdata_active_plugins.iteritems() %}
   {{ plugin }} = {{ 'yes' if state else 'no' }}
@@ -36,6 +37,7 @@
 {% endif %}
 {% endif %}
 {% endfor %}
+{% endif %}
 
 [netdata.backend_metrics]
   enabled=no
