@@ -71,3 +71,6 @@
   enabled=no
 
 {% endfor %}
+
+[plugin:proc:diskspace]
+  exclude space metrics on filesystems = tmpfs devtmpfs
