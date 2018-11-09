@@ -2,7 +2,7 @@
 # defaults file for ansible-role-openio-netdata
 openio_netdata_namespace: "OPENIO"
 openio_netdata_confdir: "/etc/netdata"
-openio_netdata_inventory_oio_group: openio
+openio_netdata_inventory_oio_hosts: []
 
 openio_netdata_bind_interface: "{{ ansible_default_ipv4.alias }}"
 openio_netdata_bind_address:
