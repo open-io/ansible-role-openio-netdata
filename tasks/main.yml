@@ -53,12 +53,12 @@
     - name: "Fetch inventory file"
       fetch:
         src: /etc/oio/sds/{{openio_netdata_namespace}}/inventory.yml
-        dest: ../inventories/{{ansible_hostname}}.yml
+        dest: "{{ playbook_dir }}/../inventories/{{ansible_hostname}}.yml"
         flat: true
 
     - name: "Load inventory as fact"
       include_vars:
-        file: "inventories/{{ansible_hostname}}.yml"
+        file: "{{ playbook_dir }}/../inventories/{{ansible_hostname}}.yml"
         name: "inventory"
 
     - name: "Select current namespace in inventory fact"
