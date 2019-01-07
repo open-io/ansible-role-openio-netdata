@@ -60,10 +60,12 @@
       include_vars:
         file: "{{ playbook_dir }}/../inventories/{{ansible_hostname}}.yml"
         name: "inventory"
+      ignore_errors: "{{ ansible_check_mode }}"
 
     - name: "Select current namespace in inventory fact"
       set_fact:
         inventory: "{{ inventory.namespaces[openio_netdata_namespace].services }}"
+      ignore_errors: "{{ ansible_check_mode }}"
 
     - name: "Set commands plugin configuration"
       copy:
@@ -81,6 +83,7 @@
         group: "{{ netdata_group }}"
         mode: 0640
       when:
+        - inventory is defined
         - openio_netdata_python_d_plugin_enabled
       with_items:
         - src: web_log.conf.j2
