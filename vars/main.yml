@@ -60,7 +60,7 @@ openio_netdata_backend_charts:
   - "*redis*"
   - "*web_log_.openio*"
   - "*version*"
-  - "zk*"
+  - "*zk*"
 
 openio_netdata_active_plugins:
   apps: true
