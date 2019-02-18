@@ -30,5 +30,14 @@ openio_netdata_oio_plugins:
     every: 60
     opts: "--fast"
 
+openio_netdata_oiofs_monitor: false
+openio_netdata_oiofs_endpoints: []
+# openio_netdata_oiofs_endpoints:
+#   - id: srv1
+#     enabled: true
+#     addr: localhost:6999
+#     full: false
+
 openio_netdata_python_d_retry: 300
+openio_netdata_provision_only: false
 ...

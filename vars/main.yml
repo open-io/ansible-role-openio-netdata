@@ -61,6 +61,7 @@ openio_netdata_backend_charts:
   - "*web_log_.openio*"
   - "*version*"
   - "*zk*"
+  - "*oiofs*"
 
 openio_netdata_active_plugins:
   apps: true

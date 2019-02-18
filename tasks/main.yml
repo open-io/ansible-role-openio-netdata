@@ -27,7 +27,6 @@
     owner: "{{ netdata_user }}"
     group: "{{ netdata_group }}"
     mode: 0640
-  notify: restart netdata
 
 - block:
     - name: Add user netdata to openio group
@@ -73,7 +72,6 @@
         dest: "{{ openio_netdata_confdir }}/commands.conf"
         owner: "{{ netdata_user }}"
         group: "{{ netdata_group }}"
-      notify: restart netdata
 
     - name: "Set python.d plugin configuration"
       template:
@@ -96,6 +94,20 @@
           dest: "{{ openio_netdata_confdir }}/python.d/beanstalk.conf"
         - src: redis.conf.j2
           dest: "{{ openio_netdata_confdir }}/python.d/redis.conf"
-      notify: restart netdata
   when: inventory_hostname in openio_netdata_inventory_oio_hosts
+
+- name: Check oiofs plugin capability
+  stat:
+    path: "{{ openio_netdata_plugins_directory }}/fs.plugin"
+  register: oiofs_plugin_binary
+
+- name: Handle oiofs collector
+  import_tasks: oiofs.yml
+  when: oiofs_plugin_binary.stat.exists
+
+- name: Restart netdata
+  service:
+    name: netdata
+    state: "{{ 'restarted' if openio_netdata_provision_only else 'started' }}"
+    enabled: true
 ...
