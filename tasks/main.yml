@@ -52,13 +52,13 @@
 
     - name: "Fetch inventory file"
       fetch:
-        src: /etc/oio/sds/{{openio_netdata_namespace}}/inventory.yml
-        dest: "{{ playbook_dir }}/../inventories/{{ansible_hostname}}.yml"
+        src: /etc/oio/sds/{{ openio_netdata_namespace }}/inventory.yml
+        dest: "{{ playbook_dir }}/../inventories/{{ ansible_hostname }}.yml"
         flat: true
 
     - name: "Load inventory as fact"
       include_vars:
-        file: "{{ playbook_dir }}/../inventories/{{ansible_hostname}}.yml"
+        file: "{{ playbook_dir }}/../inventories/{{ ansible_hostname }}.yml"
         name: "inventory"
       ignore_errors: "{{ ansible_check_mode }}"
 
@@ -70,7 +70,7 @@
     - name: "Set commands plugin configuration"
       copy:
         src: "commands/{{ ansible_os_family }}.conf"
-        dest: "{{openio_netdata_confdir}}/commands.conf"
+        dest: "{{ openio_netdata_confdir }}/commands.conf"
         owner: "{{ netdata_user }}"
         group: "{{ netdata_group }}"
       notify: restart netdata
@@ -87,15 +87,15 @@
         - openio_netdata_python_d_plugin_enabled
       with_items:
         - src: web_log.conf.j2
-          dest: "{{openio_netdata_confdir}}/python.d/web_log.conf"
+          dest: "{{ openio_netdata_confdir }}/python.d/web_log.conf"
         - src: python.d.conf.j2
-          dest: "{{openio_netdata_confdir}}/python.d.conf"
+          dest: "{{ openio_netdata_confdir }}/python.d.conf"
         - src: apps_groups.conf.j2
-          dest: "{{openio_netdata_confdir}}/apps_groups.conf"
+          dest: "{{ openio_netdata_confdir }}/apps_groups.conf"
         - src: beanstalk.conf.j2
-          dest: "{{openio_netdata_confdir}}/python.d/beanstalk.conf"
+          dest: "{{ openio_netdata_confdir }}/python.d/beanstalk.conf"
         - src: redis.conf.j2
-          dest: "{{openio_netdata_confdir}}/python.d/redis.conf"
+          dest: "{{ openio_netdata_confdir }}/python.d/redis.conf"
       notify: restart netdata
   when: inventory_hostname in openio_netdata_inventory_oio_hosts
 ...
