@@ -4,5 +4,6 @@
 - hosts: all
   become: true
   roles:
+    - role: repo
     - role: role_under_test
 ...
