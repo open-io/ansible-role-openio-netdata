@@ -45,9 +45,9 @@
 {% if openio_netdata_oiofs_monitor %}
 {% for endpoint in openio_netdata_oiofs_endpoints %}
 {% if endpoint.enabled %}
-[plugin:oiofs-{{ loop.index0 }}]
+[plugin:fs-{{ loop.index0 }}]
     update every = {{ endpoint.every | default(openio_netdata_global_update_every) }}
-    command options = --full {{ endpoint.full | default(false) }} --addr {{ endpoint.addr }} --id {{ endpoint.id }}
+    command options = --addr {{ endpoint.addr }} --id {{ endpoint.id }} {% if endpoint.full | default(false) %}--full{% endif %}
 {% endif %}
 {% endfor %}
 {% endif %}
