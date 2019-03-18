@@ -15,7 +15,7 @@ autodetection_retry: {{ openio_netdata_python_d_retry }}
     {% endfor %}
 {% endif %}
 
-{% for service in ['meta0', 'meta1', 'meta2'] %}
+{% for service in ['meta1', 'meta2'] %}
     {% if service in inventory %}
         {% for instance in inventory[service] %}
 {{ instance.id }}:
@@ -32,6 +32,8 @@ autodetection_retry: {{ openio_netdata_python_d_retry }}
 {{ instance.id }}:
     name: '.openio.{{ openio_netdata_namespace }}.oioswift.oioswift-{{ loop.index0 }}.log'
     path: '/var/log/oio/sds/{{ openio_netdata_namespace }}/oioswift-{{ loop.index0 }}/oioswift-{{ loop.index0 }}.log'
+    filter:
+        include: '- - \d+.\d+ \d+.\d+ -$'
     custom_log_format:
         pattern: '\S+ \S+ \S+ \S+  \S+ (?P<address>\S+) \S+ (?P<method>\S+) (?P<url>\S+) \S+ (?P<code>\d+) \S+ \S+ \S+ (?P<resp_length>\d+|-) (?P<bytes_sent>\d+|-) \S+ \S+ \S+ (?P<resp_time>\d+\.\d+) .*'
     {% endfor %}
