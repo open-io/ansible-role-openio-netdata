@@ -109,5 +109,5 @@
   service:
     name: netdata
     state: "{{ 'restarted' if openio_netdata_provision_only else 'started' }}"
-    enabled: true
+    enabled: "{{ openio_netdata_service_enabled }}"
 ...
