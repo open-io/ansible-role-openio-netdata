@@ -30,6 +30,7 @@ An Ansible role for install netdata. Specifically, the responsibilities of this 
 | openio_netdata_inventory_oio_group         | Group name of monitored nodes that run OpenIO (should be a subgroup of netdata group) | string  |
 | openio_netdata_oiofs_monitor               | Activate oiofs monitoring (Use as hostvar)                                            | boolean |
 | openio_netdata_oiofs_endpoints             | oiofs endpoints to monitor (Use as hostvar)                                           | dict    |
+| openio_netdata_service_enabled             | Enable service at system boot                                                         | boolean |
 
 
 ## Dependencies
