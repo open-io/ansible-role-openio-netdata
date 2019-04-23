@@ -1,0 +1,9 @@
+---
+- src: https://github.com/open-io/ansible-role-openio-gridinit.git
+  version: "19.04"
+  name: gridinit
+
+- src: https://github.com/open-io/ansible-role-openio-repository.git
+  version: "19.04"
+  name: repo
+...
