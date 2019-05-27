@@ -1,6 +1,13 @@
 import os
 import re
 
+import io
+from base64 import b64decode
+try:
+    import configparser
+except ImportError:
+    import ConfigParser as configparser
+
 
 class FilterModule(object):
     def filters(self):
@@ -8,6 +15,7 @@ class FilterModule(object):
             'services_by_path': self.services_by_path,
             'beanstalks_by_status2': self.beanstalks_by_status2,
             'ip_port': self.ip_port,
+            'aws_creds': self.aws_creds
         }
 
     def services_by_path(self, paths):
@@ -39,3 +47,13 @@ class FilterModule(object):
             ip, port = pair.split(':')
             services.append({'ip': ip, 'port': port})
         return services
+
+    def aws_creds(self, data, type_='access'):
+        """ Retrieves AWS creds from b64 encoded data received by slurp """
+        data = b64decode(data)
+        config = configparser.ConfigParser()
+        config.optionxform = str
+        config.readfp(io.BytesIO(data))
+        if type_ == 'secret':
+            return config.get('default', 'aws_secret_access_key')
+        return config.get('default', 'aws_access_key_id')

@@ -1,0 +1,9 @@
+# {{ ansible_managed }}
+endpoint={{ openio_netdata_s3rt_endpoint}}
+
+access={{ s3creds['content'] | aws_creds('access') }}
+secret={{ s3creds['content'] | aws_creds('secret') }}
+region={{ openio_netdata_s3rt_region }}
+bucket={{ openio_netdata_s3rt_bucket }}
+object={{ openio_netdata_s3rt_object }}
+timeout={{ openio_netdata_s3rt_timeout }}

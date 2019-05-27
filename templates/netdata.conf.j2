@@ -21,37 +21,43 @@
   destination = {{ openio_netdata_backend_destination }}
 {% endif %}
 
-{% if inventory_hostname in openio_netdata_inventory_oio_hosts %}
+
 [plugins]
 {% for plugin, state in openio_netdata_active_plugins.iteritems() %}
   {{ plugin }} = {{ 'yes' if state else 'no' }}
 {% endfor %}
+{% if inventory_hostname in openio_netdata_oio_hosts %}
+  zookeeper = {{ 'yes' if inventory_hostname in groups['zookeeper'] else 'no' }}
+  openio = {{ 'yes' if inventory_hostname in groups['openio'] else 'no' }}
+  command = {{ 'yes' if inventory_hostname in groups['openio'] else 'no' }}
+  container = {{ 'yes' if inventory_hostname == groups['redis'][0] else 'no' }}
+  fs = {{ 'yes' if inventory_hostname in openio_netdata_oiofs_hosts else 'no' }}
+  s3roundtrip = {{ 'yes' if inventory_hostname in openio_netdata_s3rt_hosts else 'no' }}
 
-{% for plugin in openio_netdata_oio_plugins %}
-{% if plugin.enabled %}
-{% if plugin.name != 'container'
-   or openio_netdata_oio_container_plugin_target == ansible_hostname %}
-[plugin:{{ plugin.name }}]
-    update every = {{ plugin.every | default(openio_netdata_global_update_every) }}
-    {% if 'opts' in plugin %}
-    command options = --ns {{ openio_netdata_namespace }} {{ plugin.opts }}
-    {% endif %}
+[plugin:openio]
+  update_every = {{ openio_netdata_global_update_every }}
+  command options = --ns {{ openio_netdata_namespace }}
 
-{% endif %}
-{% endif %}
-{% endfor %}
-{% endif %}
+[plugin:container]
+  update_every = {{ openio_netdata_global_update_every }}
+  command options = --ns {{ openio_netdata_namespace }} --fast
 
-{% if openio_netdata_oiofs_monitor %}
-{% for endpoint in openio_netdata_oiofs_endpoints %}
-{% if endpoint.enabled %}
-[plugin:fs-{{ loop.index0 }}]
-    update every = {{ endpoint.every | default(openio_netdata_global_update_every) }}
-    command options = --addr {{ endpoint.addr }} --id {{ endpoint.id }} {% if endpoint.full | default(false) %}--full{% endif %}
-{% endif %}
-{% endfor %}
+[plugin:command]
+  update_every = {{ openio_netdata_global_update_every }}
+  command options = --ns {{ openio_netdata_namespace }}
+
+[plugin:zookeeper]
+  update_every = {{ openio_netdata_global_update_every }}
+  command options = --ns {{ openio_netdata_namespace }}
+
+[plugin:fs]
+  update_every = {{ openio_netdata_global_update_every }}
+  command options = --conf {{ openio_netdata_confdir }}/oiofs.conf {% if openio_netdata_oiofs_debug %}--fast{% endif %}
 {% endif %}
 
+[plugin:s3roundtrip]
+  update_every = {{ openio_netdata_global_update_every }}
+  command options = --conf {{ openio_netdata_confdir }}/s3-roundtrip.conf
 
 [netdata.backend_metrics]
   enabled=no

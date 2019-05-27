@@ -35,20 +35,6 @@
         groups: openio
         append: true
 
-    - name: Disable container plugin
-      file:
-        path: "{{ openio_netdata_plugins_directory }}/container.plugin"
-        state: touch
-        mode: "0644"
-      when: openio_netdata_oio_container_plugin_target != ansible_hostname
-
-    - name: Enable container plugin
-      file:
-        path: "{{ openio_netdata_plugins_directory }}/container.plugin"
-        state: touch
-        mode: "0755"
-      when: openio_netdata_oio_container_plugin_target == ansible_hostname
-
     - name: "Fetch inventory file"
       fetch:
         src: /etc/oio/sds/{{ openio_netdata_namespace }}/inventory.yml
@@ -82,7 +68,6 @@
         mode: 0640
       when:
         - inventory is defined
-        - openio_netdata_python_d_plugin_enabled
       with_items:
         - src: web_log.conf.j2
           dest: "{{ openio_netdata_confdir }}/python.d/web_log.conf"
@@ -94,16 +79,31 @@
           dest: "{{ openio_netdata_confdir }}/python.d/beanstalk.conf"
         - src: redis.conf.j2
           dest: "{{ openio_netdata_confdir }}/python.d/redis.conf"
-  when: inventory_hostname in openio_netdata_inventory_oio_hosts
+  when: inventory_hostname in openio_netdata_oio_hosts
 
-- name: Check oiofs plugin capability
-  stat:
-    path: "{{ openio_netdata_plugins_directory }}/fs.plugin"
-  register: oiofs_plugin_binary
+- name: Set oiofs configuration
+  template:
+    src: "oiofs.conf.j2"
+    dest: "{{ openio_netdata_confdir }}/oiofs.conf"
+    owner: "{{ netdata_user }}"
+    group: "{{ netdata_group }}"
+    mode: 0640
+  when: inventory_hostname in openio_netdata_oiofs_hosts
 
-- name: Handle oiofs collector
-  import_tasks: oiofs.yml
-  when: oiofs_plugin_binary.stat.exists
+- block:
+    - name: Get S3 credentials on nodes
+      slurp:
+        src: "{{ openio_netdata_s3rt_aws_creds }}"
+      register: s3creds
+
+    - name: Set S3 roundtrip configuration
+      template:
+        src: "s3roundtrip.conf.j2"
+        dest: "{{ openio_netdata_confdir }}/s3-roundtrip.conf"
+        owner: "{{ netdata_user }}"
+        group: "{{ netdata_group }}"
+        mode: 0640
+  when: inventory_hostname in openio_netdata_s3rt_hosts
 
 - name: Restart netdata
   service:
