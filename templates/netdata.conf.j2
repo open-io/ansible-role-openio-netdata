@@ -27,10 +27,11 @@
   {{ plugin }} = {{ 'yes' if state else 'no' }}
 {% endfor %}
 {% if inventory_hostname in openio_netdata_oio_hosts %}
-  zookeeper = {{ 'yes' if inventory_hostname in groups['zookeeper'] else 'no' }}
-  openio = {{ 'yes' if inventory_hostname in groups['openio'] else 'no' }}
-  command = {{ 'yes' if inventory_hostname in groups['openio'] else 'no' }}
-  container = {{ 'yes' if inventory_hostname == groups['redis'][0] else 'no' }}
+  zookeeper = {{ 'yes' if inventory_hostname in openio_netdata_zookeeper_hosts else 'no' }}
+  openio = {{ 'yes' if inventory_hostname in openio_netdata_oio_hosts else 'no' }}
+  command = {{ 'yes' if inventory_hostname in openio_netdata_oio_hosts else 'no' }}
+  container = {{ 'yes' if openio_netdata_redis_hosts and
+                 (inventory_hostname == openio_netdata_redis_hosts | first) else 'no' }}
   fs = {{ 'yes' if inventory_hostname in openio_netdata_oiofs_hosts else 'no' }}
   s3roundtrip = {{ 'yes' if inventory_hostname in openio_netdata_s3rt_hosts else 'no' }}
 

@@ -35,15 +35,33 @@
         groups: openio
         append: true
 
+    - name: Create temporary inventory directory
+      local_action:
+        module: tempfile
+        state: directory
+        suffix: inventory
+      register: inv_dir
+      changed_when: false
+
+    - name: Make temporary directory writeable
+      local_action:
+        module: file
+        path: "{{ inv_dir.path }}"
+        owner: root
+        group: root
+        mode: '0777'
+      changed_when: false
+
     - name: "Fetch inventory file"
       fetch:
         src: /etc/oio/sds/{{ openio_netdata_namespace }}/inventory.yml
-        dest: "{{ playbook_dir }}/../inventories/{{ ansible_hostname }}.yml"
+        dest: "{{ inv_dir.path }}/inventories/{{ ansible_hostname }}.yml"
         flat: true
+      changed_when: false
 
     - name: "Load inventory as fact"
       include_vars:
-        file: "{{ playbook_dir }}/../inventories/{{ ansible_hostname }}.yml"
+        file: "{{ inv_dir.path }}/inventories/{{ ansible_hostname }}.yml"
         name: "inventory"
       ignore_errors: "{{ ansible_check_mode }}"
 
