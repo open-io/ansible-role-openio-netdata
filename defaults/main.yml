@@ -29,7 +29,7 @@ openio_netdata_oiofs_mountpoints: "{{ oiofs_mountpoints | d([]) }}"
 openio_netdata_python_d_retry: 300
 openio_netdata_provision_only: false
 
-openio_netdata_s3rt_endpoint: "'http://{{ vip | d('localhost')}}:6007"
+openio_netdata_s3rt_endpoint: "http://{{ vip | d('localhost')}}:6007"
 openio_netdata_s3rt_region: "{{ openio_s3_region | d(default_openio_s3_region) }}"
 openio_netdata_s3rt_bucket: "s3roundtrip-bucket"
 openio_netdata_s3rt_object: "s3roundtrip-object"
