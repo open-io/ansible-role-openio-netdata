@@ -45,7 +45,7 @@
 
 [plugin:command]
   update_every = {{ openio_netdata_global_update_every }}
-  command options = --ns {{ openio_netdata_namespace }}
+  command options = --conf {{ openio_netdata_confdir }}/commands.conf
 
 [plugin:zookeeper]
   update_every = {{ openio_netdata_global_update_every }}
