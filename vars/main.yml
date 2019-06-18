@@ -62,6 +62,7 @@ openio_netdata_backend_charts:
   - "*version*"
   - "*zk*"
   - "*oiofs*"
+  - "roundtrip*"
 
 openio_netdata_active_plugins:
   apps: true
