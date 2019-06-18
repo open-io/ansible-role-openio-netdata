@@ -6,4 +6,8 @@
 - src: https://github.com/open-io/ansible-role-openio-repository.git
   version: "18.10"
   name: repo
+
+- src: https://github.com/open-io/ansible-role-openio-users.git
+  version: "18.10"
+  name: users
 ...

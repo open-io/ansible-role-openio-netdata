@@ -1,9 +1,28 @@
 # Test playbook
 ---
-
 - hosts: all
   become: true
+  vars:
+    namespace: TRAVIS
+  pre_tasks:
+    - name: Seed directory for NS
+      file:
+        path: "/etc/oio/sds/{{ namespace }}"
+        state: directory
+    - name: Seed inventory on nodes
+      copy:
+        src: inventory.yml
+        dest: "/etc/oio/sds/{{ namespace }}/inventory.yml"
   roles:
+    - role: users
     - role: repo
+      openio_repository_no_log: false
+      openio_repository_mirror_host: mirror2.openio.io
     - role: role_under_test
+      openio_netdata_namespace: "{{ namespace }}"
+      openio_netdata_inventory_oio_hosts: [ 'localhost' ]
+      openio_netdata_oiofs_mountpoints:
+        - path: /mnt/test
+          http_server: localhost:7000
+          state: present
 ...

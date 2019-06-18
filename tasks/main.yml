@@ -41,6 +41,7 @@
         state: touch
         mode: "0644"
       when: openio_netdata_oio_container_plugin_target != ansible_hostname
+      changed_when: false
 
     - name: Enable container plugin
       file:
@@ -49,15 +50,33 @@
         mode: "0755"
       when: openio_netdata_oio_container_plugin_target == ansible_hostname
 
+    - name: Create temporary inventory directory
+      local_action:
+        module: tempfile
+        state: directory
+        suffix: inventory
+      register: inv_dir
+      changed_when: false
+
+    - name: Make temporary directory writeable
+      local_action:
+        module: file
+        path: "{{ inv_dir.path }}"
+        owner: root
+        group: root
+        mode: '0777'
+      changed_when: false
+
     - name: "Fetch inventory file"
       fetch:
         src: /etc/oio/sds/{{ openio_netdata_namespace }}/inventory.yml
-        dest: "{{ playbook_dir }}/../inventories/{{ ansible_hostname }}.yml"
+        dest: "{{ inv_dir.path }}/inventories/{{ ansible_hostname }}.yml"
         flat: true
+      changed_when: false
 
     - name: "Load inventory as fact"
       include_vars:
-        file: "{{ playbook_dir }}/../inventories/{{ ansible_hostname }}.yml"
+        file: "{{ inv_dir.path }}/inventories/{{ ansible_hostname }}.yml"
         name: "inventory"
       ignore_errors: "{{ ansible_check_mode }}"
 
@@ -96,14 +115,21 @@
           dest: "{{ openio_netdata_confdir }}/python.d/redis.conf"
   when: inventory_hostname in openio_netdata_inventory_oio_hosts
 
-- name: Check oiofs plugin capability
-  stat:
+- name: Enable oiofs plugin
+  file:
     path: "{{ openio_netdata_plugins_directory }}/fs.plugin"
-  register: oiofs_plugin_binary
+    state: touch
+    mode: "0755"
+  changed_when: false
 
-- name: Handle oiofs collector
-  import_tasks: oiofs.yml
-  when: oiofs_plugin_binary.stat.exists
+- name: Set oiofs endpoint configuration
+  template:
+    src: oiofs.conf.j2
+    dest: "{{ openio_netdata_confdir }}/oiofs.conf"
+    owner: "{{ netdata_user }}"
+    group: "{{ netdata_group }}"
+    mode: 0640
+  when: openio_netdata_oiofs_mountpoints
 
 - name: Restart netdata
   service:

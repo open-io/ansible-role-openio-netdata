@@ -26,6 +26,7 @@
 {% for plugin, state in openio_netdata_active_plugins.iteritems() %}
   {{ plugin }} = {{ 'yes' if state else 'no' }}
 {% endfor %}
+   fs = {{ 'yes' if openio_netdata_oiofs_mountpoints else 'no' }}
 
 {% for plugin in openio_netdata_oio_plugins %}
 {% if plugin.enabled %}
@@ -42,16 +43,11 @@
 {% endfor %}
 {% endif %}
 
-{% if openio_netdata_oiofs_monitor %}
-{% for endpoint in openio_netdata_oiofs_endpoints %}
-{% if endpoint.enabled %}
-[plugin:fs-{{ loop.index0 }}]
-    update every = {{ endpoint.every | default(openio_netdata_global_update_every) }}
-    command options = --addr {{ endpoint.addr }} --id {{ endpoint.id }} {% if endpoint.full | default(false) %}--full{% endif %}
+{% if openio_netdata_oiofs_mountpoints %}
+[plugin:fs]
+    update every = {{ openio_netdata_global_update_every }}
+    command options = --conf {{ openio_netdata_confdir }}/oiofs.conf
 {% endif %}
-{% endfor %}
-{% endif %}
-
 
 [netdata.backend_metrics]
   enabled=no

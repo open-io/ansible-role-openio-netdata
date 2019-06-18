@@ -1,0 +1,366 @@
+---
+created_at: '2018-10-18T15:00:21.726800Z'
+namespaces:
+  TRAVIS:
+    config: {}
+    services:
+      account:
+        - config: {}
+          id: TRAVIS-account-0
+          ip: 10.0.0.91
+          location: node11.0
+          partition: ''
+          port: 6009
+          volume: ''
+      beanstalkd:
+        - config: {}
+          id: TRAVIS-beanstalkd-0
+          ip: 10.0.0.91
+          location: ''
+          partition: ''
+          port: 6014
+          volume: /mnt/ssd/TRAVIS/beanstalkd-0
+      conscience:
+        - config: {}
+          id: TRAVIS-conscience-0
+          ip: 10.0.0.91
+          location: ''
+          partition: ''
+          port: 6000
+          volume: ''
+      conscienceagent:
+        - config: {}
+          id: TRAVIS-conscienceagent-0
+          ip: ''
+          location: ''
+          partition: ''
+          port: 0
+          volume: ''
+      galera:
+        - config: {}
+          id: ''
+          ip: 10.0.0.91
+          location: ''
+          partition: ''
+          port: 3306
+          volume: /var/lib/mysql
+      haproxy:
+        - config: {}
+          id: ''
+          ip: 10.0.0.59
+          location: ''
+          partition: ''
+          port: 0
+          volume: ''
+      keepalived:
+        - config: {}
+          id: ''
+          ip: 10.0.0.59
+          location: ''
+          partition: ''
+          port: 0
+          volume: ''
+      keystone:
+        - config: {}
+          id: TRAVIS-keystone-0.0
+          ip: 10.0.0.91
+          location: ''
+          partition: ''
+          port: 5000
+          volume: ''
+        - config: {}
+          id: TRAVIS-keystone-0.1
+          ip: 10.0.0.91
+          location: ''
+          partition: ''
+          port: 35357
+          volume: ''
+      memcached:
+        - config: {}
+          id: TRAVIS-memcached-0
+          ip: 10.0.0.91
+          location: ''
+          partition: ''
+          port: 6019
+          volume: ''
+      meta0:
+        - config: {}
+          id: TRAVIS-meta0-0
+          ip: 10.0.0.91
+          location: node11.0
+          partition: /dev/vdb
+          port: 6001
+          volume: /mnt/ssd/TRAVIS/meta0-0
+      meta1:
+        - config: {}
+          id: TRAVIS-meta1-0
+          ip: 10.0.0.91
+          location: node11.0
+          partition: /dev/vdb
+          port: 6110
+          volume: /mnt/ssd/TRAVIS/meta1-0
+        - config: {}
+          id: TRAVIS-meta1-1
+          ip: 10.0.0.91
+          location: node11.1
+          partition: /dev/vdd
+          port: 6111
+          volume: /mnt/ssd2/TRAVIS/meta1-1
+        - config: {}
+          id: TRAVIS-meta1-2
+          ip: 10.0.0.91
+          location: node11.2
+          partition: /dev/vde
+          port: 6112
+          volume: /mnt/ssd3/TRAVIS/meta1-2
+      meta2:
+        - config: {}
+          id: TRAVIS-meta2-0
+          ip: 10.0.0.91
+          location: node11.0
+          partition: /dev/vdb
+          port: 6120
+          volume: /mnt/ssd/TRAVIS/meta2-0
+        - config: {}
+          id: TRAVIS-meta2-1
+          ip: 10.0.0.91
+          location: node11.1
+          partition: /dev/vdb
+          port: 6121
+          volume: /mnt/ssd/TRAVIS/meta2-1
+        - config: {}
+          id: TRAVIS-meta2-2
+          ip: 10.0.0.91
+          location: node11.2
+          partition: /dev/vdb
+          port: 6122
+          volume: /mnt/ssd/TRAVIS/meta2-2
+        - config: {}
+          id: TRAVIS-meta2-3
+          ip: 10.0.0.91
+          location: node11.3
+          partition: /dev/vdb
+          port: 6123
+          volume: /mnt/ssd/TRAVIS/meta2-3
+        - config: {}
+          id: TRAVIS-meta2-4
+          ip: 10.0.0.91
+          location: node11.4
+          partition: /dev/vdb
+          port: 6124
+          volume: /mnt/ssd/TRAVIS/meta2-4
+        - config: {}
+          id: TRAVIS-meta2-5
+          ip: 10.0.0.91
+          location: node11.5
+          partition: /dev/vdb
+          port: 6125
+          volume: /mnt/ssd/TRAVIS/meta2-5
+        - config: {}
+          id: TRAVIS-meta2-6
+          ip: 10.0.0.91
+          location: node11.6
+          partition: /dev/vdb
+          port: 6126
+          volume: /mnt/ssd/TRAVIS/meta2-6
+        - config: {}
+          id: TRAVIS-meta2-7
+          ip: 10.0.0.91
+          location: node11.7
+          partition: /dev/vdb
+          port: 6127
+          volume: /mnt/ssd/TRAVIS/meta2-7
+        - config: {}
+          id: TRAVIS-meta2-8
+          ip: 10.0.0.91
+          location: node11.8
+          partition: /dev/vdd
+          port: 6128
+          volume: /mnt/ssd2/TRAVIS/meta2-8
+        - config: {}
+          id: TRAVIS-meta2-9
+          ip: 10.0.0.91
+          location: node11.9
+          partition: /dev/vdd
+          port: 6129
+          volume: /mnt/ssd2/TRAVIS/meta2-9
+        - config: {}
+          id: TRAVIS-meta2-10
+          ip: 10.0.0.91
+          location: node11.10
+          partition: /dev/vdd
+          port: 6130
+          volume: /mnt/ssd2/TRAVIS/meta2-10
+        - config: {}
+          id: TRAVIS-meta2-11
+          ip: 10.0.0.91
+          location: node11.11
+          partition: /dev/vdd
+          port: 6131
+          volume: /mnt/ssd2/TRAVIS/meta2-11
+        - config: {}
+          id: TRAVIS-meta2-12
+          ip: 10.0.0.91
+          location: node11.12
+          partition: /dev/vdd
+          port: 6132
+          volume: /mnt/ssd2/TRAVIS/meta2-12
+        - config: {}
+          id: TRAVIS-meta2-13
+          ip: 10.0.0.91
+          location: node11.13
+          partition: /dev/vdd
+          port: 6133
+          volume: /mnt/ssd2/TRAVIS/meta2-13
+        - config: {}
+          id: TRAVIS-meta2-14
+          ip: 10.0.0.91
+          location: node11.14
+          partition: /dev/vdd
+          port: 6134
+          volume: /mnt/ssd2/TRAVIS/meta2-14
+        - config: {}
+          id: TRAVIS-meta2-15
+          ip: 10.0.0.91
+          location: node11.15
+          partition: /dev/vdd
+          port: 6135
+          volume: /mnt/ssd2/TRAVIS/meta2-15
+        - config: {}
+          id: TRAVIS-meta2-16
+          ip: 10.0.0.91
+          location: node11.16
+          partition: /dev/vde
+          port: 6136
+          volume: /mnt/ssd3/TRAVIS/meta2-16
+        - config: {}
+          id: TRAVIS-meta2-17
+          ip: 10.0.0.91
+          location: node11.17
+          partition: /dev/vde
+          port: 6137
+          volume: /mnt/ssd3/TRAVIS/meta2-17
+        - config: {}
+          id: TRAVIS-meta2-18
+          ip: 10.0.0.91
+          location: node11.18
+          partition: /dev/vde
+          port: 6138
+          volume: /mnt/ssd3/TRAVIS/meta2-18
+        - config: {}
+          id: TRAVIS-meta2-19
+          ip: 10.0.0.91
+          location: node11.19
+          partition: /dev/vde
+          port: 6139
+          volume: /mnt/ssd3/TRAVIS/meta2-19
+        - config: {}
+          id: TRAVIS-meta2-20
+          ip: 10.0.0.91
+          location: node11.20
+          partition: /dev/vde
+          port: 6140
+          volume: /mnt/ssd3/TRAVIS/meta2-20
+        - config: {}
+          id: TRAVIS-meta2-21
+          ip: 10.0.0.91
+          location: node11.21
+          partition: /dev/vde
+          port: 6141
+          volume: /mnt/ssd3/TRAVIS/meta2-21
+        - config: {}
+          id: TRAVIS-meta2-22
+          ip: 10.0.0.91
+          location: node11.22
+          partition: /dev/vde
+          port: 6142
+          volume: /mnt/ssd3/TRAVIS/meta2-22
+        - config: {}
+          id: TRAVIS-meta2-23
+          ip: 10.0.0.91
+          location: node11.23
+          partition: /dev/vde
+          port: 6143
+          volume: /mnt/ssd3/TRAVIS/meta2-23
+      oioblobindexer:
+        - config: {}
+          id: TRAVIS-oioblobindexer-0
+          ip: 10.0.0.91
+          location: node11.0
+          partition: /dev/vdc
+          port: 0
+          volume: /mnt/hdd/TRAVIS/rawx-0
+      oioblobrebuilder:
+        - config: {}
+          id: TRAVIS-oioblobrebuilder-0
+          ip: ''
+          location: ''
+          partition: ''
+          port: 0
+          volume: ''
+      oioeventagent:
+        - config: {}
+          id: TRAVIS-oioeventagent-0
+          ip: ''
+          location: node11.0
+          partition: ''
+          port: 0
+          volume: ''
+      oioproxy:
+        - config: {}
+          id: TRAVIS-oioproxy-0
+          ip: 10.0.0.91
+          location: ''
+          partition: ''
+          port: 6006
+          volume: ''
+      oioswift:
+        - config: {}
+          id: TRAVIS-oioswift-0
+          ip: 10.0.0.91
+          location: ''
+          partition: ''
+          port: 6007
+          volume: ''
+      rawx:
+        - config: {}
+          id: TRAVIS-rawx-0
+          ip: 10.0.0.91
+          location: node11.0
+          partition: /dev/vdc
+          port: 6200
+          volume: /mnt/hdd/TRAVIS/rawx-0
+      rdir:
+        - config: {}
+          id: TRAVIS-rdir-0
+          ip: 10.0.0.91
+          location: node11.0
+          partition: /dev/vdc
+          port: 6300
+          volume: /mnt/hdd/TRAVIS/rdir-0
+      redis:
+        - config: {}
+          id: TRAVIS-redis-0
+          ip: 10.0.0.91
+          location: ''
+          partition: ''
+          port: 6011
+          volume: /mnt/ssd/TRAVIS/redis-0
+      redissentinel:
+        - config: {}
+          id: TRAVIS-redissentinel-0
+          ip: 10.0.0.91
+          location: ''
+          partition: ''
+          port: 6012
+          volume: /mnt/ssd/TRAVIS/redissentinel-0
+      zookeeper:
+        - config: {}
+          id: TRAVIS-zookeeper-0
+          ip: 10.0.0.91
+          location: ''
+          partition: ''
+          port: 6005
+          volume: /mnt/ssd/TRAVIS/zookeeper-0
+
+...

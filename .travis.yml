@@ -32,9 +32,14 @@ before_install:
   #- git worktree add docker-tests origin/docker-tests
   # retrieve centralized script
   - |
-    for i in docker-tests.sh functional-tests.sh ansible.cfg; do
+    for i in functional-tests.sh ansible.cfg; do
       wget -O docker-tests/${i} https://raw.githubusercontent.com/open-io/ansible-role-openio-skeleton/docker-tests/${i}
     done
+
+    wget -O docker-tests/docker-tests.sh \
+      https://raw.githubusercontent.com/open-io/ansible-role-openio-netdata/18.10/docker-tests/docker-tests.sh
+
+
   # Lint
   - sudo pip install --upgrade pip
   - sudo pip install ansible-lint yamllint
