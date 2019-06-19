@@ -4,8 +4,8 @@ openio_netdata_namespace: "{{ namespace | d(default_namespace) }}"
 openio_netdata_confdir: "/etc/netdata"
 openio_netdata_oio_hosts: "{{ groups['fronts'] | d([]) + groups['backs'] | d([]) + openio_netdata_oiofs_hosts }}"
 openio_netdata_oiofs_hosts: "{{ groups['oiofs'] | d([]) + groups['oiofs_ha'] | d([]) }}"
-openio_netdata_s3rt_hosts: "{{ [(groups['fronts'] | first), (groups['fronts'] | last)]
-  if (groups['fronts'] | d([])) | length > 1 else [] }}"
+openio_netdata_s3rt_hosts: "{{ [(groups['oioswift'] | first), (groups['oioswift'] | last)]
+  if (groups['oioswift'] | d([])) | length > 1 else [] }}"
 openio_netdata_zookeeper_hosts: "{{ groups['zookeeper'] | d([]) }}"
 openio_netdata_redis_hosts: "{{ groups['redis'] | d([]) }}"
 
