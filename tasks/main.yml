@@ -22,15 +22,6 @@
   ignore_errors: "{{ ansible_check_mode }}"
   tags: install
 
-- name: Set global configuration
-  template:
-    src: netdata.conf.j2
-    dest: /etc/netdata/netdata.conf
-    owner: "{{ netdata_user }}"
-    group: "{{ netdata_group }}"
-    mode: 0640
-  tags: configure
-
 - block:
     - name: Add user netdata to openio group
       user:
@@ -66,7 +57,7 @@
 
     - name: "Select current namespace in inventory fact"
       set_fact:
-        inventory: "{{ inventory.namespaces[openio_netdata_namespace].services }}"
+        inventory: "{{ inventory.namespaces[openio_netdata_namespace] }}"
       ignore_errors: "{{ ansible_check_mode }}"
       tags: configure
 
@@ -100,6 +91,17 @@
           dest: "{{ openio_netdata_confdir }}/python.d/redis.conf"
       tags: configure
   when: inventory_hostname in openio_netdata_oio_hosts
+
+- name: Set global configuration
+  vars:
+    inventory: "{{ inventory | d({}) }}"
+  template:
+    src: netdata.conf.j2
+    dest: /etc/netdata/netdata.conf
+    owner: "{{ netdata_user }}"
+    group: "{{ netdata_group }}"
+    mode: 0640
+  tags: configure
 
 - name: Set oiofs configuration
   template:
