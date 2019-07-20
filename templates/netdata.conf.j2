@@ -20,7 +20,7 @@
 {% if openio_netdata_backend_destination %}
   destination = {{ openio_netdata_backend_destination }}
 {% endif %}
-  host tags = ansible_name="{{ inventory_hostname }}" namespace="{{ openio_netdata_namespace }}" rack="{{ inventory.get('rack', '') }}"
+  host tags = ansible_name="{{ inventory_hostname }}" namespace="{{ openio_netdata_namespace }}" rack="{{ _inventory.get('rack', '') }}"
 
 
 [plugins]

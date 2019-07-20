@@ -94,7 +94,7 @@
 
 - name: Set global configuration
   vars:
-    inventory: "{{ inventory | d({}) }}"
+    _inventory: "{{ inventory | d({}) }}"
   template:
     src: netdata.conf.j2
     dest: /etc/netdata/netdata.conf
