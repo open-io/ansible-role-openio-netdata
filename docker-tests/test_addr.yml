@@ -1,6 +1,7 @@
 # Test playbook
 ---
-- hosts: all
+- name: "Test playbook using management address"
+  hosts: "all"
   become: true
   vars:
     namespace: TRAVIS
@@ -13,6 +14,10 @@
       copy:
         src: inventory.yml
         dest: "/etc/oio/sds/{{ namespace }}/inventory.yml"
+    - name: Setup networking
+      set_fact:
+        openio_bind_mgmt_address: "{{ ansible_eth1.ipv4.address }}"
+        openio_bind_address: "{{ ansible_default_ipv4.address }}"
     - name: Add localhost to group 'fronts'
       add_host:
         name: localhost

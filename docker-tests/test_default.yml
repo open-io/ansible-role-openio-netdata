@@ -1,0 +1,31 @@
+# Test playbook
+---
+- name: "Test playbook using default networking"
+  hosts: "all"
+  become: true
+  vars:
+    namespace: TRAVIS
+  pre_tasks:
+    - name: Seed directory for NS
+      file:
+        path: "/etc/oio/sds/{{ namespace }}"
+        state: directory
+    - name: Seed inventory on nodes
+      copy:
+        src: inventory.yml
+        dest: "/etc/oio/sds/{{ namespace }}/inventory.yml"
+    - name: Setup networking
+      set_fact:
+        openio_bind_address: "{{ ansible_default_ipv4.address }}"
+    - name: Add localhost to group 'fronts'
+      add_host:
+        name: localhost
+        groups: fronts
+      changed_when: false
+  roles:
+    - role: users
+    - role: repo
+      openio_repository_no_log: false
+      openio_repository_mirror_host: mirror2.openio.io
+    - role: role_under_test
+...

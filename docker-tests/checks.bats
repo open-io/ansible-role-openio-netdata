@@ -6,7 +6,7 @@
 # Tests
 
 @test 'Netdata listens 19999' {
-  run bash -c "curl http://${SUT_IP}:19999"
+  run bash -c "curl -s http://${SUT_IP}:19999/api/v1/allmetrics?format=prometheus_all_hosts | grep ${SUT_ID}"
   echo "output: "$output
   echo "status: "$status
   [[ "${status}" -eq "0" ]]

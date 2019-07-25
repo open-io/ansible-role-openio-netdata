@@ -45,9 +45,16 @@ script:
   - yamllint .
 
   # Create container and apply test playbook
-  - ./docker-tests/docker-tests.sh
+  - ./docker-tests/docker-tests.sh test_default
+  - ./docker-tests/docker-tests.sh test_iface
+  - ./docker-tests/docker-tests.sh test_addr
+  - ./docker-tests/docker-tests.sh test_all
+
 
   # Run functional tests on the container
-  #- SUT_ID=$(docker ps -qa) ./docker-tests/functional-tests.sh
-  - SUT_IP=172.17.0.2 SUT_ID=$(docker ps -qa) ./docker-tests/functional-tests.sh
+  # - SUT_ID=$(docker ps -qa) ./docker-tests/functional-tests.sh
+  - SUT_IP=172.17.0.2 SUT_ID=$(docker ps -qa | tail -n 1) ./docker-tests/functional-tests.sh
+  - SUT_IP=172.18.0.3 SUT_ID=$(docker ps -qa | tail -n 2 | head -n 1) ./docker-tests/functional-tests.sh
+  - SUT_IP=172.18.0.4 SUT_ID=$(docker ps -qa | head -n 2 | tail -n 1) ./docker-tests/functional-tests.sh
+  - SUT_IP=172.18.0.5 SUT_ID=$(docker ps -qa | head -n 1) ./docker-tests/functional-tests.sh
 ...
