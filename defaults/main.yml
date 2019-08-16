@@ -7,7 +7,8 @@ openio_netdata_oiofs_hosts: "{{ groups['oiofs'] | d([]) + groups['oiofs_ha'] | d
 openio_netdata_s3rt_hosts: "{{ [(groups['oioswift'] | first), (groups['oioswift'] | last)]
   if (groups['oioswift'] | d([])) | length > 1 else [] }}"
 openio_netdata_zookeeper_hosts: "{{ groups['zookeeper'] | d([]) }}"
-openio_netdata_redis_hosts: "{{ groups['redis'] | d([]) }}"
+openio_netdata_redis_account_group: "redis"
+openio_netdata_redis_hosts: "{{ groups[openio_netdata_redis_account_group] | d([]) }}"
 
 openio_netdata_bind_interface: "{{ openio_bind_mgmt_interface | d(ansible_default_ipv4.alias) }}"
 openio_netdata_bind_address: "{{ openio_bind_mgmt_address \

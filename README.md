@@ -31,6 +31,7 @@ An Ansible role for install netdata. Specifically, the responsibilities of this 
 | openio_netdata_oiofs_monitor               | Activate oiofs monitoring (Use as hostvar)                                            | boolean |
 | openio_netdata_oiofs_endpoints             | oiofs endpoints to monitor (Use as hostvar)                                           | dict    |
 | openio_netdata_service_enabled             | Enable service at system boot                                                         | boolean |
+| openio_netdata_redis_account_group             | Ansible group of hosts for the account redis backend boot                                                         | string |
 
 
 ## Dependencies

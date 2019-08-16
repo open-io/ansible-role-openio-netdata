@@ -345,6 +345,7 @@ namespaces:
           location: ''
           partition: ''
           port: 6011
+          role: "redis"
           volume: /mnt/ssd/TRAVIS/redis-0
       redissentinel:
         - config: {}

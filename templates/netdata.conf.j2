@@ -40,9 +40,12 @@
   update_every = {{ openio_netdata_global_update_every }}
   command options = --ns {{ openio_netdata_namespace }}
 
+{% set targets = inventory.services.get('redis', []) | selectattr('role', 'match', openio_netdata_redis_account_group) | list %}
+{% if targets %}
 [plugin:container]
   update_every = {{ openio_netdata_global_update_every }}
-  command options = --ns {{ openio_netdata_namespace }} --fast
+  command options = --ns {{ openio_netdata_namespace }} --fast --addr {{ targets[0].ip }}:{{ targets[0].port }}
+{% endif %}
 
 [plugin:command]
   update_every = {{ openio_netdata_global_update_every }}
