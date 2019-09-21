@@ -1,9 +1,9 @@
 ---
 - src: https://github.com/open-io/ansible-role-openio-users.git
-  version: "19.04"
+  version: "19.10"
   name: users
 
 - src: https://github.com/open-io/ansible-role-openio-repository.git
-  version: "19.04"
+  version: "19.10"
   name: repo
 ...
