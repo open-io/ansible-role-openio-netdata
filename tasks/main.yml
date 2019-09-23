@@ -56,15 +56,7 @@
         state: directory
         suffix: inventory
       register: inv_dir
-      changed_when: false
-
-    - name: Make temporary directory writeable
-      local_action:
-        module: file
-        path: "{{ inv_dir.path }}"
-        owner: root
-        group: root
-        mode: '0777'
+      become: false
       changed_when: false
 
     - name: "Fetch inventory file"
