@@ -11,7 +11,7 @@ autodetection_retry: {{ openio_netdata_python_d_retry }}
     name: '.openio.{{ openio_netdata_namespace }}.rawx.rawx-{{ loop.index0 }}.log.access'
     path: '/var/log/oio/sds/{{ openio_netdata_namespace }}/rawx-{{ loop.index0 }}/rawx-{{ loop.index0 }}-httpd-access.log'
     custom_log_format:
-        pattern: '\S+ \S+ \S+ \S+ \S+ \d+ \d+ \S+ \S+ (?P<address>\S+) \S+ (?P<method>\S+) (?P<code>\d+) (?P<resp_time>\d+) (?P<bytes_sent>\d+) \S+ \S+ (?P<url>.*)'
+        pattern: '\S+ \S+ \S+ \S+ \S+ \d+ \d+ \S+ \S+ (?P<address>\S+) \S+ (?P<method>\S+) (?P<code>\d+) (?P<resp_time>\d+) (?P<bytes_sent>\d+) (?P<resp_length>\d+) \S+ \S+ (?P<url>.*)'
     {% endfor %}
 {% endif %}
 
