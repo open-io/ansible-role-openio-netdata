@@ -37,31 +37,31 @@
   s3roundtrip = {{ 'yes' if inventory_hostname in openio_netdata_s3rt_hosts else 'no' }}
 
 [plugin:openio]
-  update_every = {{ openio_netdata_global_update_every }}
+  update every = {{ openio_netdata_global_update_every }}
   command options = --ns {{ openio_netdata_namespace }}
 
 {% set targets = inventory.services.get('redis', []) | selectattr('role', 'match', openio_netdata_redis_account_group) | list %}
 {% if targets %}
 [plugin:container]
-  update_every = {{ openio_netdata_global_update_every }}
+  update every = {{ openio_netdata_global_update_every }}
   command options = --ns {{ openio_netdata_namespace }} --fast --addr {{ targets[0].ip }}:{{ targets[0].port }}
 {% endif %}
 
 [plugin:command]
-  update_every = {{ openio_netdata_global_update_every }}
+  update every = {{ openio_netdata_global_update_every }}
   command options = --conf {{ openio_netdata_confdir }}/commands.conf
 
 [plugin:zookeeper]
-  update_every = {{ openio_netdata_global_update_every }}
+  update every = {{ openio_netdata_global_update_every }}
   command options = --ns {{ openio_netdata_namespace }}
 
 [plugin:fs]
-  update_every = {{ openio_netdata_global_update_every }}
+  update every = {{ openio_netdata_global_update_every }}
   command options = --conf {{ openio_netdata_confdir }}/oiofs.conf {% if openio_netdata_oiofs_debug %}--fast{% endif %}
 {% endif %}
 
 [plugin:s3roundtrip]
-  update_every = {{ openio_netdata_global_update_every }}
+  update every = {{ openio_netdata_global_update_every }}
   command options = --conf {{ openio_netdata_confdir }}/s3-roundtrip.conf
 
 [netdata.backend_metrics]
