@@ -24,7 +24,7 @@
 
 
 [plugins]
-{% for plugin, state in openio_netdata_active_plugins.iteritems() %}
+{% for plugin, state in openio_netdata_active_plugins.items() | list %}
   {{ plugin }} = {{ 'yes' if state else 'no' }}
 {% endfor %}
 {% if inventory_hostname in openio_netdata_oio_hosts %}
