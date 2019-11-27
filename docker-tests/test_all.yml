@@ -5,6 +5,8 @@
   become: true
   vars:
     namespace: TRAVIS
+    openio_netdata_s3rt_hosts: [ "localhost" ]
+    default_openio_s3_region: "us-east-1"
   pre_tasks:
     - name: Seed directory for NS
       file:
@@ -24,6 +26,14 @@
         name: localhost
         groups: fronts
       changed_when: false
+    - name: "Create .aws directory"
+      file:
+        state: directory
+        dest: "/root/.aws"
+    - name: "Seed .aws/credentials file"
+      copy:
+        content: "[default]\naws_access_key_id=test_access\naws_secret_access_key=test_secret\n"
+        dest: "/root/.aws/credentials"
   roles:
     - role: users
     - role: repo
