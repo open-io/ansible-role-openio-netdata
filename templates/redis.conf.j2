@@ -1,8 +1,0 @@
-#jinja2: lstrip_blocks: True
-# {{ ansible_managed }}
-autodetection_retry: {{ openio_netdata_python_d_retry }}
-{% for redis in inventory.services.get('redis', []) %}
-'{{ redis.ip }}:{{ redis.port}}':
-    host: '{{ redis.ip }}'
-    port:  {{ redis.port }}
-{% endfor %}

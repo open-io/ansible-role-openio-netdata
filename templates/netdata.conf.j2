@@ -35,6 +35,7 @@
                  (inventory_hostname == openio_netdata_redis_hosts | first) else 'no' }}
   fs = {{ 'yes' if inventory_hostname in openio_netdata_oiofs_hosts else 'no' }}
   s3roundtrip = {{ 'yes' if inventory_hostname in openio_netdata_s3rt_hosts else 'no' }}
+  redis = {{ 'yes' if inventory.services.get('redis', []) else 'no' }}
 
 [plugin:openio]
   update every = {{ openio_netdata_global_update_every }}
@@ -46,6 +47,10 @@
   update every = {{ openio_netdata_global_update_every }}
   command options = --ns {{ openio_netdata_namespace }} --fast --addr {{ targets[0].ip }}:{{ targets[0].port }}
 {% endif %}
+
+[plugin:redis]
+  update every = {{ openio_netdata_global_update_every }}
+  command options = --targets {{ inventory.services.get('redis', []) | redis_roles }}
 
 [plugin:command]
   update every = {{ openio_netdata_global_update_every }}

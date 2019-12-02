@@ -42,10 +42,10 @@
       tags: configure
 
     - name: Create temporary inventory directory
-      local_action:
-        module: tempfile
+      tempfile:
         state: directory
         suffix: inventory
+      delegate_to: localhost
       register: inv_dir
       changed_when: false
       become: false
@@ -99,8 +99,6 @@
           dest: "{{ openio_netdata_confdir }}/apps_groups.conf"
         - src: beanstalk.conf.j2
           dest: "{{ openio_netdata_confdir }}/python.d/beanstalk.conf"
-        - src: redis.conf.j2
-          dest: "{{ openio_netdata_confdir }}/python.d/redis.conf"
         - src: memcached.conf.j2
           dest: "{{ openio_netdata_confdir }}/python.d/memcached.conf"
       tags: configure
