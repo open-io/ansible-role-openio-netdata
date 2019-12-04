@@ -4,6 +4,6 @@ endpoint={{ openio_netdata_s3rt_endpoint}}
 access={{ s3creds['content'] | aws_creds('access') }}
 secret={{ s3creds['content'] | aws_creds('secret') }}
 region={{ openio_netdata_s3rt_region }}
-bucket={{ openio_netdata_s3rt_bucket }}
+bucket={{ openio_netdata_s3rt_bucket }}-{{ openio_netdata_s3rt_hosts.index(inventory_hostname) }}
 object={{ openio_netdata_s3rt_object }}
 timeout={{ openio_netdata_s3rt_timeout }}
