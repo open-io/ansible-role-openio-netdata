@@ -11,8 +11,8 @@ env:
       VERSION: 7
 #    - DISTRIBUTION: centos
 #      VERSION: 8
-    - DISTRIBUTION: ubuntu
-      VERSION: 16.04
+#    - DISTRIBUTION: ubuntu
+#      VERSION: 16.04
     - DISTRIBUTION: ubuntu
       VERSION: 18.04
 #    - DISTRIBUTION: debian

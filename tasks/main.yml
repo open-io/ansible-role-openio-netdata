@@ -46,6 +46,7 @@
         dest: "{{ inv_dir.path }}/inventories/{{ ansible_hostname }}.yml"
         flat: true
       changed_when: false
+      ignore_errors: "{{ ansible_check_mode }}"
       tags: configure
 
     - name: "Load inventory as fact"
@@ -94,7 +95,7 @@
 
 - name: Set global configuration
   vars:
-    _inventory: "{{ inventory | d({}) }}"
+    _inventory: "{{ inventory | d({'rack': 'default', 'services': {} }) }}"
   template:
     src: netdata.conf.j2
     dest: /etc/netdata/netdata.conf
@@ -129,6 +130,7 @@
         mode: 0640
       tags: configure
   when: inventory_hostname in openio_netdata_s3rt_hosts
+  ignore_errors: "{{ ansible_check_mode }}"
 
 - name: Restart netdata
   service:

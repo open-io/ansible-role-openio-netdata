@@ -40,7 +40,7 @@
   update every = {{ openio_netdata_global_update_every }}
   command options = --ns {{ openio_netdata_namespace }}
 
-{% set targets = inventory.services.get('redis', []) | selectattr('role', 'match', openio_netdata_redis_account_group) | list %}
+{% set targets = _inventory.services.get('redis', []) | selectattr('role', 'match', openio_netdata_redis_account_group) | list %}
 {% if targets %}
 [plugin:container]
   update every = {{ openio_netdata_global_update_every }}
