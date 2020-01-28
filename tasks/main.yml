@@ -22,6 +22,17 @@
   ignore_errors: "{{ ansible_check_mode }}"
   tags: install
 
+- name: Configure sysctl
+  sysctl:
+    name: "{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+    sysctl_file: "/etc/sysctl.d/{{ openio_netdata_sysctl_filename }}"
+  loop: "{{ openio_netdata_sysctl_entries | dict2items }}"
+  when: ansible_virtualization_type != 'docker'
+  tags: install
+
+
 - block:
     - name: Add user netdata to openio group
       user:
