@@ -1,11 +1,11 @@
 # .travis.yml Execution script for role tests on Travis-CI
 ---
-dist: xenial
+dist: bionic
 sudo: required
 
 env:
   global:
-    - ANSIBLE_VERSION=2.5
+    - ANSIBLE_VERSION=2.9
   matrix:
     - DISTRIBUTION: centos
       VERSION: 7
@@ -20,6 +20,10 @@ env:
 
 services:
   - docker
+
+language: python
+python:
+  - "3.6"
 
 before_install:
   # Install latest Git
