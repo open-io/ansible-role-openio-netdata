@@ -75,8 +75,8 @@
 
     - name: "Set commands plugin configuration"
       copy:
-        src: "commands/{{ ansible_os_family }}.conf"
-        dest: "{{ openio_netdata_confdir }}/commands.conf"
+        src: "commands/{{ ansible_os_family }}.yml"
+        dest: "{{ openio_netdata_confdir }}/commands.yml"
         owner: "{{ netdata_user }}"
         group: "{{ netdata_group }}"
       tags: configure

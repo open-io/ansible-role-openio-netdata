@@ -1,0 +1,49 @@
+# This file is used by netdata to gather version information
+---
+config:
+  - name: openio_version
+    command: "dpkg-query -Wf='${Version}\n' openio-sds"
+    interval: 60
+    family: version
+    value_is_label: true
+  - name: swift_version
+    command: "dpkg-query -Wf='${Version}\n' openio-sds-swift"
+    interval: 60
+    family: version
+    value_is_label: true
+  - name: s3_version
+    command: "dpkg-query -Wf='${Version}\n' openio-sds-swift-plugin-s3"
+    interval: 60
+    family: version
+    value_is_label: true
+  - name: zookeeper_version
+    command: "dpkg-query -Wf='${Version}\n' zookeeper"
+    interval: 60
+    family: version
+    value_is_label: true
+  - name: zk_lib_version
+    command: "dpkg-query -Wf='${Version}\n' libzookeeper-java"
+    interval: 60
+    family: version
+    value_is_label: true
+  - name: oiofs_version
+    command: "dpkg-query -Wf='${Version}\n' oiofs-fuse"
+    interval: 60
+    family: version
+    value_is_label: true
+  - name: redis_version
+    command: "redis-server --version | grep -oP ' v=\\K.+? '"
+    interval: 60
+    family: version
+    value_is_label: true
+  - name: beanstalkd_version
+    command: "beanstalkd -v | awk 'BEGIN {err=1} NF == 2 {print $2; err = 0} END {exit err}'"
+    interval: 60
+    family: version
+    value_is_label: true
+  - name: keystone_version
+    command: "keystone-manage --version 2>&1"
+    interval: 60
+    family: version
+    value_is_label: true
+...
