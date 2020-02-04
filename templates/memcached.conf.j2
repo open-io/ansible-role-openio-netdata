@@ -1,0 +1,8 @@
+#jinja2: lstrip_blocks: True
+# {{ ansible_managed }}
+autodetection_retry: {{ openio_netdata_python_d_retry }}
+{% for memcached in inventory.services.get('memcached', []) %}
+'{{ memcached.ip }}:{{ memcached.port}}':
+    host: '{{ memcached.ip }}'
+    port:  {{ memcached.port }}
+{% endfor %}

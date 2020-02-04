@@ -101,6 +101,8 @@
           dest: "{{ openio_netdata_confdir }}/python.d/beanstalk.conf"
         - src: redis.conf.j2
           dest: "{{ openio_netdata_confdir }}/python.d/redis.conf"
+        - src: memcached.conf.j2
+          dest: "{{ openio_netdata_confdir }}/python.d/memcached.conf"
       tags: configure
   when: inventory_hostname in openio_netdata_oio_hosts
 

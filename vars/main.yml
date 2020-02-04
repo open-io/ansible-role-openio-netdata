@@ -63,6 +63,7 @@ openio_netdata_backend_charts:
   - "*zk*"
   - "*oiofs*"
   - "roundtrip*"
+  - "*memcached*"
 
 openio_netdata_active_plugins:
   apps: true
@@ -81,6 +82,7 @@ openio_netdata_python_d_plugin_default_run: 'no'
 openio_netdata_python_d_plugin_logs_per_interval: 200
 openio_netdata_python_d_plugin_log_interval: 3600
 openio_netdata_python_d_plugin_web_log: 'yes'
+openio_netdata_python_d_plugin_memcached: 'yes'
 
 openio_netdata_sysctl_filename: "99-netdata.conf"
 openio_netdata_sysctl_entries:
