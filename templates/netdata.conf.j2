@@ -36,6 +36,7 @@
   fs = {{ 'yes' if inventory_hostname in openio_netdata_oiofs_hosts else 'no' }}
   s3roundtrip = {{ 'yes' if inventory_hostname in openio_netdata_s3rt_hosts else 'no' }}
   redis = {{ 'yes' if inventory.services.get('redis', []) else 'no' }}
+  memcached = {{ 'yes' if inventory.services.get('memcached', []) else 'no' }}
 
 [plugin:openio]
   update every = {{ openio_netdata_global_update_every }}
@@ -51,6 +52,16 @@
 [plugin:redis]
   update every = {{ openio_netdata_global_update_every }}
   command options = --targets {{ inventory.services.get('redis', []) | redis_roles }}
+
+{% if inventory.services.get('memcached', []) %}
+{% set _m_servers = [] -%}
+{% for s in inventory.services.get('memcached', []) -%}
+{{ _m_servers.append( s.ip ~ ':' ~ s.port) -}}
+{% endfor -%}
+[plugin:memcached]
+  update every = {{ openio_netdata_global_update_every }}
+  command options = --targets {{ _m_servers | join(',') }}
+{% endif %}
 
 [plugin:command]
   update every = {{ openio_netdata_global_update_every }}
