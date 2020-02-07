@@ -97,8 +97,6 @@
           dest: "{{ openio_netdata_confdir }}/python.d.conf"
         - src: apps_groups.conf.j2
           dest: "{{ openio_netdata_confdir }}/apps_groups.conf"
-        - src: beanstalk.conf.j2
-          dest: "{{ openio_netdata_confdir }}/python.d/beanstalk.conf"
       tags: configure
   when: inventory_hostname in openio_netdata_oio_hosts
 

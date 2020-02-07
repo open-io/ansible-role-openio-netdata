@@ -37,6 +37,7 @@
   s3roundtrip = {{ 'yes' if inventory_hostname in openio_netdata_s3rt_hosts else 'no' }}
   redis = {{ 'yes' if inventory.services.get('redis', []) else 'no' }}
   memcached = {{ 'yes' if inventory.services.get('memcached', []) else 'no' }}
+  beanstalk = {{ 'yes' if inventory.services.get('beanstalkd', []) else 'no' }}
 
 [plugin:openio]
   update every = {{ openio_netdata_global_update_every }}
@@ -59,6 +60,16 @@
 {{ _m_servers.append( s.ip ~ ':' ~ s.port) -}}
 {% endfor -%}
 [plugin:memcached]
+  update every = {{ openio_netdata_global_update_every }}
+  command options = --targets {{ _m_servers | join(',') }}
+{% endif %}
+
+{% if inventory.services.get('beanstalkd', []) %}
+{% set _m_servers = [] -%}
+{% for s in inventory.services.get('beanstalkd', []) -%}
+{{ _m_servers.append( s.ip ~ ':' ~ s.port ~ ':default:oio:oio-delete:oio-rebuild:oio-retry:oio-quarantine') -}}
+{% endfor -%}
+[plugin:beanstalk]
   update every = {{ openio_netdata_global_update_every }}
   command options = --targets {{ _m_servers | join(',') }}
 {% endif %}
