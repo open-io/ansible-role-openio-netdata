@@ -36,4 +36,12 @@ openio_netdata_s3rt_bucket: "s3roundtrip-bucket"
 openio_netdata_s3rt_object: "s3roundtrip-object"
 openio_netdata_s3rt_aws_creds: "/root/.aws/credentials"
 openio_netdata_s3rt_timeout: 5
+
+openio_netdata_sysctl_filename: "99-netdata.conf"
+openio_netdata_sysctl_entries:
+  "vm.max_map_count": 262144
+
+netdata_user: netdata
+netdata_group: netdata
+openio_netdata_service_name: netdata
 ...

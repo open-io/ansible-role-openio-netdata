@@ -1,10 +1,4 @@
 ---
-# vars file for ansible-role-openio-netdata
-netdata_user: netdata
-netdata_group: netdata
-
-openio_netdata_service_name: netdata
-
 openio_netdata_ipv6_ignore:
   - ect
   - errors
@@ -82,8 +76,4 @@ openio_netdata_python_d_plugin_default_run: 'no'
 openio_netdata_python_d_plugin_logs_per_interval: 200
 openio_netdata_python_d_plugin_log_interval: 3600
 openio_netdata_python_d_plugin_web_log: 'yes'
-
-openio_netdata_sysctl_filename: "99-netdata.conf"
-openio_netdata_sysctl_entries:
-  "vm.max_map_count": 262144
 ...
