@@ -1,5 +1,0 @@
-#jinja2: lstrip_blocks: True
-# {{ ansible_managed }}
-{% for e in openio_netdata_oiofs_mountpoints if e.state | d('present') == 'present' %}
-{{ e.path | d((openio_netdata_oiofs_mount_directory) ~ '/oiofs-' ~ e.namespace | d(openio_netdata_namespace) ~ '-' ~ e.account | d('') ~ '-' ~ e.container | d('')) }}={{ e.http_server }}
-{% endfor %}

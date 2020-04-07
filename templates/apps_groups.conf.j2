@@ -2,24 +2,25 @@
 # -----------------------------------------------------------------------------
 # OpenIO processes
 
+haproxy: *haproxy*
+keepalived: *keepalived*
+mysqld: *mysqld*
 openio.account: oio-account-ser
 openio.beanstalkd: *beanstalkd-*
+openio.blob-indexer: oio-blob-indexe
 openio.conscienceagent: *conscienceagent-*
 openio.conscience: *conscience-*
 openio.ecd: *ecd-*
+openio.event-agent: oio-event-agent
+openio-keystone: *keystone-*
+openio.memcached: memcached
 openio.meta0: oio-meta0-serve
 openio.meta1: oio-meta1-serve
 openio.meta2: oio-meta2-serve
-openio.blob-indexer: oio-blob-indexe
-openio.event-agent: oio-event-agent
 openio.oio-proxy: oio-proxy
 openio.rawx: *rawx-*
 openio.rdir: oio-rdir-server
 openio.redis: *redis-*
 openio.redissentinel: *redissentinel-*
-openio.zookeeper: *zookeeper-*
-openio-keystone: *keystone-*
 openio.swift-proxy: *swift-proxy*
-keepalived: *keepalived*
-haproxy: *haproxy*
-mysqld: *mysqld*
+openio.zookeeper: *zookeeper-*

@@ -1,47 +1,8 @@
 ---
-# defaults file for ansible-role-openio-netdata
-openio_netdata_namespace: "{{ namespace | d(default_namespace) }}"
-openio_netdata_confdir: "/etc/netdata"
-openio_netdata_oio_hosts: "{{ groups['fronts'] | d([]) + groups['backs'] | d([]) + openio_netdata_oiofs_hosts }}"
-openio_netdata_oiofs_hosts: "{{ groups['oiofs'] | d([]) + groups['oiofs_ha'] | d([]) }}"
-openio_netdata_s3rt_hosts: "{{ [(groups['oioswift'] | first), (groups['oioswift'] | last)]
-  if (groups['oioswift'] | d([])) | length > 1 else [] }}"
-openio_netdata_zookeeper_hosts: "{{ groups['zookeeper'] | d([]) }}"
-openio_netdata_redis_account_group: "redis"
-openio_netdata_redis_hosts: "{{ groups[openio_netdata_redis_account_group] | d([]) }}"
+openio_netdata_namespace: "{{ namespace | d('OPENIO') }}"
+openio_netdata_maintenance_mode: "{{ openio_maintenance_mode | d(false) }}"
 
-openio_netdata_bind_interface: "{{ openio_bind_mgmt_interface | d(ansible_default_ipv4.alias) }}"
-openio_netdata_bind_address: "{{ openio_bind_mgmt_address \
-      | default(hostvars[inventory_hostname]['ansible_' + openio_netdata_bind_interface]['ipv4']['address']) }}"
-openio_netdata_bind_port: 19999
-
+openio_netdata_bind_address: "{{ openio_mgmt_bind_address | d(ansible_default_ipv4.address) }}"
+openio_netdata_bind_port: 6921
 openio_netdata_global_update_every: 10
-openio_netdata_service_enabled: true
-
-openio_netdata_backend_hostname: "{{ ansible_hostname }}"
-openio_netdata_backend_timeout_ms: 20000
-openio_netdata_backend_enabled: 'no'
-openio_netdata_backend_destination: false
-
-openio_netdata_oiofs_debug: false
-openio_netdata_oiofs_mount_directory: "{{ oiofs_global_mount_directory | d('/mnt') }}"
-openio_netdata_oiofs_mountpoints: "{{ oiofs_mountpoints | d([]) }}"
-
-openio_netdata_python_d_retry: 300
-openio_netdata_provision_only: false
-
-openio_netdata_s3rt_endpoint: "http://{{ openio_bind_virtual_address | d('localhost')}}:6007"
-openio_netdata_s3rt_region: "{{ openio_s3_region | d(default_openio_s3_region) }}"
-openio_netdata_s3rt_bucket: "s3roundtrip-bucket"
-openio_netdata_s3rt_object: "s3roundtrip-object"
-openio_netdata_s3rt_aws_creds: "/root/.aws/credentials"
-openio_netdata_s3rt_timeout: 5
-
-openio_netdata_sysctl_filename: "99-netdata.conf"
-openio_netdata_sysctl_entries:
-  "vm.max_map_count": 262144
-
-netdata_user: netdata
-netdata_group: netdata
-openio_netdata_service_name: netdata
 ...

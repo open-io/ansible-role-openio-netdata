@@ -1,6 +1,6 @@
 # .travis.yml Execution script for role tests on Travis-CI
 ---
-dist: bionic
+dist: xenial
 sudo: required
 
 env:
@@ -9,56 +9,33 @@ env:
   matrix:
     - DISTRIBUTION: centos
       VERSION: 7
-#    - DISTRIBUTION: centos
-#      VERSION: 8
-#    - DISTRIBUTION: ubuntu
-#      VERSION: 16.04
     - DISTRIBUTION: ubuntu
       VERSION: 18.04
-#    - DISTRIBUTION: debian
-#      VERSION: 9
 
 services:
   - docker
 
-language: python
-python:
-  - "3.6"
-
 before_install:
-  # Install latest Git
   - sudo apt-get update
   - sudo apt-get install --only-upgrade git
-  # Allow fetching other branches than master
-  #- git config remote.origin.fetch +refs/heads/*:refs/remotes/origin/*
-  # Fetch the branch with test code
-  #- git fetch origin docker-tests
-  #- git worktree add docker-tests origin/docker-tests
-  # retrieve centralized script
   - |
     for i in docker-tests.sh functional-tests.sh ansible.cfg; do
       wget -O docker-tests/${i} https://raw.githubusercontent.com/open-io/ansible-role-openio-skeleton/docker-tests/${i}
     done
-  # Lint
   - sudo pip install --upgrade pip
   - sudo pip install ansible-lint yamllint
 
 script:
   # Lint
-  #- ansible-lint . -x ANSIBLE0016
+  # - ansible-lint . -x ANSIBLE0016
   - yamllint .
 
   # Create container and apply test playbook
-  - ./docker-tests/docker-tests.sh test_default
-  - ./docker-tests/docker-tests.sh test_iface
-  - ./docker-tests/docker-tests.sh test_addr
-  - ./docker-tests/docker-tests.sh test_all
+  - ./docker-tests/docker-tests.sh
 
+  # wait 30s for netdata to gather metrics
+  - sleep 30
 
   # Run functional tests on the container
-  # - SUT_ID=$(docker ps -qa) ./docker-tests/functional-tests.sh
-  - SUT_IP=172.17.0.2 SUT_ID=$(docker ps -qa | tail -n 1) ./docker-tests/functional-tests.sh
-  - SUT_IP=172.18.0.3 SUT_ID=$(docker ps -qa | tail -n 2 | head -n 1) ./docker-tests/functional-tests.sh
-  - SUT_IP=172.18.0.4 SUT_ID=$(docker ps -qa | head -n 2 | tail -n 1) ./docker-tests/functional-tests.sh
-  - SUT_IP=172.18.0.5 SUT_ID=$(docker ps -qa | head -n 1) ./docker-tests/functional-tests.sh
+  - SUT_IP=172.17.0.2 SUT_ID=$(docker ps -qa) ./docker-tests/functional-tests.sh
 ...

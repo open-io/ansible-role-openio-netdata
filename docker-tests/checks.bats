@@ -5,18 +5,43 @@
 
 # Tests
 
-@test 'Netdata listens 19999' {
-  run bash -c "curl -s http://${SUT_IP}:19999/api/v1/allmetrics?format=prometheus_all_hosts | grep ${SUT_ID}"
+@test 'Netdata is up and running on port 6921' {
+  run bash -c "curl -qs http://${SUT_IP}:6921/api/v1/info"
   echo "output: "$output
   echo "status: "$status
-  [[ "${status}" -eq "0" ]]
+  [[ "${status}" -eq "0" && "${output}" == *"\"version\""* ]]
 }
 
-@test 'Netdata conf file exists and plugins are enabled' {
-  run bash -c "docker exec -ti ${SUT_ID} cat /etc/netdata/netdata.conf"
+@test 'Netdata returns valid cpu metrics' {
+  run bash -c "curl -qs http://${SUT_IP}:6921/api/v1/allmetrics?format=prometheus_all_hosts"
   echo "output: "$output
   echo "status: "$status
-  [[ "${status}" -eq "0" ]]
-  [[ "${output}" =~ 'openio = yes' ]]
-  [[ "${output}" =~ 'command = yes' ]]
+  check="netdata_system_cpu_percentage_average\{chart=\"system.cpu\",family=\"cpu\",dimension=\"(steal|irq|soft_irq|user|system|nice|iowait|idle)\",instance=\"${SUT_ID}\"}"
+  echo "check= $check"
+  [[ "${status}" -eq "0" && "${output}" =~ $check ]]
+}
+
+@test 'Netdata returns valid memory metrics' {
+  run bash -c "curl -qs http://${SUT_IP}:6921/api/v1/allmetrics?format=prometheus_all_hosts"
+  echo "output: "$output
+  echo "status: "$status
+  check="netdata_system_ram_MiB_average\{chart=\"system.ram\",family=\"ram\",dimension=\"(free|used|cached|buffers)\",instance=\"${SUT_ID}\"}"
+  [[ "${status}" -eq "0" && "${output}" =~ $check ]]
+}
+
+@test 'Netdata returns valid load metrics' {
+  run bash -c "curl -qs http://${SUT_IP}:6921/api/v1/allmetrics?format=prometheus_all_hosts"
+  echo "output: "$output
+  echo "status: "$status
+  check="netdata_system_load_load_average\{chart=\"system.load\",family=\"load\",dimension=\"(load1|load5|load15)\",instance=\"${SUT_ID}\"}"
+  [[ "${status}" -eq "0" && "${output}" =~ $check ]]
+}
+
+@test 'Netdata returns valid apps.group metrics' {
+  run bash -c "curl -qs http://${SUT_IP}:6921/api/v1/allmetrics?format=prometheus_all_hosts"
+  echo "output: "$output
+  echo "status: "$status
+  check="netdata_apps_cpu_percentage_average\{chart=\"apps.cpu\",family=\"cpu\",dimension=\"other\",instance=\"${SUT_ID}\"}"
+  echo "check= $check"
+  [[ "${status}" -eq "0" && "${output}" =~ $check ]]
 }

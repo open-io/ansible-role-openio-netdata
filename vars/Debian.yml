@@ -1,8 +1,0 @@
----
-openio_netdata_plugins_directory: "/usr/lib/x86_64-linux-gnu/netdata/plugins.d/"
-
-openio_netdata_packages:
-  - netdata
-  - python-beanstalkc
-  - openio-netdata-plugins
-...

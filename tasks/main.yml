@@ -1,148 +1,25 @@
 ---
-- name: "Include {{ ansible_distribution }} variables"
-  include_vars: "{{ item }}"
-  with_first_found:
-    - "{{ ansible_distribution }}.yml"
-    - "{{ ansible_os_family }}.yml"
-  tags:
-    - install
-    - configure
-
-- name: Install packages
-  package:
-    name: "{{ pkg }}"
-    state: present
-  with_items: "{{ openio_netdata_packages }}"
-  loop_control:
-    loop_var: pkg
-  register: install_packages
-  until: install_packages is success
-  retries: 5
-  delay: 2
-  ignore_errors: "{{ ansible_check_mode }}"
-  tags: install
-
-- name: Configure sysctl
-  sysctl:
-    name: "{{ item.key }}"
-    value: "{{ item.value }}"
-    state: present
-    sysctl_file: "/etc/sysctl.d/{{ openio_netdata_sysctl_filename }}"
-  loop: "{{ openio_netdata_sysctl_entries | dict2items }}"
-  when: ansible_virtualization_type != 'docker'
-  tags: install
-
-
-- block:
-    - name: Add user netdata to openio group
-      user:
-        name: "{{ netdata_user }}"
-        groups: openio
-        append: true
-      tags: configure
-
-    - name: Create temporary inventory directory
-      tempfile:
-        state: directory
-        suffix: inventory
-      delegate_to: localhost
-      register: inv_dir
-      changed_when: false
-      become: false
-      tags: configure
-
-    - name: "Fetch inventory file"
-      fetch:
-        src: /etc/oio/sds/{{ openio_netdata_namespace }}/inventory.yml
-        dest: "{{ inv_dir.path }}/inventories/{{ ansible_hostname }}.yml"
-        flat: true
-      changed_when: false
-      ignore_errors: "{{ ansible_check_mode }}"
-      tags: configure
-
-    - name: "Load inventory as fact"
-      include_vars:
-        file: "{{ inv_dir.path }}/inventories/{{ ansible_hostname }}.yml"
-        name: "inventory"
-      ignore_errors: "{{ ansible_check_mode }}"
-      tags: configure
-
-    - name: "Select current namespace in inventory fact"
-      set_fact:
-        inventory: "{{ inventory.namespaces[openio_netdata_namespace] }}"
-      ignore_errors: "{{ ansible_check_mode }}"
-      tags: configure
-
-    - name: "Set commands plugin configuration"
-      copy:
-        src: "commands/{{ ansible_os_family }}.yml"
-        dest: "{{ openio_netdata_confdir }}/commands.yml"
-        owner: "{{ netdata_user }}"
-        group: "{{ netdata_group }}"
-      tags: configure
-
-    - name: "Set python.d plugin configuration"
-      template:
-        src: "{{ item.src }}"
-        dest: "{{ item.dest }}"
-        owner: "{{ netdata_user }}"
-        group: "{{ netdata_group }}"
-        mode: 0640
-      when:
-        - inventory is defined
-      with_items:
-        - src: web_log.conf.j2
-          dest: "{{ openio_netdata_confdir }}/python.d/web_log.conf"
-        - src: python.d.conf.j2
-          dest: "{{ openio_netdata_confdir }}/python.d.conf"
-        - src: apps_groups.conf.j2
-          dest: "{{ openio_netdata_confdir }}/apps_groups.conf"
-      tags: configure
-  when: inventory_hostname in openio_netdata_oio_hosts
-
-- name: Set global configuration
+- include_role:
+    name: openio-service
   vars:
-    _inventory: "{{ inventory | d({'rack': 'default', 'services': {} }) }}"
-  template:
-    src: netdata.conf.j2
-    dest: /etc/netdata/netdata.conf
-    owner: "{{ netdata_user }}"
-    group: "{{ netdata_group }}"
-    mode: 0640
-  tags: configure
-
-- name: Set oiofs configuration
-  template:
-    src: "oiofs.conf.j2"
-    dest: "{{ openio_netdata_confdir }}/oiofs.conf"
-    owner: "{{ netdata_user }}"
-    group: "{{ netdata_group }}"
-    mode: 0640
-  when: inventory_hostname in openio_netdata_oiofs_hosts
-  tags: configure
-
-- block:
-    - name: Get S3 credentials on nodes
-      slurp:
-        src: "{{ openio_netdata_s3rt_aws_creds }}"
-      register: s3creds
-      tags: configure
-
-    - name: Set S3 roundtrip configuration
-      template:
-        src: "s3roundtrip.conf.j2"
-        dest: "{{ openio_netdata_confdir }}/s3-roundtrip.conf"
-        owner: "{{ netdata_user }}"
-        group: "{{ netdata_group }}"
-        mode: 0640
-      tags: configure
-  when: inventory_hostname in openio_netdata_s3rt_hosts
-  ignore_errors: "{{ ansible_check_mode }}"
-
-- name: Restart netdata
-  service:
-    name: netdata
-    state: "{{ 'restarted' if openio_netdata_provision_only else 'started' }}"
-    enabled: "{{ openio_netdata_service_enabled }}"
-  tags: configure
+    openio_service_type: "oio-netdata"
+    openio_service_namespace: "{{ openio_netdata_namespace }}"
+    openio_service_maintenance_mode: "{{ openio_netdata_maintenance_mode }}"
+    openio_service_packages:
+      - oio-netdata
+    openio_service_directories:
+      - path: "{{ openio_service_volume }}"
+    openio_service_configuration_files:
+      - name: netdata.conf
+      - name: apps_groups.conf
+      - name: stream.conf
+    openio_service_services:
+      - command: "/usr/sbin/oio-netdata -c {{ openio_service_conf_dir }}/netdata.conf -D"
+        uid: root
+        gid: root
+    openio_service_checks:
+      - uri:
+          url: "http://{{ openio_netdata_bind_address }}:{{ openio_netdata_bind_port }}/api/v1/info"
+        retries: 10
+        delay: 2
 ...

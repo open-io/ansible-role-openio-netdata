@@ -1,9 +1,17 @@
 ---
 - src: https://github.com/open-io/ansible-role-openio-users.git
-  version: "19.10"
+  version: "20.04"
   name: users
 
 - src: https://github.com/open-io/ansible-role-openio-repository.git
-  version: "19.10"
-  name: repo
+  version: "20.04"
+  name: repository
+
+- src: https://github.com/open-io/ansible-role-openio-gridinit.git
+  version: "20.04"
+  name: gridinit
+
+- src: https://github.com/open-io/ansible-role-openio-service.git
+  version: "20.04"
+  name: openio-service
 ...

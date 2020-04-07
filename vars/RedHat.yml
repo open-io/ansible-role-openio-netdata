@@ -1,8 +1,0 @@
----
-openio_netdata_plugins_directory: "/usr/libexec/netdata/plugins.d/"
-
-openio_netdata_packages:
-  - netdata
-  - beanstalkc
-  - openio-netdata-plugins
-...

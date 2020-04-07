@@ -1,6 +1,7 @@
 ---
 ignore:
   env/**/*
+  .travis*
 rules:
   braces:
     level: error
@@ -25,9 +26,10 @@ rules:
     max-spaces-after: 1
   comments:
     level: error
-    require-starting-space: false
+    require-starting-space: true
     min-spaces-from-content: 2
-  comments-indentation: disable
+  comments-indentation:
+    level: error
   document-end:
     level: error
     present: true

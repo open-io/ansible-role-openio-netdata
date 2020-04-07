@@ -1,124 +1,91 @@
 #jinja2: lstrip_blocks: True
 # {{ ansible_managed }}
 # NetData Configuration
+# https://docs.netdata.cloud/daemon/config/#global-section-options
 [global]
-  run as user = netdata
-  web files owner = root
-  web files group = netdata
-  # Netdata is not designed to be exposed to potentially hostile
-  # networks.See https://github.com/firehol/netdata/issues/164
+  run as user = openio
+{% if openio_netdata_bind_address | length > 0 %}
   bind socket to IP = {{ openio_netdata_bind_address }}
+{% endif %}
   default port = {{ openio_netdata_bind_port }}
   update every = {{ openio_netdata_global_update_every }}
+  config directory = {{ openio_service_conf_dir }}
+  log directory = {{ openio_service_log_dir }}
+  cache directory = {{ openio_service_volume }}
+  home directory = {{ openio_service_volume }}
+  web files directory = /usr/share/oio-netdata/web
+  debug log = none
+  access log = none
+  error log = syslog
+  facility log = local7
+  
+# https://docs.netdata.cloud/web/server/
+[web]
+  web files owner = root
+  web files group = openio
 
-[backend]
-  enabled = {{ openio_netdata_backend_enabled }}
-  hostname = {{ openio_netdata_backend_hostname }}
-  update every = {{ openio_netdata_backend_update_every | default(openio_netdata_global_update_every) }}
-  timeout ms = {{ openio_netdata_backend_timeout_ms }}
-  send charts matching = {{ openio_netdata_backend_charts | join(' ')}}
-{% if openio_netdata_backend_destination %}
-  destination = {{ openio_netdata_backend_destination }}
-{% endif %}
-  host tags = ansible_name="{{ inventory_hostname }}" namespace="{{ openio_netdata_namespace }}" rack="{{ _inventory.get('rack', '') }}"
-
-
+# https://docs.netdata.cloud/daemon/config/#plugins-section-options
 [plugins]
-{% for plugin, state in openio_netdata_active_plugins.items() | list %}
-  {{ plugin }} = {{ 'yes' if state else 'no' }}
-{% endfor %}
-{% if inventory_hostname in openio_netdata_oio_hosts %}
-  zookeeper = {{ 'yes' if inventory_hostname in openio_netdata_zookeeper_hosts else 'no' }}
-  openio = {{ 'yes' if inventory_hostname in openio_netdata_oio_hosts else 'no' }}
-  command = {{ 'yes' if inventory_hostname in openio_netdata_oio_hosts else 'no' }}
-  container = {{ 'yes' if openio_netdata_redis_hosts and
-                 (inventory_hostname == openio_netdata_redis_hosts | first) else 'no' }}
-  fs = {{ 'yes' if inventory_hostname in openio_netdata_oiofs_hosts else 'no' }}
-  s3roundtrip = {{ 'yes' if inventory_hostname in openio_netdata_s3rt_hosts else 'no' }}
-  redis = {{ 'yes' if inventory.services.get('redis', []) else 'no' }}
-  memcached = {{ 'yes' if inventory.services.get('memcached', []) else 'no' }}
-  beanstalk = {{ 'yes' if inventory.services.get('beanstalkd', []) else 'no' }}
+  enable running new plugins = no
+  # internal plugins
+  cgroups = no
+  checks = no
+  diskspace = yes
+  idlejitter = no
+  proc = yes
+  slabinfo = no
+  stats.d = no
+  tc = no
+  xenstat = no
+  # external plugins
+  apps = yes
+  charts.d = no
+  cups = no
+  ebpf_process = no
+  fping = no
+  freeipmi = no
+  go.d = no
+  ioping = no
+  nfacct = no
+  node.d = no
+  perf = no
+  pythond.d = no
 
-[plugin:openio]
-  update every = {{ openio_netdata_global_update_every }}
-  command options = --ns {{ openio_netdata_namespace }}
+[statsd]
+  enabled = no
 
-{% set targets = _inventory.services.get('redis', []) | selectattr('role', 'match', openio_netdata_redis_account_group) | list %}
-{% if targets %}
-[plugin:container]
-  update every = {{ openio_netdata_global_update_every }}
-  command options = --ns {{ openio_netdata_namespace }} --fast --addr {{ targets[0].ip }}:{{ targets[0].port }}
-{% endif %}
+[exporting:global]
+  enabled = no
 
-[plugin:redis]
-  update every = {{ openio_netdata_global_update_every }}
-  command options = --targets {{ inventory.services.get('redis', []) | redis_roles }}
+# https://docs.netdata.cloud/daemon/config/#health-section-options
+[health]
+  enabled = no
 
-{% if inventory.services.get('memcached', []) %}
-{% set _m_servers = [] -%}
-{% for s in inventory.services.get('memcached', []) -%}
-{{ _m_servers.append( s.ip ~ ':' ~ s.port) -}}
-{% endfor -%}
-[plugin:memcached]
-  update every = {{ openio_netdata_global_update_every }}
-  command options = --targets {{ _m_servers | join(',') }}
-{% endif %}
+# https://docs.netdata.cloud/registry/
+[registry]
+  enabled = no
 
-{% if inventory.services.get('beanstalkd', []) %}
-{% set _m_servers = [] -%}
-{% for s in inventory.services.get('beanstalkd', []) -%}
-{{ _m_servers.append( s.ip ~ ':' ~ s.port ~ ':default:oio:oio-delete:oio-rebuild:oio-retry:oio-quarantine') -}}
-{% endfor -%}
-[plugin:beanstalk]
-  update every = {{ openio_netdata_global_update_every }}
-  command options = --targets {{ _m_servers | join(',') }}
-{% endif %}
+# https://docs.netdata.cloud/streaming/
+[backend]
+  enabled = no
+  hostname = {{ ansible_hostname }}
+  send charts matching =  *apps* *disk* *ipv4.errors* *ipv4.tcpsock* *ipv4.tcppackets* *ipv4.tcperrors* *ipv4.packets* *ipv4.tcphandshake* *ipv4.udppackets* *mem.committed* *net_drops* *net_packets* *net.* *system.ctxt* *system.cpu* *system.ram* *system.io* *system.processes* *system.load* *system.uptime* *system.forks*
 
-[plugin:command]
-  update every = {{ openio_netdata_global_update_every }}
-  command options = --conf {{ openio_netdata_confdir }}/commands.yml
+[stream]
+  enabled = no
 
-[plugin:zookeeper]
-  update every = {{ openio_netdata_global_update_every }}
-  command options = --ns {{ openio_netdata_namespace }}
-
-[plugin:fs]
-  update every = {{ openio_netdata_global_update_every }}
-  command options = --conf {{ openio_netdata_confdir }}/oiofs.conf {% if openio_netdata_oiofs_debug %}--fast{% endif %}
-{% endif %}
-
-[plugin:s3roundtrip]
-  update every = {{ openio_netdata_global_update_every }}
-  command options = --conf {{ openio_netdata_confdir }}/s3-roundtrip.conf
-
-[netdata.backend_metrics]
-  enabled=no
-
-[netdata.backend_bytes]
-  enabled=no
-
-[netdata.backend_ops]
-  enabled=no
-
-[netdata.backend_thread_cpu]
-  enabled=no
-
-[netdata.private_charts]
-  enabled=no
-
-{% for t in openio_netdata_ipv6_ignore %}
+{% set ipv6_charts = ['icmp', 'icmprouter', 'icmpneighbor', 'icmpmldv2', 'icmptypes', 'packets', 'ect', 'sockstat6_tcp_sockets', 'sockstat6_udp_sockets', 'mcast', 'mcastpkts'] %}
+{% for t in ipv6_charts %}
 [ipv6.{{ t }}]
-  enabled=no
-
+  enabled = no
 {% endfor %}
 
-{% for t in openio_netdata_users_groups_ignore %}
+{% set users_groups_charts = ['cpu', 'preads', 'pwrites', 'lreads', 'lwrites', 'files', 'mem', 'vmem', 'minor_faults', 'major_faults', 'threads', 'processes', 'uptime', 'uptime_min', 'uptime_avg', 'uptime_max', 'pipe', 'swap', 'sockets'] %}
+{% for t in users_groups_charts %}
 [groups.{{ t }}]
-  enabled=no
-
+  enabled = no
 [users.{{ t }}]
-  enabled=no
-
+  enabled = no
 {% endfor %}
 
 [plugin:proc:diskspace]
