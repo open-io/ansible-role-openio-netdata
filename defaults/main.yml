@@ -2,7 +2,7 @@
 openio_netdata_namespace: "{{ namespace | d('OPENIO') }}"
 openio_netdata_maintenance_mode: "{{ openio_maintenance_mode | d(false) }}"
 
-openio_netdata_bind_address: "{{ openio_mgmt_bind_address | d(ansible_default_ipv4.address) }}"
+openio_netdata_bind_address: "{{ openio_bind_mgmt_address | d(ansible_default_ipv4.address) }}"
 openio_netdata_bind_port: 6921
 openio_netdata_global_update_every: 10
 ...

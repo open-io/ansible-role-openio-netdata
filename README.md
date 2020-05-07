@@ -15,7 +15,7 @@ An Ansible role for install netdata. Specifically, the responsibilities of this 
 | :---       | :---    | :---             |
 | `openio_netdata_namespace` | `"{{ namespace \| d('OPENIO') }}"` | OpenIO Namespace |
 | `openio_netdata_maintenance_mode` | `"{{ openio_maintenance_mode \| d(false) }}"` | Maintenance mode |
-| `openio_netdata_bind_address` | `{{ openio_mgmt_bind_address \| d(ansible_default_ipv4.address) }}` |  Binding IP address. |
+| `openio_netdata_bind_address` | `{{ openio_bind_mgmt_address \| d(ansible_default_ipv4.address) }}` |  Binding IP address. |
 | `openio_netdata_bind_port` | `6921` |  Listening port. |
 | `openio_netdata_global_update_every` | `10` |  The frequency for data collection (in seconds). |
 
