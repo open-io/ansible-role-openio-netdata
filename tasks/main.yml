@@ -2,7 +2,7 @@
 - include_role:
     name: openio-service
   vars:
-    openio_service_type: "oio-netdata"
+    openio_service_type: "netdata"
     openio_service_namespace: "{{ openio_netdata_namespace }}"
     openio_service_maintenance_mode: "{{ openio_netdata_maintenance_mode }}"
     openio_service_packages:
