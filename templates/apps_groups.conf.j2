@@ -2,9 +2,9 @@
 # -----------------------------------------------------------------------------
 # OpenIO processes
 
-haproxy: *haproxy*
-keepalived: *keepalived*
-mysqld: *mysqld*
+other.haproxy: *haproxy*
+other.keepalived: *keepalived*
+other.mysqld: *mysqld*
 
 openio.account: *oio-account-server*
 openio.beanstalkd: *beanstalkd*
@@ -15,7 +15,7 @@ openio.conscienceagent: *conscienceagent*
 openio.conscience: *conscience*
 openio.ecd: *ecd*
 openio.event-agent: *oio-event-agent*
-openio-keystone: *keystone*
+openio.keystone: *keystone*
 openio.memcached: *memcached*
 openio.meta0: *oio-meta0-server*
 openio.meta1: *oio-meta1-server*
