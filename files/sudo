@@ -1,0 +1,3 @@
+# OpenIO managed
+netdata ALL = (root) NOPASSWD: /usr/bin/openio-fs-ha-healthchecks.sh
+

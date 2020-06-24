@@ -63,6 +63,7 @@ openio_netdata_backend_charts:
   - "*zk*"
   - "*oiofs*"
   - "roundtrip*"
+  - "*healthcheck*"
 
 openio_netdata_active_plugins:
   apps: true
@@ -81,4 +82,15 @@ openio_netdata_python_d_plugin_default_run: 'no'
 openio_netdata_python_d_plugin_logs_per_interval: 200
 openio_netdata_python_d_plugin_log_interval: 3600
 openio_netdata_python_d_plugin_web_log: 'yes'
+
+openio_netdata_commands_oiofs:
+  oiofsha_pcs_resource_status_healthcheck: sudo /usr/bin/openio-fs-ha-healthchecks.sh -q pcs_resource_status
+  oiofsha_pcs_resource_status_nodes_healthcheck: sudo /usr/bin/openio-fs-ha-healthchecks.sh -q pcs_resource_status_nodes
+  oiofsha_drbd_status_healthcheck: sudo /usr/bin/openio-fs-ha-healthchecks.sh -q drbd_status
+  oiofsha_pcs_constraint_location_healthcheck: sudo /usr/bin/openio-fs-ha-healthchecks.sh -q pcs_constraint_location
+  oiofsha_pcs_oiofs_master_healthcheck: sudo /usr/bin/openio-fs-ha-healthchecks.sh -q pcs_oiofs_master
+  oiofsha_pcs_stonith_healthcheck: sudo /usr/bin/openio-fs-ha-healthchecks.sh -q pcs_stonith
+  oiofsha_pcs_vip_status_healthcheck: sudo /usr/bin/openio-fs-ha-healthchecks.sh -q pcs_vip_status
+  oiofsha_pcs_samba_status_healthcheck: sudo /usr/bin/openio-fs-ha-healthchecks.sh -q pcs_samba_status
+  oiofsha_pcs_nfs_status_healthcheck: sudo /usr/bin/openio-fs-ha-healthchecks.sh -q pcs_nfs_status
 ...

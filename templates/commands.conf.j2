@@ -1,0 +1,10 @@
+# {{ ansible_managed }}
+{% for k, v in openio_netdata_commands | dictsort(false)  %}
+{{ k }}={{ v }}
+{% endfor %}
+
+{% if inventory_hostname in openio_netdata_oiofs_hosts %}
+{% for k, v in openio_netdata_commands_oiofs | dictsort(false)  %}
+{{ k }}={{ v }}
+{% endfor %}
+{% endif %}

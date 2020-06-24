@@ -62,14 +62,6 @@
       ignore_errors: "{{ ansible_check_mode }}"
       tags: configure
 
-    - name: "Set commands plugin configuration"
-      copy:
-        src: "commands/{{ ansible_os_family }}.conf"
-        dest: "{{ openio_netdata_confdir }}/commands.conf"
-        owner: "{{ netdata_user }}"
-        group: "{{ netdata_group }}"
-      tags: configure
-
     - name: "Set python.d plugin configuration"
       template:
         src: "{{ item.src }}"
@@ -90,8 +82,11 @@
           dest: "{{ openio_netdata_confdir }}/python.d/beanstalk.conf"
         - src: redis.conf.j2
           dest: "{{ openio_netdata_confdir }}/python.d/redis.conf"
+        - src: commands.conf.j2
+          dest: "{{ openio_netdata_confdir }}/commands.conf"
       tags: configure
   when: inventory_hostname in openio_netdata_oio_hosts
+  tags: configure
 
 - name: Set global configuration
   vars:
@@ -104,15 +99,35 @@
     mode: 0640
   tags: configure
 
-- name: Set oiofs configuration
-  template:
-    src: "oiofs.conf.j2"
-    dest: "{{ openio_netdata_confdir }}/oiofs.conf"
-    owner: "{{ netdata_user }}"
-    group: "{{ netdata_group }}"
-    mode: 0640
+- block:
+    - name: Set oiofs configuration
+      template:
+        src: "oiofs.conf.j2"
+        dest: "{{ openio_netdata_confdir }}/oiofs.conf"
+        owner: "{{ netdata_user }}"
+        group: "{{ netdata_group }}"
+        mode: 0640
+      tags: configure
+
+    - name: "Copy script healthchecks for oiofs HA"
+      copy:
+        src: "openio-fs-ha-healthchecks.sh"
+        dest: "/usr/bin/openio-fs-ha-healthchecks.sh"
+        owner: root
+        group: root
+        mode: 0750
+      tags: configure
+
+    - name: "Copy sudoers configuration for netdata"
+      copy:
+        src: "sudo"
+        dest: "/etc/sudoers.d/netdata"
+        owner: root
+        group: root
+        mode: 0644
+      tags: configure
+
   when: inventory_hostname in openio_netdata_oiofs_hosts
-  tags: configure
 
 - block:
     - name: Get S3 credentials on nodes
